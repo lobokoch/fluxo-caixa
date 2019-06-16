@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: financeiro-fluxocaixa
+  cloud:
+    config:
+      uri: http://localhost:9091
+
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+     

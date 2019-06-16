@@ -1,0 +1,444 @@
+@label("Financeiro")
+domain financeiro
+
+@label("Fluxo de caixa")
+service fluxo_caixa {
+	
+	config {
+		groupId: "br.com.kerubin.api"
+		version: "1.0.0"
+		cloudConfigUri: "http://localhost:9091"
+		servicePort: 0
+		messagingCore {version:"1.0.0"}
+		databaseCore {version:"1.0.0"}
+	}
+	
+	dependency {
+		groupId: "br.com.kerubin.api"
+		artifactId: "financeiro-planocontas-client"
+		version: "1.0.0" 
+	}
+	
+	dependency {
+		groupId: "br.com.kerubin.api"
+		artifactId: "cadastros-banco-client"
+		version: "1.0.0" 
+	}
+	
+	dependency {
+		groupId: "br.com.kerubin.api"
+		artifactId: "cadastros-fornecedor-client"
+		version: "1.0.0" 
+	}
+	
+	dependency {
+		groupId: "br.com.kerubin.api"
+		artifactId: "cadastros-cliente-client"
+		version: "1.0.0" 
+	}
+	
+	@version
+	@auditing
+	@label("Cadastro de caixa")
+	entity Caixa {
+		
+		nome: string
+		label: "Nome do caixa"
+		web(styleClass: "ui-md-8")
+		autoComplete
+		
+		ativo: boolean default: true
+		label: "Caixa ativo"
+		web(styleClass: "ui-md-4")
+		///////////
+		
+		saldo: money optional
+		label: "Saldo do caixa"
+		web(styleClass: "ui-md-2" readOnly)
+		
+		observacoes: string? 
+		label: "Observações"
+		grid(hidden) 
+		web(styleClass: "ui-md-12")
+	}
+	
+	@version
+	@auditing
+	@label("Abertura/Fechamento de caixa") ///
+	entity CaixaDiario {
+		
+		caixa: refers Caixa manyToOne
+		label: "Caixa"
+		web(styleClass: "ui-md-8")
+		autoComplete
+		
+		caixaDiarioSituacao: CaixaDiarioSituacao
+		web(styleClass: "ui-md-4" readOnly)
+		
+		/////
+		
+		dataHoraAbertura: dateTime optional
+		label: "Data/hora de abertura"
+		web(styleClass: "ui-md-6" readOnly)
+		autoComplete
+		
+		saldoInicial: money optional
+		label: "Saldo inicial"
+		web(styleClass: "ui-md-6" readOnly)
+		///////////////////////////
+		
+		dataHoraFechamento: dateTime optional
+		label: "Data/hora de fechamento"
+		web(styleClass: "ui-md-6" readOnly)
+		
+		saldoFinal: money optional
+		label: "Saldo final"
+		web(styleClass: "ui-md-6" readOnly)
+		/////////////
+		
+		observacoes: string[1000] optional
+		label: "Observações"
+		grid(hidden) 
+		web(styleClass: "ui-md-12")
+		
+		rules {
+			// with(form).apply(dataHoraAbertura = now).when(form.onCreate)
+			
+			// RuleFunctionCaixaDiaro
+			// CaixaDiario abrirCaixa(CaixaDiario caixaDiario)
+			// CaixaDiario fecharCaixa(CaixaDiario caixaDiario)
+			/*with(form.actions)
+				.apply(function(name: abrirCaixa, params:[this], return: this), form.refresh))
+				.when(dataHoraAbertura.isNull and dataHoraFechamento.isNull)
+				.action(name: abrirCaixa button(tooltip: "Abrir caixa" label: "Abrir caixa" cssClass="ui-button-success" icon: "pi pi-lock-open"))*/
+				
+			/*with(form.actions)
+				.apply(function(name: fecharCaixa, params:[this], return: this), form.refresh))
+				.when(dataHoraAbertura.isNotNull and dataHoraFechamento.isNull)
+				.action(name: fecharCaixa button(tooltip: "Fechar caixa" label: "Fechar caixa" cssClass="ui-button-warning" icon: "pi pi-lock"))*/
+		}
+		
+	}
+	
+	@version // xxx
+	@label("Lançamentos no caixa")
+	entity CaixaLancamento {
+		
+		caixaDiario: refers CaixaDiario manyToOne // readOnly, do próprio usuário, aberto
+		label: "Caixa"
+		web(styleClass: "ui-md-8")
+		
+		tipoFonteMovimento: TipoFonteMovimento // readOnly
+		web(styleClass: "ui-md-4" readOnly)
+		///////////////////
+		
+		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
+		web(styleClass: "ui-md-2")
+		
+		planoContas: refers PlanoConta manyToOne
+		web(styleClass: "ui-md-4")
+		
+		descricao: string
+		label: "Descrição do lançamento"
+		web(styleClass: "ui-md-6")
+		
+		/////////////////////////
+		
+		valor: money
+		label: "Valor"
+		web(styleClass: "ui-md-4")
+		
+		formaPagamento: FormaPagamento
+		label: "Forma de pagamento"
+		web(styleClass: "ui-md-8")
+		
+		//--
+		contaBancaria: refers ContaBancaria? manyToOne 
+		grid(hidden)
+		label: "Pagamento com conta bancária"
+		web(styleClass: "ui-md-6")
+		
+		cartaoCredito: refers CartaoCredito? manyToOne
+		label: "Pagamento com cartão de crédito"
+		grid(hidden)
+		web(styleClass: "ui-md-6")
+		//--
+		
+		cliente: refers Cliente? manyToOne
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		////
+		
+		fornecedor: refers Fornecedor? manyToOne
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		////
+		
+		documento: string?
+		label: "Documento"
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		///////
+		
+		observacoes: string[1000]? 
+		label: "Observações"
+		grid(hidden) 
+		web(styleClass: "ui-md-12")
+		
+	}
+	
+	@externalEntity
+	@subscribe(domain= cadastros, service=cliente, events=[created, updated, deleted])
+	@label("Cliente")
+	entity Cliente {		
+		
+		nome: string
+		label: "Nome"
+		autoComplete
+		
+		cpfCNPJ: string?
+		label: "Documento (CNPJ/CPF)"
+		autoComplete
+	}
+	
+	@externalEntity
+	@subscribe(domain= cadastros, service=fornecedor, events=[created, updated, deleted])
+	@label("Fornecedor")
+	entity Fornecedor {		
+		
+		nome: string
+		label: "Nome"
+		autoComplete
+		
+		cpfCNPJ: string?
+		label: "Documento (CPF/CNPJ)"
+		autoComplete
+	}
+	
+	@externalEntity
+	@subscribe(domain= cadastros, service=banco, events=[created, updated, deleted])
+	@label("Banco")
+	entity Banco {
+		
+		numero: string[20] 
+		label: "Número"
+		autoComplete
+		
+		nome: string 
+		label: "Nome"
+		autoComplete
+	}
+	
+	@externalEntity
+	@subscribe(domain= cadastros, service=banco, events=[cud])
+	@label("Agência bancária")
+	entity AgenciaBancaria {
+		
+		banco: refers Banco manyToOne
+		
+		numeroAgencia: string[50] 
+		autoComplete
+		label: "Número da agência"
+		
+		digitoAgencia: string[10] 
+		autoComplete(result)
+		label: "Dígito"
+		
+		endereco: string? 
+		autoComplete
+		label: "Endereço/localização da agência"
+		
+	}
+	
+	@externalEntity
+	@subscribe(domain= cadastros, service=banco, events=[cud])
+	@label("Bandeira de cartão")
+	entity BandeiraCartao {
+		
+		nomeBandeira: string
+		autoComplete
+		label: "Bandeira do cartão"
+	}
+	
+	@externalEntity
+	@subscribe(domain= cadastros, service=banco, events=[cud])
+	@label("Conta bancária")
+	entity ContaBancaria {
+		
+		nomeTitular: string
+		label: "Nome do títular da conta"
+		autoComplete
+		
+		agencia: refers AgenciaBancaria manyToOne
+		
+		tipoContaBancaria: TipoContaBancaria
+		label: "Tipo da conta"
+		//--
+		
+		numeroConta: string[30] 
+		autoComplete(result)
+		label: "Número da conta"
+		
+		digito: string[10]? 
+		label: "Dígito"
+		
+		dataValidade: date?
+		mask:"MM/yyyy"
+		label: "Validade"
+		
+		ativo: boolean
+		label: "Conta ativa"
+		
+	}
+	
+	@externalEntity
+	@subscribe(domain= cadastros, service=banco, events=[cud])
+	@label("Cartão de crédito")
+	entity CartaoCredito {
+		
+		//--
+		banco: refers Banco manyToOne
+		
+		nomeTitular: string
+		autoComplete
+		label: "Nome do títular do cartão"
+		
+		//--
+		numeroCartao: string[50] 
+		autoComplete
+		label: "Número do cartão"
+		
+		validade: date?
+		label: "Validade"
+		mask:"mm/yy"
+		
+		valorLimite: money?
+		label: "Limite de crédito"
+		
+		//--
+		bandeiraCartao: refers BandeiraCartao manyToOne
+		label: "Bandeira do cartão"
+		
+		ativo: boolean
+		label: "Cartão ativo"
+		
+	}
+	
+	@externalEntity
+	@subscribe(domain= financeiro, service=plano_contas, events=[cud])
+	@label("Plano de contas")
+	entity PlanoConta {
+		
+		codigo: string
+		label: "Código"
+		autoComplete(sort:asc)
+		
+		descricao: string
+		label: "Descrição"
+		autoComplete
+		
+		tipoFinanceiro: TipoPlanoContaFinanceiro
+		
+		tipoReceitaDespesa: TipoReceitaDespesa?
+		label: "Tipo receita/despesa"
+		
+		planoContaPai: refers PlanoConta? manyToOne
+		label: "Plano de conta pai"
+		
+		ativo: boolean default: true // Will be replecated
+		label: "Ativo"
+		
+	}
+	
+	@label("Fonte do movimento")
+	enum TipoFonteMovimento {
+		LANCEMENTO_CAIXA
+		label: "Lançamento direto no caixa"
+		default
+		
+		CONTAS_PAGAR
+		label: "Contas a pagar"
+		
+		CONTAS_RECEBER
+		label: "Contas a receber"
+	}
+	
+	@label("Forma de pagamento")
+	enum FormaPagamento {
+		DINHEIRO
+		label: "Dinheiro"
+		default
+		
+		CONTA_BANCARIA
+		label: "Conta bancária"
+		
+		CARTAO_CREDITO
+		label: "Cartão de crédito"
+		
+		CHEQUE
+		label: "Cheque"
+		
+		OUTROS
+		label: "Outros"
+	}
+	
+	// From Plano de Contas
+	@label("Tipo da receita/despesa")
+	enum TipoReceitaDespesa {
+		VARIAVEL
+		label: "Variável"
+		default
+		
+		FIXO
+		label: "Fixa"
+	}
+	
+	@label("Tipo da conta bancária")
+	enum TipoContaBancaria { 
+		CONTA_CORRENTE
+		label: "Conta corrente"
+		default
+		
+		CONTA_POUPANCA
+		label: "Conta poupança"
+		
+		CONTA_SALARIO
+		label: "Conta salário"
+		
+		CONTA_INVESTIMENTO
+		label: "Conta investimento"
+	}
+	
+	@label("Situação do caixa")
+	enum CaixaDiarioSituacao {
+		NAO_INICIADO
+		label: "Não iniciado"
+		default
+		
+		ABERTO
+		label: "Aberto"
+		
+		FECHADO
+		label: "Fechado"
+	}
+	
+	@label("Tipo do movimento")
+	enum TipoLancamentoFinanceiro {
+		CREDITO
+		label: "Crédito"
+		
+		DEBITO
+		label: "Débito"
+		default
+	}
+	
+	@label("Tipo financeiro do plano de contas")
+	enum TipoPlanoContaFinanceiro {
+		RECEITA
+		label: "Receita"
+		
+		DESPESA
+		label: "Despesa"
+	}
+	
+}
