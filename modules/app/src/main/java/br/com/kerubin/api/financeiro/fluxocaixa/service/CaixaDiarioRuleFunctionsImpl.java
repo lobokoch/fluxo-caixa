@@ -25,6 +25,7 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixa.CaixaRepository;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiario;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioRepository;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioRuleFunctions;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.QCaixaDiarioEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.QCaixaLancamentoEntity;
 
@@ -158,7 +159,7 @@ public class CaixaDiarioRuleFunctionsImpl implements CaixaDiarioRuleFunctions {
 			.selectFrom(qCaixaDiarioEntity)
 			.where(qCaixaDiarioEntity.caixa.id.eq(caixaId)
 					.and(qCaixaDiarioEntity.id.ne(caixaDiarioAtual))
-					.and(qCaixaDiarioEntity.lastModifiedDate.lt(maxLastModifiedDate)))
+					.and(qCaixaDiarioEntity.lastModifiedDate.eq(maxLastModifiedDate)))
 			.orderBy(qCaixaDiarioEntity.version.desc())
 			.fetch();
 		

@@ -101,21 +101,18 @@ service fluxo_caixa {
 		grid(hidden) 
 		web(styleClass: "ui-md-12")
 		
-		rules {
+		rules { // xxx
 			// with(form).apply(dataHoraAbertura = now).when(form.onCreate)
 			
-			// RuleFunctionCaixaDiaro
-			// CaixaDiario abrirCaixa(CaixaDiario caixaDiario)
-			// CaixaDiario fecharCaixa(CaixaDiario caixaDiario)
-			/*with(form.actions)
-				.apply(function(name: abrirCaixa, params:[this], return: this), form.refresh))
-				.when(dataHoraAbertura.isNull and dataHoraFechamento.isNull)
-				.action(name: abrirCaixa button(tooltip: "Abrir caixa" label: "Abrir caixa" cssClass="ui-button-success" icon: "pi pi-lock-open"))*/
+			with(form.actions)
+				.apply(function(name: abrirCaixa params:[this] return: this))
+				.when(caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.NAO_INICIADO))
+				.action(name: abrirCaixa button(tooltip: "Abrir caixa" label: "Abrir caixa" cssClass: "ui-button-success" icon: "pi pi-lock-open"))
 				
-			/*with(form.actions)
-				.apply(function(name: fecharCaixa, params:[this], return: this), form.refresh))
-				.when(dataHoraAbertura.isNotNull and dataHoraFechamento.isNull)
-				.action(name: fecharCaixa button(tooltip: "Fechar caixa" label: "Fechar caixa" cssClass="ui-button-warning" icon: "pi pi-lock"))*/
+			with(form.actions)
+				.apply(function(name: fecharCaixa params:[this] return: this))
+				.when(caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.ABERTO))
+				.action(name: fecharCaixa button(tooltip: "Fechar caixa" label: "Fechar caixa" cssClass: "ui-button-warning" icon: "pi pi-lock"))
 		}
 		
 	}
