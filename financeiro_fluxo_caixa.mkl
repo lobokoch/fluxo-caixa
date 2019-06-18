@@ -66,6 +66,7 @@ service fluxo_caixa {
 	@auditing
 	@label("Abertura/Fechamento de caixa") ///
 	entity CaixaDiario {
+		id: uuid
 		
 		caixa: refers Caixa manyToOne
 		label: "Caixa"
@@ -101,17 +102,17 @@ service fluxo_caixa {
 		grid(hidden) 
 		web(styleClass: "ui-md-12")
 		
-		rules { // xxx
+		rules { // xxxx
 			// with(form).apply(dataHoraAbertura = now).when(form.onCreate)
 			
 			with(form.actions)
 				.apply(function(name: abrirCaixa params:[this] return: this))
-				.when(caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.NAO_INICIADO))
+				.when(id.isNotNull and caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.NAO_INICIADO))
 				.action(name: abrirCaixa button(tooltip: "Abrir caixa" label: "Abrir caixa" cssClass: "ui-button-success" icon: "pi pi-lock-open"))
 				
 			with(form.actions)
 				.apply(function(name: fecharCaixa params:[this] return: this))
-				.when(caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.ABERTO))
+				.when(id.isNotNull and caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.ABERTO))
 				.action(name: fecharCaixa button(tooltip: "Fechar caixa" label: "Fechar caixa" cssClass: "ui-button-warning" icon: "pi pi-lock"))
 		}
 		
