@@ -22,7 +22,7 @@ CREATE TABLE caixa /* Caixa */  (
 	created_date TIMESTAMP /* createdDate */,
 	last_modified_by VARCHAR(255) /* lastModifiedBy */,
 	last_modified_date TIMESTAMP /* lastModifiedDate */,
-	version NUMERIC(19)
+	version SMALLINT
 );
 
 CREATE TABLE caixa_diario /* CaixaDiario */  (
@@ -38,25 +38,26 @@ CREATE TABLE caixa_diario /* CaixaDiario */  (
 	created_date TIMESTAMP /* createdDate */,
 	last_modified_by VARCHAR(255) /* lastModifiedBy */,
 	last_modified_date TIMESTAMP /* lastModifiedDate */,
-	version NUMERIC(19)
+	version SMALLINT
 );
 
 CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	id UUID NOT NULL,
 	caixa_diario UUID NOT NULL /* caixaDiario */,
 	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
-	tipo_lancamento_financeiro VARCHAR(255) NOT NULL /* tipoLancamentoFinanceiro */,
 	plano_contas UUID NOT NULL /* planoContas */,
 	descricao VARCHAR(255) NOT NULL,
+	tipo_lancamento_financeiro VARCHAR(255) NOT NULL /* tipoLancamentoFinanceiro */,
 	valor DECIMAL NOT NULL,
 	forma_pagamento VARCHAR(255) NOT NULL /* formaPagamento */,
+	data_lancamento DATE NOT NULL /* dataLancamento */,
 	conta_bancaria UUID /* contaBancaria */,
 	cartao_credito UUID /* cartaoCredito */,
 	cliente UUID,
 	fornecedor UUID,
 	documento VARCHAR(255),
 	observacoes VARCHAR(1000),
-	version NUMERIC(19)
+	version SMALLINT
 );
 
 CREATE TABLE cliente /* Cliente */  (

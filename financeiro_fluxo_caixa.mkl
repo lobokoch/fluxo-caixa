@@ -103,7 +103,6 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-12")
 		
 		rules { // xxxx
-			// with(form).apply(dataHoraAbertura = now).when(form.onCreate)
 			
 			with(form.actions)
 				.apply(function(name: abrirCaixa params:[this] return: this))
@@ -130,25 +129,32 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-4" readOnly)
 		///////////////////
 		
-		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
-		web(styleClass: "ui-md-2")
-		
 		planoContas: refers PlanoConta manyToOne
-		web(styleClass: "ui-md-4")
+		web(styleClass: "ui-md-6")
+		grid(hidden)
 		
 		descricao: string
 		label: "Descrição do lançamento"
 		web(styleClass: "ui-md-6")
 		
-		/////////////////////////
+		////////////////////////
+		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
+		web(styleClass: "ui-md-2")
 		
 		valor: money
 		label: "Valor"
 		web(styleClass: "ui-md-4")
+		sum(styleClass:"kb-conta-valor-apagar" label:"A")
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
-		web(styleClass: "ui-md-8")
+		web(styleClass: "ui-md-4")
+		
+		dataLancamento: date 
+		label: "Data do lançamento"
+		sort: desc
+		web(styleClass: "ui-md-2")
+		// grid(hidden)
 		
 		//--
 		contaBancaria: refers ContaBancaria? manyToOne 
@@ -176,12 +182,17 @@ service fluxo_caixa {
 		label: "Documento"
 		web(styleClass: "ui-md-12")
 		grid(hidden)
+		
 		///////
 		
 		observacoes: string[1000]? 
 		label: "Observações"
 		grid(hidden) 
 		web(styleClass: "ui-md-12")
+		
+		rules {
+			with(form).apply(dataLancamento = today).when(entityForm.onInit)
+		}
 		
 	}
 	
