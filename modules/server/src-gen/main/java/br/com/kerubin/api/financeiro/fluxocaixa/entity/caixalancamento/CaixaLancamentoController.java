@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -32,6 +32,15 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import br.com.kerubin.api.financeiro.fluxocaixa.common.PageResult;
+
+		
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.contabancaria.ContaBancariaAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCreditoAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorAutoComplete;
+
 
 
 @RestController
@@ -98,5 +107,63 @@ public class CaixaLancamentoController {
 	}
 	
 	
+	@GetMapping("/caixaLancamentoSumFields")
+	public CaixaLancamentoSumFields getCaixaLancamentoSumFields(CaixaLancamentoListFilter caixaLancamentoListFilter) {
+		CaixaLancamentoSumFields result = caixaLancamentoService.getCaixaLancamentoSumFields(caixaLancamentoListFilter);
+		return result;
+	}
+	
+	
+				
+	// Begin relationships autoComplete 
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/caixaDiarioCaixaDiarioAutoComplete")
+	public Collection<CaixaDiarioAutoComplete> caixaDiarioCaixaDiarioAutoComplete(@RequestParam("query") String query) {
+		Collection<CaixaDiarioAutoComplete> result = caixaLancamentoService.caixaDiarioCaixaDiarioAutoComplete(query);
+		return result;
+	}
+	
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/planoContaPlanoContasAutoComplete")
+	public Collection<PlanoContaAutoComplete> planoContaPlanoContasAutoComplete(@RequestParam("query") String query) {
+		Collection<PlanoContaAutoComplete> result = caixaLancamentoService.planoContaPlanoContasAutoComplete(query);
+		return result;
+	}
+	
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/contaBancariaContaBancariaAutoComplete")
+	public Collection<ContaBancariaAutoComplete> contaBancariaContaBancariaAutoComplete(@RequestParam("query") String query) {
+		Collection<ContaBancariaAutoComplete> result = caixaLancamentoService.contaBancariaContaBancariaAutoComplete(query);
+		return result;
+	}
+	
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/cartaoCreditoCartaoCreditoAutoComplete")
+	public Collection<CartaoCreditoAutoComplete> cartaoCreditoCartaoCreditoAutoComplete(@RequestParam("query") String query) {
+		Collection<CartaoCreditoAutoComplete> result = caixaLancamentoService.cartaoCreditoCartaoCreditoAutoComplete(query);
+		return result;
+	}
+	
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/clienteClienteAutoComplete")
+	public Collection<ClienteAutoComplete> clienteClienteAutoComplete(@RequestParam("query") String query) {
+		Collection<ClienteAutoComplete> result = caixaLancamentoService.clienteClienteAutoComplete(query);
+		return result;
+	}
+	
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/fornecedorFornecedorAutoComplete")
+	public Collection<FornecedorAutoComplete> fornecedorFornecedorAutoComplete(@RequestParam("query") String query) {
+		Collection<FornecedorAutoComplete> result = caixaLancamentoService.fornecedorFornecedorAutoComplete(query);
+		return result;
+	}
+	
+	// End relationships autoComplete
 	
 }

@@ -1,7 +1,7 @@
 <!--
 **********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.754
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.603
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -48,7 +48,6 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		            	<th style="width: 8em" [pSortableColumn]="'saldoInicial'">{{ getTranslation('financeiro.fluxo_caixa.caixaDiario_saldoInicial_grid') }}<p-sortIcon [field]="'saldoInicial'"></p-sortIcon></th>
 		            	<th [pSortableColumn]="'dataHoraFechamento'">{{ getTranslation('financeiro.fluxo_caixa.caixaDiario_dataHoraFechamento_grid') }}<p-sortIcon [field]="'dataHoraFechamento'"></p-sortIcon></th>
 		            	<th style="width: 8em" [pSortableColumn]="'saldoFinal'">{{ getTranslation('financeiro.fluxo_caixa.caixaDiario_saldoFinal_grid') }}<p-sortIcon [field]="'saldoFinal'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'version'">{{ getTranslation('financeiro.fluxo_caixa.caixaDiario_version_grid') }}<p-sortIcon [field]="'version'"></p-sortIcon></th>
 						<th style="width: 12em">Ações</th>
 		            </tr>
 		        </ng-template>
@@ -62,19 +61,16 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		            		{{ getTranslation('financeiro.fluxo_caixa.caixaDiario_caixaDiarioSituacao' + '_' + caixaDiario?.caixaDiarioSituacao?.toLowerCase()) }}
 		            	</td>
 		            	<td>
-		            		{{caixaDiario?.dataHoraAbertura}}
+		            		{{caixaDiario?.dataHoraAbertura | date:'dd/MM/yyyy HH:mm'}}
 		            	</td>
 		            	<td class="kb-field-money">
 		            		{{caixaDiario?.saldoInicial | currency:'BRL':'symbol':'1.2-2':'pt' }}
 		            	</td>
 		            	<td>
-		            		{{caixaDiario?.dataHoraFechamento}}
+		            		{{caixaDiario?.dataHoraFechamento | date:'dd/MM/yyyy HH:mm'}}
 		            	</td>
 		            	<td class="kb-field-money">
 		            		{{caixaDiario?.saldoFinal | currency:'BRL':'symbol':'1.2-2':'pt' }}
-		            	</td>
-		            	<td>
-		            		{{caixaDiario?.version}}
 		            	</td>
 		              	<td class="kb-actions">
 		              		<a pButton [routerLink]="['/caixadiario', caixaDiario.id]" icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></a>
@@ -87,7 +83,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		        
 		        <ng-template pTemplate="emptymessage" let-columns>
 				    <tr>
-				        <td [attr.colspan]="8">
+				        <td [attr.colspan]="7">
 				            Nenhum registro encontrado.
 				        </td>
 				    </tr>

@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -19,6 +19,7 @@ import { AgenciaBancariaAutoComplete } from './agenciabancaria.model';
 import { Banco } from './../banco/banco.model';
 import { AgenciaBancariaListFilter } from './agenciabancaria.model';
 import { environment } from 'src/environments/environment';
+import { BancoAutoComplete } from './../banco/banco.model';
 
 @Injectable()
 export class AgenciaBancariaService {
@@ -102,6 +103,27 @@ export class AgenciaBancariaService {
 	
 	}
 	
+							
+	// Begin relationships autoComplete 
+	
+	bancoBancoAutoComplete(query: string): Promise<BancoAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<BancoAutoComplete[]>(`${this.url}/bancoBancoAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as BancoAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	// End relationships autoComplete
+	
+				
 	
 	agenciaBancariaList(agenciaBancariaListFilter: AgenciaBancariaListFilter): Promise<any> {
 	    const headers = this.getHeaders();

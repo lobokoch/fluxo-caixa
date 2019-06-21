@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -15,6 +15,7 @@ import {MessageService} from 'primeng/api';
 import { Caixa } from './caixa.model';
 import { CaixaService } from './caixa.service';
 import { FinanceiroFluxoCaixaTranslationService } from './../i18n/financeiro-fluxocaixa-translation.service';
+import * as moment from 'moment';
 
 
 @Component({
@@ -35,6 +36,8 @@ export class CaixaComponent implements OnInit {
 	}
 	
 	ngOnInit() {
+		this.rulesOnCreate();
+		
 	    const id = this.route.snapshot.params['id'];
 	    if (id) {
 	      this.getCaixaById(id);
@@ -74,6 +77,8 @@ export class CaixaComponent implements OnInit {
 	}
 	
 	create() {
+		this.rulesOnCreate();
+		
 	    this.caixaService.create(this.caixa)
 	    .then((caixa) => {
 	      this.caixa = caixa;
@@ -127,5 +132,10 @@ export class CaixaComponent implements OnInit {
 		// const result = key.substring(key.lastIndexOf('_') + 1);
 		// return result;
 	}
+	
+	rulesOnCreate() {
+		this.caixa.saldo = 0.0;
+	}
+	
 	
 }

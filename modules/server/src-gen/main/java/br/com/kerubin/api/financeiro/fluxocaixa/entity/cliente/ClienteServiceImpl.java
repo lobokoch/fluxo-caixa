@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -31,18 +31,20 @@ public class ClienteServiceImpl implements ClienteService {
 	private ClienteListFilterPredicate clienteListFilterPredicate;
 	
 	
-	
 	@Transactional
+	@Override
 	public ClienteEntity create(ClienteEntity clienteEntity) {
 		return clienteRepository.save(clienteEntity);
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public ClienteEntity read(java.util.UUID id) {
 		return getClienteEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public ClienteEntity update(java.util.UUID id, ClienteEntity clienteEntity) {
 		ClienteEntity entity = getClienteEntity(id);
 		BeanUtils.copyProperties(clienteEntity, entity, "id");
@@ -52,6 +54,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		clienteRepository.deleteById(id);
 		
@@ -59,6 +62,7 @@ public class ClienteServiceImpl implements ClienteService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<ClienteEntity> list(ClienteListFilter clienteListFilter, Pageable pageable) {
 		Predicate predicate = clienteListFilterPredicate.mountAndGetPredicate(clienteListFilter);
 		
@@ -67,7 +71,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 	
 	@Transactional(readOnly = true)
-	private ClienteEntity getClienteEntity(java.util.UUID id) {
+	protected ClienteEntity getClienteEntity(java.util.UUID id) {
 		Optional<ClienteEntity> clienteEntity = clienteRepository.findById(id);
 		if (!clienteEntity.isPresent()) {
 			throw new IllegalArgumentException("Cliente not found:" + id.toString());
@@ -76,6 +80,7 @@ public class ClienteServiceImpl implements ClienteService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<ClienteAutoComplete> autoComplete(String query) {
 		Collection<ClienteAutoComplete> result = clienteRepository.autoComplete(query);
 		return result;

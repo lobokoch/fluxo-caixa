@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -31,18 +31,20 @@ public class BancoServiceImpl implements BancoService {
 	private BancoListFilterPredicate bancoListFilterPredicate;
 	
 	
-	
 	@Transactional
+	@Override
 	public BancoEntity create(BancoEntity bancoEntity) {
 		return bancoRepository.save(bancoEntity);
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public BancoEntity read(java.util.UUID id) {
 		return getBancoEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public BancoEntity update(java.util.UUID id, BancoEntity bancoEntity) {
 		BancoEntity entity = getBancoEntity(id);
 		BeanUtils.copyProperties(bancoEntity, entity, "id");
@@ -52,6 +54,7 @@ public class BancoServiceImpl implements BancoService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		bancoRepository.deleteById(id);
 		
@@ -59,6 +62,7 @@ public class BancoServiceImpl implements BancoService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<BancoEntity> list(BancoListFilter bancoListFilter, Pageable pageable) {
 		Predicate predicate = bancoListFilterPredicate.mountAndGetPredicate(bancoListFilter);
 		
@@ -67,7 +71,7 @@ public class BancoServiceImpl implements BancoService {
 	}
 	
 	@Transactional(readOnly = true)
-	private BancoEntity getBancoEntity(java.util.UUID id) {
+	protected BancoEntity getBancoEntity(java.util.UUID id) {
 		Optional<BancoEntity> bancoEntity = bancoRepository.findById(id);
 		if (!bancoEntity.isPresent()) {
 			throw new IllegalArgumentException("Banco not found:" + id.toString());
@@ -76,6 +80,7 @@ public class BancoServiceImpl implements BancoService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<BancoAutoComplete> autoComplete(String query) {
 		Collection<BancoAutoComplete> result = bancoRepository.autoComplete(query);
 		return result;

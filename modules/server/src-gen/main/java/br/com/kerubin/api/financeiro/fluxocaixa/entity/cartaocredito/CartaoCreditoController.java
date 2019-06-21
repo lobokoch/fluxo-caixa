@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -32,6 +32,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import br.com.kerubin.api.financeiro.fluxocaixa.common.PageResult;
+
+		
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.banco.BancoAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.bandeiracartao.BandeiraCartaoAutoComplete;
+
 
 
 @RestController
@@ -98,5 +103,26 @@ public class CartaoCreditoController {
 	}
 	
 	
+	
+	
+				
+	// Begin relationships autoComplete 
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/bancoBancoAutoComplete")
+	public Collection<BancoAutoComplete> bancoBancoAutoComplete(@RequestParam("query") String query) {
+		Collection<BancoAutoComplete> result = cartaoCreditoService.bancoBancoAutoComplete(query);
+		return result;
+	}
+	
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/bandeiraCartaoBandeiraCartaoAutoComplete")
+	public Collection<BandeiraCartaoAutoComplete> bandeiraCartaoBandeiraCartaoAutoComplete(@RequestParam("query") String query) {
+		Collection<BandeiraCartaoAutoComplete> result = cartaoCreditoService.bandeiraCartaoBandeiraCartaoAutoComplete(query);
+		return result;
+	}
+	
+	// End relationships autoComplete
 	
 }

@@ -1,7 +1,7 @@
 <!--
 **********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.754
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.603
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -77,6 +77,21 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 			<div class="ui-g-12 ui-md-2 ui-fluid">
 				<a routerLink="/caixadiario" pButton label="Pesquisar"></a>
 			</div>
+			
+			<!-- Begin rule functions -->
+			
+			
+			<div class="ui-g-12 ui-md-2 ui-fluid">
+				<button pButton [disabled]="!abrirCaixaWhenCondition()" (click)="abrirCaixa()" type="button" pTooltip="Abrir caixa" tooltipPosition="top" icon="pi pi-lock-open" label="Abrir caixa" class="ui-button-success"></button>
+			</div>
+			
+			
+			<div class="ui-g-12 ui-md-2 ui-fluid">
+				<button pButton [disabled]="!fecharCaixaWhenCondition()" (click)="fecharCaixa()" type="button" pTooltip="Fechar caixa" tooltipPosition="top" icon="pi pi-lock" label="Fechar caixa" class="ui-button-warning"></button>
+			</div>
+			
+			
+			<!-- End rule functions -->
 		</div>
 		
 	

@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -20,6 +20,13 @@ import com.querydsl.core.types.Predicate;
 import java.util.Optional;
 import java.util.Collection;
 
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.banco.BancoAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.bandeiracartao.BandeiraCartaoAutoComplete;
+
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.banco.BancoRepository;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.bandeiracartao.BandeiraCartaoRepository;
+
+
  
 @Service
 public class CartaoCreditoServiceImpl implements CartaoCreditoService {
@@ -31,18 +38,27 @@ public class CartaoCreditoServiceImpl implements CartaoCreditoService {
 	private CartaoCreditoListFilterPredicate cartaoCreditoListFilterPredicate;
 	
 	
+	@Autowired
+	private BancoRepository bancoRepository;
+	
+	@Autowired
+	private BandeiraCartaoRepository bandeiraCartaoRepository;
+	
 	
 	@Transactional
+	@Override
 	public CartaoCreditoEntity create(CartaoCreditoEntity cartaoCreditoEntity) {
 		return cartaoCreditoRepository.save(cartaoCreditoEntity);
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public CartaoCreditoEntity read(java.util.UUID id) {
 		return getCartaoCreditoEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public CartaoCreditoEntity update(java.util.UUID id, CartaoCreditoEntity cartaoCreditoEntity) {
 		CartaoCreditoEntity entity = getCartaoCreditoEntity(id);
 		BeanUtils.copyProperties(cartaoCreditoEntity, entity, "id");
@@ -52,6 +68,7 @@ public class CartaoCreditoServiceImpl implements CartaoCreditoService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		cartaoCreditoRepository.deleteById(id);
 		
@@ -59,6 +76,7 @@ public class CartaoCreditoServiceImpl implements CartaoCreditoService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<CartaoCreditoEntity> list(CartaoCreditoListFilter cartaoCreditoListFilter, Pageable pageable) {
 		Predicate predicate = cartaoCreditoListFilterPredicate.mountAndGetPredicate(cartaoCreditoListFilter);
 		
@@ -67,7 +85,7 @@ public class CartaoCreditoServiceImpl implements CartaoCreditoService {
 	}
 	
 	@Transactional(readOnly = true)
-	private CartaoCreditoEntity getCartaoCreditoEntity(java.util.UUID id) {
+	protected CartaoCreditoEntity getCartaoCreditoEntity(java.util.UUID id) {
 		Optional<CartaoCreditoEntity> cartaoCreditoEntity = cartaoCreditoRepository.findById(id);
 		if (!cartaoCreditoEntity.isPresent()) {
 			throw new IllegalArgumentException("CartaoCredito not found:" + id.toString());
@@ -76,10 +94,29 @@ public class CartaoCreditoServiceImpl implements CartaoCreditoService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<CartaoCreditoAutoComplete> autoComplete(String query) {
 		Collection<CartaoCreditoAutoComplete> result = cartaoCreditoRepository.autoComplete(query);
 		return result;
 	}
+	
+	// Begin relationships autoComplete 
+	@Transactional(readOnly = true)
+	@Override
+	public Collection<BancoAutoComplete> bancoBancoAutoComplete(String query) {
+		Collection<BancoAutoComplete> result = bancoRepository.autoComplete(query);
+		return result;
+	}
+	
+	@Transactional(readOnly = true)
+	@Override
+	public Collection<BandeiraCartaoAutoComplete> bandeiraCartaoBandeiraCartaoAutoComplete(String query) {
+		Collection<BandeiraCartaoAutoComplete> result = bandeiraCartaoRepository.autoComplete(query);
+		return result;
+	}
+	
+	// End relationships autoComplete
+	
 	
 	
 }

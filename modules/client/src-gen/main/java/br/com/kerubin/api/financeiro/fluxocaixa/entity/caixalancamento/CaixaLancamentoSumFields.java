@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.13.1
-Code generated at time stamp: 2019-06-18T23:50:31.158
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -14,7 +14,7 @@ public class CaixaLancamentoSumFields {
 	private java.math.BigDecimal sumValor;
 	
 	public CaixaLancamentoSumFields() {
-		
+		// Contructor for reflexion, injection, Jackson, QueryDSL, etc proposal.
 	}
 	
 	public java.math.BigDecimal getSumValor() {

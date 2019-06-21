@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -23,7 +23,14 @@ import { CartaoCredito } from './../cartaocredito/cartaocredito.model';
 import { Cliente } from './../cliente/cliente.model';
 import { Fornecedor } from './../fornecedor/fornecedor.model';
 import { CaixaLancamentoListFilter } from './caixalancamento.model';
+import { CaixaLancamentoSumFields } from './caixalancamento.model';
 import { environment } from 'src/environments/environment';
+import { CaixaDiarioAutoComplete } from './../caixadiario/caixadiario.model';
+import { PlanoContaAutoComplete } from './../planoconta/planoconta.model';
+import { ContaBancariaAutoComplete } from './../contabancaria/contabancaria.model';
+import { CartaoCreditoAutoComplete } from './../cartaocredito/cartaocredito.model';
+import { ClienteAutoComplete } from './../cliente/cliente.model';
+import { FornecedorAutoComplete } from './../fornecedor/fornecedor.model';
 
 @Injectable()
 export class CaixaLancamentoService {
@@ -48,6 +55,7 @@ export class CaixaLancamentoService {
 	    .then(response => {
 	      const created = response as CaixaLancamento;
 	      this.adjustNullEntitySlots([created]);
+	      this.adjustEntityDates([created]);
 	      return created;
 	    });
 	}
@@ -60,6 +68,7 @@ export class CaixaLancamentoService {
 	    .then(response => {
 	      const updated = response as CaixaLancamento;
 	      this.adjustNullEntitySlots([updated]);
+	      this.adjustEntityDates([updated]);
 	      return updated;
 	    });
 	}
@@ -77,11 +86,20 @@ export class CaixaLancamentoService {
 	    .then(response => {
 	      const caixaLancamento = response as CaixaLancamento;
 	      this.adjustNullEntitySlots([caixaLancamento]);
+	      this.adjustEntityDates([caixaLancamento]);
 	      return caixaLancamento;
 	    });
 	}
 	
 	
+	private adjustEntityDates(entityList: CaixaLancamento[]) {
+		entityList.forEach(caixaLancamento => {
+		      if (caixaLancamento.dataLancamento) {
+		        caixaLancamento.dataLancamento = moment(caixaLancamento.dataLancamento, 'YYYY-MM-DD').toDate();
+		      }
+		      	
+		});
+	}
 	
 	private adjustNullEntitySlots(entityList: CaixaLancamento[]) {
 		/*entityList.forEach(caixaLancamento => {
@@ -132,6 +150,107 @@ export class CaixaLancamentoService {
 	
 	}
 	
+							
+	// Begin relationships autoComplete 
+	
+	caixaDiarioCaixaDiarioAutoComplete(query: string): Promise<CaixaDiarioAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<CaixaDiarioAutoComplete[]>(`${this.url}/caixaDiarioCaixaDiarioAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as CaixaDiarioAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	
+	planoContaPlanoContasAutoComplete(query: string): Promise<PlanoContaAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<PlanoContaAutoComplete[]>(`${this.url}/planoContaPlanoContasAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as PlanoContaAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	
+	contaBancariaContaBancariaAutoComplete(query: string): Promise<ContaBancariaAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<ContaBancariaAutoComplete[]>(`${this.url}/contaBancariaContaBancariaAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as ContaBancariaAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	
+	cartaoCreditoCartaoCreditoAutoComplete(query: string): Promise<CartaoCreditoAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<CartaoCreditoAutoComplete[]>(`${this.url}/cartaoCreditoCartaoCreditoAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as CartaoCreditoAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	
+	clienteClienteAutoComplete(query: string): Promise<ClienteAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<ClienteAutoComplete[]>(`${this.url}/clienteClienteAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as ClienteAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	
+	fornecedorFornecedorAutoComplete(query: string): Promise<FornecedorAutoComplete[]> {
+	    const headers = this.getHeaders();
+	
+	    let params = new HttpParams();
+	    params = params.set('query', query);
+	
+	    return this.http.get<FornecedorAutoComplete[]>(`${this.url}/fornecedorFornecedorAutoComplete`, { headers, params })
+	      .toPromise()
+	      .then(response => {
+	        const result = response as FornecedorAutoComplete[];
+	        return result;
+	      });
+	
+	}
+	
+	// End relationships autoComplete
+	
+				
 	
 	caixaLancamentoList(caixaLancamentoListFilter: CaixaLancamentoListFilter): Promise<any> {
 	    const headers = this.getHeaders();
@@ -146,6 +265,7 @@ export class CaixaLancamentoService {
 	        const totalElements = data.totalElements;
 	
 	        this.adjustNullEntitySlots(items);
+	        this.adjustEntityDates(items);
 	
 	        const result = {
 	          items,
@@ -156,6 +276,18 @@ export class CaixaLancamentoService {
 	      });
 	}
 	
+	
+	getCaixaLancamentoSumFields(caixaLancamentoListFilter: CaixaLancamentoListFilter): Promise<CaixaLancamentoSumFields> {
+	    const headers = this.getHeaders();
+	    
+		const params = this.mountAndGetSearchParams(caixaLancamentoListFilter);
+		return this.http.get<any>(`${this.url}/caixaLancamentoSumFields`, { headers, params })
+		  .toPromise()
+		  .then(response => {
+		    const result = response;
+		    return result;
+		  });
+	}
 	
 	mountAndGetSearchParams(filter: CaixaLancamentoListFilter): HttpParams {
 	    let params = new HttpParams();

@@ -1,4 +1,4 @@
-@label("Financeiro")
+@label("Financeiro") // xxx
 domain financeiro
 
 @label("Fluxo de caixa")
@@ -50,7 +50,7 @@ service fluxo_caixa {
 		ativo: boolean default: true
 		label: "Caixa ativo"
 		web(styleClass: "ui-md-4")
-		///////////
+		////////////
 		
 		saldo: money optional
 		label: "Saldo do caixa"
@@ -60,6 +60,10 @@ service fluxo_caixa {
 		label: "Observações"
 		grid(hidden) 
 		web(styleClass: "ui-md-12")
+		
+		rules {
+			with(form).apply(saldo = 0).when(entityForm.onCreate)
+		}
 	}
 	
 	@version
@@ -117,7 +121,7 @@ service fluxo_caixa {
 		
 	}
 	
-	@version // xxx
+	@version // xx
 	@label("Lançamentos no caixa")
 	entity CaixaLancamento {
 		
@@ -129,15 +133,11 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-4" readOnly)
 		///////////////////
 		
-		planoContas: refers PlanoConta manyToOne
-		web(styleClass: "ui-md-6")
-		grid(hidden)
+		dataLancamento: date 
+		label: "Data"
+		sort: desc
+		web(styleClass: "ui-md-2")
 		
-		descricao: string
-		label: "Descrição do lançamento"
-		web(styleClass: "ui-md-6")
-		
-		////////////////////////
 		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
 		web(styleClass: "ui-md-2")
 		
@@ -150,11 +150,18 @@ service fluxo_caixa {
 		label: "Forma de pagamento"
 		web(styleClass: "ui-md-4")
 		
-		dataLancamento: date 
-		label: "Data do lançamento"
-		sort: desc
-		web(styleClass: "ui-md-2")
-		// grid(hidden)
+		
+		///////
+		descricao: string
+		label: "Descrição do lançamento"
+		web(styleClass: "ui-md-6")
+		
+		planoContas: refers PlanoConta optional manyToOne
+		web(styleClass: "ui-md-6")
+		grid(hidden)
+		
+		
+		////////////////////////
 		
 		//--
 		contaBancaria: refers ContaBancaria? manyToOne 
@@ -190,8 +197,12 @@ service fluxo_caixa {
 		grid(hidden) 
 		web(styleClass: "ui-md-12")
 		
-		rules {
+		rules { //xx
 			with(form).apply(dataLancamento = today).when(entityForm.onInit)
+			with(contaBancaria).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CONTA_BANCARIA))
+			with(cartaoCredito).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CARTAO_CREDITO))
+			with(cliente).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
+			with(fornecedor).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
 		}
 		
 	}

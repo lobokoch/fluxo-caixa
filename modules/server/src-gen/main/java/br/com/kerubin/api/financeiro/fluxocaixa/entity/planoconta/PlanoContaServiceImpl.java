@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -20,6 +20,9 @@ import com.querydsl.core.types.Predicate;
 import java.util.Optional;
 import java.util.Collection;
 
+
+
+
  
 @Service
 public class PlanoContaServiceImpl implements PlanoContaService {
@@ -31,18 +34,20 @@ public class PlanoContaServiceImpl implements PlanoContaService {
 	private PlanoContaListFilterPredicate planoContaListFilterPredicate;
 	
 	
-	
 	@Transactional
+	@Override
 	public PlanoContaEntity create(PlanoContaEntity planoContaEntity) {
 		return planoContaRepository.save(planoContaEntity);
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public PlanoContaEntity read(java.util.UUID id) {
 		return getPlanoContaEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public PlanoContaEntity update(java.util.UUID id, PlanoContaEntity planoContaEntity) {
 		PlanoContaEntity entity = getPlanoContaEntity(id);
 		BeanUtils.copyProperties(planoContaEntity, entity, "id");
@@ -52,6 +57,7 @@ public class PlanoContaServiceImpl implements PlanoContaService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		planoContaRepository.deleteById(id);
 		
@@ -59,6 +65,7 @@ public class PlanoContaServiceImpl implements PlanoContaService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<PlanoContaEntity> list(PlanoContaListFilter planoContaListFilter, Pageable pageable) {
 		Predicate predicate = planoContaListFilterPredicate.mountAndGetPredicate(planoContaListFilter);
 		
@@ -67,7 +74,7 @@ public class PlanoContaServiceImpl implements PlanoContaService {
 	}
 	
 	@Transactional(readOnly = true)
-	private PlanoContaEntity getPlanoContaEntity(java.util.UUID id) {
+	protected PlanoContaEntity getPlanoContaEntity(java.util.UUID id) {
 		Optional<PlanoContaEntity> planoContaEntity = planoContaRepository.findById(id);
 		if (!planoContaEntity.isPresent()) {
 			throw new IllegalArgumentException("PlanoConta not found:" + id.toString());
@@ -76,10 +83,22 @@ public class PlanoContaServiceImpl implements PlanoContaService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<PlanoContaAutoComplete> autoComplete(String query) {
 		Collection<PlanoContaAutoComplete> result = planoContaRepository.autoComplete(query);
 		return result;
 	}
+	
+	// Begin relationships autoComplete 
+	@Transactional(readOnly = true)
+	@Override
+	public Collection<PlanoContaAutoComplete> planoContaPlanoContaPaiAutoComplete(String query) {
+		Collection<PlanoContaAutoComplete> result = planoContaRepository.autoComplete(query);
+		return result;
+	}
+	
+	// End relationships autoComplete
+	
 	
 	
 }

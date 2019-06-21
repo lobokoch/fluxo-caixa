@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -15,6 +15,7 @@ import {MessageService} from 'primeng/api';
 import { CaixaDiario } from './caixadiario.model';
 import { CaixaDiarioService } from './caixadiario.service';
 import { FinanceiroFluxoCaixaTranslationService } from './../i18n/financeiro-fluxocaixa-translation.service';
+import * as moment from 'moment';
 
 import { CaixaService } from './../caixa/caixa.service';
 import { Caixa } from './../caixa/caixa.model';
@@ -86,6 +87,7 @@ export class CaixaDiarioComponent implements OnInit {
 	}
 	
 	create() {
+		
 	    this.caixaDiarioService.create(this.caixaDiario)
 	    .then((caixaDiario) => {
 	      this.caixaDiario = caixaDiario;
@@ -131,8 +133,8 @@ export class CaixaDiarioComponent implements OnInit {
 	
 	caixaDiarioCaixaAutoComplete(event) {
 	    const query = event.query;
-	    this.caixaService
-	      .autoComplete(query)
+	    this.caixaDiarioService
+	      .caixaCaixaAutoComplete(query)
 	      .then((result) => {
 	        this.caixaDiarioCaixaAutoCompleteSuggestions = result as CaixaAutoComplete[];
 	      })
@@ -174,5 +176,48 @@ export class CaixaDiarioComponent implements OnInit {
 		// const result = key.substring(key.lastIndexOf('_') + 1);
 		// return result;
 	}
+	
+	abrirCaixaWhenCondition(): boolean {
+		return this.caixaDiario.id && (String(this.caixaDiario.caixaDiarioSituacao) === 'NAO_INICIADO');
+	}
+	  
+	abrirCaixa() {
+		this.caixaDiarioRuleFunctionAbrirCaixa();
+	}
+	
+	caixaDiarioRuleFunctionAbrirCaixa() {
+	    this.caixaDiarioService.caixaDiarioRuleFunctionAbrirCaixa(this.caixaDiario)
+	    .then((caixaDiario) => {
+	      if (caixaDiario) { // Can be null
+	      	this.caixaDiario = caixaDiario;
+	      }
+	      this.showSuccess('Operação executada com sucesso.');
+	    })
+	    .catch(error => {
+	      this.showError('Erro ao executar a operação: ' + error);
+	    });
+	}
+	
+	fecharCaixaWhenCondition(): boolean {
+		return this.caixaDiario.id && (String(this.caixaDiario.caixaDiarioSituacao) === 'ABERTO');
+	}
+	  
+	fecharCaixa() {
+		this.caixaDiarioRuleFunctionFecharCaixa();
+	}
+	
+	caixaDiarioRuleFunctionFecharCaixa() {
+	    this.caixaDiarioService.caixaDiarioRuleFunctionFecharCaixa(this.caixaDiario)
+	    .then((caixaDiario) => {
+	      if (caixaDiario) { // Can be null
+	      	this.caixaDiario = caixaDiario;
+	      }
+	      this.showSuccess('Operação executada com sucesso.');
+	    })
+	    .catch(error => {
+	      this.showError('Erro ao executar a operação: ' + error);
+	    });
+	}
+	
 	
 }

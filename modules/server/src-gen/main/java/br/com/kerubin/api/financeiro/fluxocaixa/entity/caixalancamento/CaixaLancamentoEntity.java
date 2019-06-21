@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -23,8 +23,8 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
-import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.contabancaria.ContaBancariaEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCreditoEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteEntity;
@@ -49,17 +49,12 @@ public class CaixaLancamentoEntity  {
 	@Column(name="tipo_fonte_movimento")
 	private TipoFonteMovimento tipoFonteMovimento;
 	
+	@Column(name="data_lancamento")
+	private java.time.LocalDate dataLancamento;
+	
 	@Enumerated(EnumType.STRING)
 	@Column(name="tipo_lancamento_financeiro")
 	private TipoLancamentoFinanceiro tipoLancamentoFinanceiro;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "plano_contas")
-	
-	private PlanoContaEntity planoContas;
-	
-	@Column(name="descricao")
-	private String descricao;
 	
 	@Column(name="valor")
 	private java.math.BigDecimal valor;
@@ -67,6 +62,14 @@ public class CaixaLancamentoEntity  {
 	@Enumerated(EnumType.STRING)
 	@Column(name="forma_pagamento")
 	private FormaPagamento formaPagamento;
+	
+	@Column(name="descricao")
+	private String descricao;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "plano_contas")
+	
+	private PlanoContaEntity planoContas;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "conta_bancaria")
@@ -96,7 +99,7 @@ public class CaixaLancamentoEntity  {
 	
 	@Version
 	@Column(name="version")
-	private Long version;
+	private short version;
 	
 	public java.util.UUID getId() {
 		return id;
@@ -110,16 +113,12 @@ public class CaixaLancamentoEntity  {
 		return tipoFonteMovimento;
 	}
 	
+	public java.time.LocalDate getDataLancamento() {
+		return dataLancamento;
+	}
+	
 	public TipoLancamentoFinanceiro getTipoLancamentoFinanceiro() {
 		return tipoLancamentoFinanceiro;
-	}
-	
-	public PlanoContaEntity getPlanoContas() {
-		return planoContas;
-	}
-	
-	public String getDescricao() {
-		return descricao;
 	}
 	
 	public java.math.BigDecimal getValor() {
@@ -128,6 +127,14 @@ public class CaixaLancamentoEntity  {
 	
 	public FormaPagamento getFormaPagamento() {
 		return formaPagamento;
+	}
+	
+	public String getDescricao() {
+		return descricao;
+	}
+	
+	public PlanoContaEntity getPlanoContas() {
+		return planoContas;
 	}
 	
 	public ContaBancariaEntity getContaBancaria() {
@@ -154,7 +161,7 @@ public class CaixaLancamentoEntity  {
 		return observacoes;
 	}
 	
-	public Long getVersion() {
+	public short getVersion() {
 		return version;
 	}
 	
@@ -170,16 +177,12 @@ public class CaixaLancamentoEntity  {
 		this.tipoFonteMovimento = tipoFonteMovimento;
 	}
 	
+	public void setDataLancamento(java.time.LocalDate dataLancamento) {
+		this.dataLancamento = dataLancamento;
+	}
+	
 	public void setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro tipoLancamentoFinanceiro) {
 		this.tipoLancamentoFinanceiro = tipoLancamentoFinanceiro;
-	}
-	
-	public void setPlanoContas(PlanoContaEntity planoContas) {
-		this.planoContas = planoContas;
-	}
-	
-	public void setDescricao(String descricao) {
-		this.descricao = descricao != null ? descricao.trim() : descricao; // Chamadas REST fazem trim.
 	}
 	
 	public void setValor(java.math.BigDecimal valor) {
@@ -188,6 +191,14 @@ public class CaixaLancamentoEntity  {
 	
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
+	}
+	
+	public void setDescricao(String descricao) {
+		this.descricao = descricao != null ? descricao.trim() : descricao; // Chamadas REST fazem trim.
+	}
+	
+	public void setPlanoContas(PlanoContaEntity planoContas) {
+		this.planoContas = planoContas;
 	}
 	
 	public void setContaBancaria(ContaBancariaEntity contaBancaria) {
@@ -214,7 +225,7 @@ public class CaixaLancamentoEntity  {
 		this.observacoes = observacoes != null ? observacoes.trim() : observacoes; // Chamadas REST fazem trim.
 	}
 	
-	public void setVersion(Long version) {
+	public void setVersion(short version) {
 		this.version = version;
 	}
 	
@@ -223,11 +234,12 @@ public class CaixaLancamentoEntity  {
 			this.setId(source.getId());
 			this.setCaixaDiario(source.getCaixaDiario());
 			this.setTipoFonteMovimento(source.getTipoFonteMovimento());
+			this.setDataLancamento(source.getDataLancamento());
 			this.setTipoLancamentoFinanceiro(source.getTipoLancamentoFinanceiro());
-			this.setPlanoContas(source.getPlanoContas());
-			this.setDescricao(source.getDescricao());
 			this.setValor(source.getValor());
 			this.setFormaPagamento(source.getFormaPagamento());
+			this.setDescricao(source.getDescricao());
+			this.setPlanoContas(source.getPlanoContas());
 			this.setContaBancaria(source.getContaBancaria());
 			this.setCartaoCredito(source.getCartaoCredito());
 			this.setCliente(source.getCliente());
@@ -243,11 +255,12 @@ public class CaixaLancamentoEntity  {
 		theClone.setId(this.getId());
 		theClone.setCaixaDiario(this.getCaixaDiario());
 		theClone.setTipoFonteMovimento(this.getTipoFonteMovimento());
+		theClone.setDataLancamento(this.getDataLancamento());
 		theClone.setTipoLancamentoFinanceiro(this.getTipoLancamentoFinanceiro());
-		theClone.setPlanoContas(this.getPlanoContas());
-		theClone.setDescricao(this.getDescricao());
 		theClone.setValor(this.getValor());
 		theClone.setFormaPagamento(this.getFormaPagamento());
+		theClone.setDescricao(this.getDescricao());
+		theClone.setPlanoContas(this.getPlanoContas());
 		theClone.setContaBancaria(this.getContaBancaria());
 		theClone.setCartaoCredito(this.getCartaoCredito());
 		theClone.setCliente(this.getCliente());

@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -20,6 +20,11 @@ import com.querydsl.core.types.Predicate;
 import java.util.Optional;
 import java.util.Collection;
 
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.banco.BancoAutoComplete;
+
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.banco.BancoRepository;
+
+
  
 @Service
 public class AgenciaBancariaServiceImpl implements AgenciaBancariaService {
@@ -31,18 +36,24 @@ public class AgenciaBancariaServiceImpl implements AgenciaBancariaService {
 	private AgenciaBancariaListFilterPredicate agenciaBancariaListFilterPredicate;
 	
 	
+	@Autowired
+	private BancoRepository bancoRepository;
+	
 	
 	@Transactional
+	@Override
 	public AgenciaBancariaEntity create(AgenciaBancariaEntity agenciaBancariaEntity) {
 		return agenciaBancariaRepository.save(agenciaBancariaEntity);
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public AgenciaBancariaEntity read(java.util.UUID id) {
 		return getAgenciaBancariaEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public AgenciaBancariaEntity update(java.util.UUID id, AgenciaBancariaEntity agenciaBancariaEntity) {
 		AgenciaBancariaEntity entity = getAgenciaBancariaEntity(id);
 		BeanUtils.copyProperties(agenciaBancariaEntity, entity, "id");
@@ -52,6 +63,7 @@ public class AgenciaBancariaServiceImpl implements AgenciaBancariaService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		agenciaBancariaRepository.deleteById(id);
 		
@@ -59,6 +71,7 @@ public class AgenciaBancariaServiceImpl implements AgenciaBancariaService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<AgenciaBancariaEntity> list(AgenciaBancariaListFilter agenciaBancariaListFilter, Pageable pageable) {
 		Predicate predicate = agenciaBancariaListFilterPredicate.mountAndGetPredicate(agenciaBancariaListFilter);
 		
@@ -67,7 +80,7 @@ public class AgenciaBancariaServiceImpl implements AgenciaBancariaService {
 	}
 	
 	@Transactional(readOnly = true)
-	private AgenciaBancariaEntity getAgenciaBancariaEntity(java.util.UUID id) {
+	protected AgenciaBancariaEntity getAgenciaBancariaEntity(java.util.UUID id) {
 		Optional<AgenciaBancariaEntity> agenciaBancariaEntity = agenciaBancariaRepository.findById(id);
 		if (!agenciaBancariaEntity.isPresent()) {
 			throw new IllegalArgumentException("AgenciaBancaria not found:" + id.toString());
@@ -76,10 +89,22 @@ public class AgenciaBancariaServiceImpl implements AgenciaBancariaService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<AgenciaBancariaAutoComplete> autoComplete(String query) {
 		Collection<AgenciaBancariaAutoComplete> result = agenciaBancariaRepository.autoComplete(query);
 		return result;
 	}
+	
+	// Begin relationships autoComplete 
+	@Transactional(readOnly = true)
+	@Override
+	public Collection<BancoAutoComplete> bancoBancoAutoComplete(String query) {
+		Collection<BancoAutoComplete> result = bancoRepository.autoComplete(query);
+		return result;
+	}
+	
+	// End relationships autoComplete
+	
 	
 	
 }

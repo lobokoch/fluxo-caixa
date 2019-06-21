@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -31,18 +31,20 @@ public class FornecedorServiceImpl implements FornecedorService {
 	private FornecedorListFilterPredicate fornecedorListFilterPredicate;
 	
 	
-	
 	@Transactional
+	@Override
 	public FornecedorEntity create(FornecedorEntity fornecedorEntity) {
 		return fornecedorRepository.save(fornecedorEntity);
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public FornecedorEntity read(java.util.UUID id) {
 		return getFornecedorEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public FornecedorEntity update(java.util.UUID id, FornecedorEntity fornecedorEntity) {
 		FornecedorEntity entity = getFornecedorEntity(id);
 		BeanUtils.copyProperties(fornecedorEntity, entity, "id");
@@ -52,6 +54,7 @@ public class FornecedorServiceImpl implements FornecedorService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		fornecedorRepository.deleteById(id);
 		
@@ -59,6 +62,7 @@ public class FornecedorServiceImpl implements FornecedorService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<FornecedorEntity> list(FornecedorListFilter fornecedorListFilter, Pageable pageable) {
 		Predicate predicate = fornecedorListFilterPredicate.mountAndGetPredicate(fornecedorListFilter);
 		
@@ -67,7 +71,7 @@ public class FornecedorServiceImpl implements FornecedorService {
 	}
 	
 	@Transactional(readOnly = true)
-	private FornecedorEntity getFornecedorEntity(java.util.UUID id) {
+	protected FornecedorEntity getFornecedorEntity(java.util.UUID id) {
 		Optional<FornecedorEntity> fornecedorEntity = fornecedorRepository.findById(id);
 		if (!fornecedorEntity.isPresent()) {
 			throw new IllegalArgumentException("Fornecedor not found:" + id.toString());
@@ -76,6 +80,7 @@ public class FornecedorServiceImpl implements FornecedorService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<FornecedorAutoComplete> autoComplete(String query) {
 		Collection<FornecedorAutoComplete> result = fornecedorRepository.autoComplete(query);
 		return result;

@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -9,8 +9,8 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 import { CaixaDiario } from './../caixadiario/caixadiario.model';
 import { TipoFonteMovimento } from './../enums/financeiro-fluxocaixa-enums.model';
 import { TipoLancamentoFinanceiro } from './../enums/financeiro-fluxocaixa-enums.model';
-import { PlanoConta } from './../planoconta/planoconta.model';
 import { FormaPagamento } from './../enums/financeiro-fluxocaixa-enums.model';
+import { PlanoConta } from './../planoconta/planoconta.model';
 import { ContaBancaria } from './../contabancaria/contabancaria.model';
 import { CartaoCredito } from './../cartaocredito/cartaocredito.model';
 import { Cliente } from './../cliente/cliente.model';
@@ -45,11 +45,12 @@ export class CaixaLancamento {
 	id: string;
 	caixaDiario: CaixaDiario;
 	tipoFonteMovimento: TipoFonteMovimento;
+	dataLancamento: Date;
 	tipoLancamentoFinanceiro: TipoLancamentoFinanceiro;
-	planoContas: PlanoConta;
-	descricao: string;
 	valor: number;
 	formaPagamento: FormaPagamento;
+	descricao: string;
+	planoContas: PlanoConta;
 	contaBancaria: ContaBancaria;
 	cartaoCredito: CartaoCredito;
 	cliente: Cliente;
@@ -66,4 +67,5 @@ export class CaixaLancamentoAutoComplete {
 }
 
 export class CaixaLancamentoSumFields {
+	sumValor: number;
 }

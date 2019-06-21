@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
-import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaLookupResult;
-import javax.validation.constraints.NotBlank;
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
+import javax.validation.constraints.NotBlank;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.contabancaria.ContaBancariaLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCreditoLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteLookupResult;
@@ -30,20 +30,22 @@ public class CaixaLancamento {
 	@NotNull(message="'tipoFonteMovimento' é obrigatório.")
 	private TipoFonteMovimento tipoFonteMovimento;
 	
+	@NotNull(message="'Data' é obrigatório.")
+	private java.time.LocalDate dataLancamento;
+	
 	@NotNull(message="'tipoLancamentoFinanceiro' é obrigatório.")
 	private TipoLancamentoFinanceiro tipoLancamentoFinanceiro;
-	
-	@NotNull(message="'Plano de contas' é obrigatório.")
-	private PlanoContaLookupResult planoContas;
-	
-	@NotBlank(message="'Descrição do lançamento' é obrigatório.")
-	private String descricao;
 	
 	@NotNull(message="'Valor' é obrigatório.")
 	private java.math.BigDecimal valor;
 	
 	@NotNull(message="'Forma de pagamento' é obrigatório.")
 	private FormaPagamento formaPagamento;
+	
+	@NotBlank(message="'Descrição do lançamento' é obrigatório.")
+	private String descricao;
+	
+	private PlanoContaLookupResult planoContas;
 	
 	private ContaBancariaLookupResult contaBancaria;
 	
@@ -57,7 +59,7 @@ public class CaixaLancamento {
 	
 	private String observacoes;
 	
-	private Long version;
+	private short version;
 	
 	public java.util.UUID getId() {
 		return id;
@@ -71,16 +73,12 @@ public class CaixaLancamento {
 		return tipoFonteMovimento;
 	}
 	
+	public java.time.LocalDate getDataLancamento() {
+		return dataLancamento;
+	}
+	
 	public TipoLancamentoFinanceiro getTipoLancamentoFinanceiro() {
 		return tipoLancamentoFinanceiro;
-	}
-	
-	public PlanoContaLookupResult getPlanoContas() {
-		return planoContas;
-	}
-	
-	public String getDescricao() {
-		return descricao;
 	}
 	
 	public java.math.BigDecimal getValor() {
@@ -89,6 +87,14 @@ public class CaixaLancamento {
 	
 	public FormaPagamento getFormaPagamento() {
 		return formaPagamento;
+	}
+	
+	public String getDescricao() {
+		return descricao;
+	}
+	
+	public PlanoContaLookupResult getPlanoContas() {
+		return planoContas;
 	}
 	
 	public ContaBancariaLookupResult getContaBancaria() {
@@ -115,7 +121,7 @@ public class CaixaLancamento {
 		return observacoes;
 	}
 	
-	public Long getVersion() {
+	public short getVersion() {
 		return version;
 	}
 	
@@ -131,16 +137,12 @@ public class CaixaLancamento {
 		this.tipoFonteMovimento = tipoFonteMovimento;
 	}
 	
+	public void setDataLancamento(java.time.LocalDate dataLancamento) {
+		this.dataLancamento = dataLancamento;
+	}
+	
 	public void setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro tipoLancamentoFinanceiro) {
 		this.tipoLancamentoFinanceiro = tipoLancamentoFinanceiro;
-	}
-	
-	public void setPlanoContas(PlanoContaLookupResult planoContas) {
-		this.planoContas = planoContas;
-	}
-	
-	public void setDescricao(String descricao) {
-		this.descricao = descricao;
 	}
 	
 	public void setValor(java.math.BigDecimal valor) {
@@ -149,6 +151,14 @@ public class CaixaLancamento {
 	
 	public void setFormaPagamento(FormaPagamento formaPagamento) {
 		this.formaPagamento = formaPagamento;
+	}
+	
+	public void setDescricao(String descricao) {
+		this.descricao = descricao;
+	}
+	
+	public void setPlanoContas(PlanoContaLookupResult planoContas) {
+		this.planoContas = planoContas;
 	}
 	
 	public void setContaBancaria(ContaBancariaLookupResult contaBancaria) {
@@ -175,7 +185,7 @@ public class CaixaLancamento {
 		this.observacoes = observacoes;
 	}
 	
-	public void setVersion(Long version) {
+	public void setVersion(short version) {
 		this.version = version;
 	}
 	

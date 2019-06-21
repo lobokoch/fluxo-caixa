@@ -1,7 +1,7 @@
 <!--
 **********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.754
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.603
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -45,7 +45,6 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		            	<th [pSortableColumn]="'nome'">{{ getTranslation('financeiro.fluxo_caixa.caixa_nome_grid') }}<p-sortIcon [field]="'nome'"></p-sortIcon></th>
 		            	<th [pSortableColumn]="'ativo'">{{ getTranslation('financeiro.fluxo_caixa.caixa_ativo_grid') }}<p-sortIcon [field]="'ativo'"></p-sortIcon></th>
 		            	<th style="width: 8em" [pSortableColumn]="'saldo'">{{ getTranslation('financeiro.fluxo_caixa.caixa_saldo_grid') }}<p-sortIcon [field]="'saldo'"></p-sortIcon></th>
-		            	<th [pSortableColumn]="'version'">{{ getTranslation('financeiro.fluxo_caixa.caixa_version_grid') }}<p-sortIcon [field]="'version'"></p-sortIcon></th>
 						<th style="width: 12em">Ações</th>
 		            </tr>
 		        </ng-template>
@@ -61,9 +60,6 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		            	<td class="kb-field-money">
 		            		{{caixa?.saldo | currency:'BRL':'symbol':'1.2-2':'pt' }}
 		            	</td>
-		            	<td>
-		            		{{caixa?.version}}
-		            	</td>
 		              	<td class="kb-actions">
 		              		<a pButton [routerLink]="['/caixa', caixa.id]" icon="pi pi-pencil" pTooltip="Editar" tooltipPosition="top"></a>
 		              		<!-- <button (click)="mostrarPagarConta(caixa)" pButton icon="pi pi-money"  pTooltip="Pagar esta conta" tooltipPosition="top"></button> -->
@@ -75,7 +71,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 		        
 		        <ng-template pTemplate="emptymessage" let-columns>
 				    <tr>
-				        <td [attr.colspan]="5">
+				        <td [attr.colspan]="4">
 				            Nenhum registro encontrado.
 				        </td>
 				    </tr>

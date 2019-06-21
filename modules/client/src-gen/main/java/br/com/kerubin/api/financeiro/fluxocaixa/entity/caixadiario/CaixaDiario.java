@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -40,7 +40,7 @@ public class CaixaDiario {
 	
 	private java.time.LocalDateTime lastModifiedDate;
 	
-	private Long version;
+	private short version;
 	
 	public java.util.UUID getId() {
 		return id;
@@ -90,7 +90,7 @@ public class CaixaDiario {
 		return lastModifiedDate;
 	}
 	
-	public Long getVersion() {
+	public short getVersion() {
 		return version;
 	}
 	
@@ -142,7 +142,7 @@ public class CaixaDiario {
 		this.lastModifiedDate = lastModifiedDate;
 	}
 	
-	public void setVersion(Long version) {
+	public void setVersion(short version) {
 		this.version = version;
 	}
 	

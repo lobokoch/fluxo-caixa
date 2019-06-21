@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -33,6 +33,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import br.com.kerubin.api.financeiro.fluxocaixa.common.PageResult;
 
+		
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixa.CaixaAutoComplete;
+
+
 
 @RestController
 @RequestMapping("entities/caixaDiario")
@@ -43,6 +47,9 @@ public class CaixaDiarioController {
 	
 	@Autowired
 	CaixaDiarioDTOConverter caixaDiarioDTOConverter;
+	
+	@Autowired
+	private CaixaDiarioRuleFunctions caixaDiarioRuleFunctions;
 	
 	@Transactional
 	@PostMapping
@@ -98,5 +105,43 @@ public class CaixaDiarioController {
 	}
 	
 	
+	
+	@Transactional
+	@PutMapping("/caixaDiarioRuleFunctionAbrirCaixa/{id}")
+	public ResponseEntity<CaixaDiario> caixaDiarioRuleFunctionAbrirCaixa(@PathVariable java.util.UUID id, @Valid @RequestBody CaixaDiario caixaDiario) {
+		try {
+			CaixaDiarioEntity caixaDiarioEntity = caixaDiarioRuleFunctions.abrirCaixa(id, caixaDiario);
+			return ResponseEntity.ok(caixaDiarioDTOConverter.convertEntityToDto(caixaDiarioEntity));
+		}
+		catch(IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	
+	@Transactional
+	@PutMapping("/caixaDiarioRuleFunctionFecharCaixa/{id}")
+	public ResponseEntity<CaixaDiario> caixaDiarioRuleFunctionFecharCaixa(@PathVariable java.util.UUID id, @Valid @RequestBody CaixaDiario caixaDiario) {
+		try {
+			CaixaDiarioEntity caixaDiarioEntity = caixaDiarioRuleFunctions.fecharCaixa(id, caixaDiario);
+			return ResponseEntity.ok(caixaDiarioDTOConverter.convertEntityToDto(caixaDiarioEntity));
+		}
+		catch(IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	
+				
+	// Begin relationships autoComplete 
+	
+	@Transactional(readOnly=true)
+	@GetMapping("/caixaCaixaAutoComplete")
+	public Collection<CaixaAutoComplete> caixaCaixaAutoComplete(@RequestParam("query") String query) {
+		Collection<CaixaAutoComplete> result = caixaDiarioService.caixaCaixaAutoComplete(query);
+		return result;
+	}
+	
+	// End relationships autoComplete
 	
 }

@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -15,6 +15,7 @@ import {MessageService} from 'primeng/api';
 import { ContaBancaria } from './contabancaria.model';
 import { ContaBancariaService } from './contabancaria.service';
 import { FinanceiroFluxoCaixaTranslationService } from './../i18n/financeiro-fluxocaixa-translation.service';
+import * as moment from 'moment';
 
 import { AgenciaBancariaService } from './../agenciabancaria/agenciabancaria.service';
 import { AgenciaBancaria } from './../agenciabancaria/agenciabancaria.model';
@@ -86,6 +87,7 @@ export class ContaBancariaComponent implements OnInit {
 	}
 	
 	create() {
+		
 	    this.contaBancariaService.create(this.contaBancaria)
 	    .then((contaBancaria) => {
 	      this.contaBancaria = contaBancaria;
@@ -131,8 +133,8 @@ export class ContaBancariaComponent implements OnInit {
 	
 	contaBancariaAgenciaAutoComplete(event) {
 	    const query = event.query;
-	    this.agenciaBancariaService
-	      .autoComplete(query)
+	    this.contaBancariaService
+	      .agenciaBancariaAgenciaAutoComplete(query)
 	      .then((result) => {
 	        this.contaBancariaAgenciaAutoCompleteSuggestions = result as AgenciaBancariaAutoComplete[];
 	      })
@@ -175,5 +177,6 @@ export class ContaBancariaComponent implements OnInit {
 		// const result = key.substring(key.lastIndexOf('_') + 1);
 		// return result;
 	}
+	
 	
 }

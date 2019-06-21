@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -19,7 +19,7 @@ import com.querydsl.core.types.Predicate;
 
 import java.util.Optional;
 import java.util.Collection;
-
+import java.math.BigDecimal;
  
 @Service
 public class CaixaServiceImpl implements CaixaService {
@@ -31,18 +31,27 @@ public class CaixaServiceImpl implements CaixaService {
 	private CaixaListFilterPredicate caixaListFilterPredicate;
 	
 	
-	
 	@Transactional
+	@Override
 	public CaixaEntity create(CaixaEntity caixaEntity) {
+		ruleOnCreate(caixaEntity);
+		
 		return caixaRepository.save(caixaEntity);
 	}
 	
+	protected void ruleOnCreate(CaixaEntity caixaEntity) {
+		caixaEntity.setSaldo(new BigDecimal(0.0));
+	}
+	
+	
 	@Transactional(readOnly = true)
+	@Override
 	public CaixaEntity read(java.util.UUID id) {
 		return getCaixaEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public CaixaEntity update(java.util.UUID id, CaixaEntity caixaEntity) {
 		CaixaEntity entity = getCaixaEntity(id);
 		BeanUtils.copyProperties(caixaEntity, entity, "id");
@@ -52,6 +61,7 @@ public class CaixaServiceImpl implements CaixaService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		caixaRepository.deleteById(id);
 		
@@ -59,6 +69,7 @@ public class CaixaServiceImpl implements CaixaService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<CaixaEntity> list(CaixaListFilter caixaListFilter, Pageable pageable) {
 		Predicate predicate = caixaListFilterPredicate.mountAndGetPredicate(caixaListFilter);
 		
@@ -67,7 +78,7 @@ public class CaixaServiceImpl implements CaixaService {
 	}
 	
 	@Transactional(readOnly = true)
-	private CaixaEntity getCaixaEntity(java.util.UUID id) {
+	protected CaixaEntity getCaixaEntity(java.util.UUID id) {
 		Optional<CaixaEntity> caixaEntity = caixaRepository.findById(id);
 		if (!caixaEntity.isPresent()) {
 			throw new IllegalArgumentException("Caixa not found:" + id.toString());
@@ -76,6 +87,7 @@ public class CaixaServiceImpl implements CaixaService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<CaixaAutoComplete> autoComplete(String query) {
 		Collection<CaixaAutoComplete> result = caixaRepository.autoComplete(query);
 		return result;

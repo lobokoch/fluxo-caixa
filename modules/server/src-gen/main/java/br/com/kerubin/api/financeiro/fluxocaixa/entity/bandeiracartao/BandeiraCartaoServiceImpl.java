@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.464
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.212
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -31,18 +31,20 @@ public class BandeiraCartaoServiceImpl implements BandeiraCartaoService {
 	private BandeiraCartaoListFilterPredicate bandeiraCartaoListFilterPredicate;
 	
 	
-	
 	@Transactional
+	@Override
 	public BandeiraCartaoEntity create(BandeiraCartaoEntity bandeiraCartaoEntity) {
 		return bandeiraCartaoRepository.save(bandeiraCartaoEntity);
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public BandeiraCartaoEntity read(java.util.UUID id) {
 		return getBandeiraCartaoEntity(id);
 	}
 	
 	@Transactional
+	@Override
 	public BandeiraCartaoEntity update(java.util.UUID id, BandeiraCartaoEntity bandeiraCartaoEntity) {
 		BandeiraCartaoEntity entity = getBandeiraCartaoEntity(id);
 		BeanUtils.copyProperties(bandeiraCartaoEntity, entity, "id");
@@ -52,6 +54,7 @@ public class BandeiraCartaoServiceImpl implements BandeiraCartaoService {
 	}
 	
 	@Transactional
+	@Override
 	public void delete(java.util.UUID id) {
 		bandeiraCartaoRepository.deleteById(id);
 		
@@ -59,6 +62,7 @@ public class BandeiraCartaoServiceImpl implements BandeiraCartaoService {
 	
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Page<BandeiraCartaoEntity> list(BandeiraCartaoListFilter bandeiraCartaoListFilter, Pageable pageable) {
 		Predicate predicate = bandeiraCartaoListFilterPredicate.mountAndGetPredicate(bandeiraCartaoListFilter);
 		
@@ -67,7 +71,7 @@ public class BandeiraCartaoServiceImpl implements BandeiraCartaoService {
 	}
 	
 	@Transactional(readOnly = true)
-	private BandeiraCartaoEntity getBandeiraCartaoEntity(java.util.UUID id) {
+	protected BandeiraCartaoEntity getBandeiraCartaoEntity(java.util.UUID id) {
 		Optional<BandeiraCartaoEntity> bandeiraCartaoEntity = bandeiraCartaoRepository.findById(id);
 		if (!bandeiraCartaoEntity.isPresent()) {
 			throw new IllegalArgumentException("BandeiraCartao not found:" + id.toString());
@@ -76,6 +80,7 @@ public class BandeiraCartaoServiceImpl implements BandeiraCartaoService {
 	}
 	
 	@Transactional(readOnly = true)
+	@Override
 	public Collection<BandeiraCartaoAutoComplete> autoComplete(String query) {
 		Collection<BandeiraCartaoAutoComplete> result = bandeiraCartaoRepository.autoComplete(query);
 		return result;

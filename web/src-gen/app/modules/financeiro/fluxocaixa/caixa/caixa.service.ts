@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -41,6 +41,7 @@ export class CaixaService {
 	    .toPromise()
 	    .then(response => {
 	      const created = response as Caixa;
+	      this.adjustEntityDates([created]);
 	      return created;
 	    });
 	}
@@ -52,6 +53,7 @@ export class CaixaService {
 	    .toPromise()
 	    .then(response => {
 	      const updated = response as Caixa;
+	      this.adjustEntityDates([updated]);
 	      return updated;
 	    });
 	}
@@ -68,11 +70,16 @@ export class CaixaService {
 	    .toPromise()
 	    .then(response => {
 	      const caixa = response as Caixa;
+	      this.adjustEntityDates([caixa]);
 	      return caixa;
 	    });
 	}
 	
 	
+	private adjustEntityDates(entityList: Caixa[]) {
+		entityList.forEach(caixa => {
+		});
+	}
 	
 	
 	autoComplete(query: string): Promise<CaixaAutoComplete[]> {
@@ -90,6 +97,7 @@ export class CaixaService {
 	
 	}
 	
+				
 	
 	caixaList(caixaListFilter: CaixaListFilter): Promise<any> {
 	    const headers = this.getHeaders();
@@ -103,6 +111,7 @@ export class CaixaService {
 	        const items = data.content; /* array of Caixa */
 	        const totalElements = data.totalElements;
 	
+	        this.adjustEntityDates(items);
 	
 	        const result = {
 	          items,

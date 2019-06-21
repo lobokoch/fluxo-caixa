@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -15,6 +15,7 @@ import {MessageService} from 'primeng/api';
 import { CartaoCredito } from './cartaocredito.model';
 import { CartaoCreditoService } from './cartaocredito.service';
 import { FinanceiroFluxoCaixaTranslationService } from './../i18n/financeiro-fluxocaixa-translation.service';
+import * as moment from 'moment';
 
 import { BancoService } from './../banco/banco.service';
 import { Banco } from './../banco/banco.model';
@@ -90,6 +91,7 @@ export class CartaoCreditoComponent implements OnInit {
 	}
 	
 	create() {
+		
 	    this.cartaoCreditoService.create(this.cartaoCredito)
 	    .then((cartaoCredito) => {
 	      this.cartaoCredito = cartaoCredito;
@@ -132,8 +134,8 @@ export class CartaoCreditoComponent implements OnInit {
 	
 	cartaoCreditoBancoAutoComplete(event) {
 	    const query = event.query;
-	    this.bancoService
-	      .autoComplete(query)
+	    this.cartaoCreditoService
+	      .bancoBancoAutoComplete(query)
 	      .then((result) => {
 	        this.cartaoCreditoBancoAutoCompleteSuggestions = result as BancoAutoComplete[];
 	      })
@@ -158,8 +160,8 @@ export class CartaoCreditoComponent implements OnInit {
 	
 	cartaoCreditoBandeiraCartaoAutoComplete(event) {
 	    const query = event.query;
-	    this.bandeiraCartaoService
-	      .autoComplete(query)
+	    this.cartaoCreditoService
+	      .bandeiraCartaoBandeiraCartaoAutoComplete(query)
 	      .then((result) => {
 	        this.cartaoCreditoBandeiraCartaoAutoCompleteSuggestions = result as BandeiraCartaoAutoComplete[];
 	      })
@@ -193,5 +195,6 @@ export class CartaoCreditoComponent implements OnInit {
 		// const result = key.substring(key.lastIndexOf('_') + 1);
 		// return result;
 	}
+	
 	
 }

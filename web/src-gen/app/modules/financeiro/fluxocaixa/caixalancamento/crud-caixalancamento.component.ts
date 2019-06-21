@@ -1,6 +1,6 @@
 /**********************************************************************************************
-Code generated with MKL Plug-in version: 3.10.14
-Code generated at time stamp: 2019-06-16T09:08:50.741
+Code generated with MKL Plug-in version: 3.17.1
+Code generated at time stamp: 2019-06-20T23:36:05.586
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -15,6 +15,7 @@ import {MessageService} from 'primeng/api';
 import { CaixaLancamento } from './caixalancamento.model';
 import { CaixaLancamentoService } from './caixalancamento.service';
 import { FinanceiroFluxoCaixaTranslationService } from './../i18n/financeiro-fluxocaixa-translation.service';
+import * as moment from 'moment';
 
 import { CaixaDiarioService } from './../caixadiario/caixadiario.service';
 import { CaixaDiario } from './../caixadiario/caixadiario.model';
@@ -150,6 +151,7 @@ export class CaixaLancamentoComponent implements OnInit {
 	}
 	
 	create() {
+		
 	    this.caixaLancamentoService.create(this.caixaLancamento)
 	    .then((caixaLancamento) => {
 	      this.caixaLancamento = caixaLancamento;
@@ -197,8 +199,8 @@ export class CaixaLancamentoComponent implements OnInit {
 	
 	caixaLancamentoCaixaDiarioAutoComplete(event) {
 	    const query = event.query;
-	    this.caixaDiarioService
-	      .autoComplete(query)
+	    this.caixaLancamentoService
+	      .caixaDiarioCaixaDiarioAutoComplete(query)
 	      .then((result) => {
 	        this.caixaLancamentoCaixaDiarioAutoCompleteSuggestions = result as CaixaDiarioAutoComplete[];
 	      })
@@ -209,7 +211,7 @@ export class CaixaLancamentoComponent implements OnInit {
 	
 	caixaLancamentoCaixaDiarioAutoCompleteFieldConverter(caixaDiario: CaixaDiarioAutoComplete) {
 		if (caixaDiario) {
-			return (caixaDiario.caixa.nome || '<nulo>') + ' - ' + (caixaDiario.dataHoraAbertura || '<nulo>');
+			return (caixaDiario.caixa.nome || '<nulo>') + ' - ' + (moment(caixaDiario.dataHoraAbertura).format('DD/MM/YYYY H:m') || '<nulo>');
 		} else {
 			return null;
 		}
@@ -223,8 +225,8 @@ export class CaixaLancamentoComponent implements OnInit {
 	
 	caixaLancamentoPlanoContasAutoComplete(event) {
 	    const query = event.query;
-	    this.planoContaService
-	      .autoComplete(query)
+	    this.caixaLancamentoService
+	      .planoContaPlanoContasAutoComplete(query)
 	      .then((result) => {
 	        this.caixaLancamentoPlanoContasAutoCompleteSuggestions = result as PlanoContaAutoComplete[];
 	      })
@@ -249,8 +251,8 @@ export class CaixaLancamentoComponent implements OnInit {
 	
 	caixaLancamentoContaBancariaAutoComplete(event) {
 	    const query = event.query;
-	    this.contaBancariaService
-	      .autoComplete(query)
+	    this.caixaLancamentoService
+	      .contaBancariaContaBancariaAutoComplete(query)
 	      .then((result) => {
 	        this.caixaLancamentoContaBancariaAutoCompleteSuggestions = result as ContaBancariaAutoComplete[];
 	      })
@@ -275,8 +277,8 @@ export class CaixaLancamentoComponent implements OnInit {
 	
 	caixaLancamentoCartaoCreditoAutoComplete(event) {
 	    const query = event.query;
-	    this.cartaoCreditoService
-	      .autoComplete(query)
+	    this.caixaLancamentoService
+	      .cartaoCreditoCartaoCreditoAutoComplete(query)
 	      .then((result) => {
 	        this.caixaLancamentoCartaoCreditoAutoCompleteSuggestions = result as CartaoCreditoAutoComplete[];
 	      })
@@ -301,8 +303,8 @@ export class CaixaLancamentoComponent implements OnInit {
 	
 	caixaLancamentoClienteAutoComplete(event) {
 	    const query = event.query;
-	    this.clienteService
-	      .autoComplete(query)
+	    this.caixaLancamentoService
+	      .clienteClienteAutoComplete(query)
 	      .then((result) => {
 	        this.caixaLancamentoClienteAutoCompleteSuggestions = result as ClienteAutoComplete[];
 	      })
@@ -327,8 +329,8 @@ export class CaixaLancamentoComponent implements OnInit {
 	
 	caixaLancamentoFornecedorAutoComplete(event) {
 	    const query = event.query;
-	    this.fornecedorService
-	      .autoComplete(query)
+	    this.caixaLancamentoService
+	      .fornecedorFornecedorAutoComplete(query)
 	      .then((result) => {
 	        this.caixaLancamentoFornecedorAutoCompleteSuggestions = result as FornecedorAutoComplete[];
 	      })
@@ -387,5 +389,46 @@ export class CaixaLancamentoComponent implements OnInit {
 		// const result = key.substring(key.lastIndexOf('_') + 1);
 		// return result;
 	}
+	
+	
+										
+	// Begin RuleWithSlotAppyStyleClass 
+	ruleContaBancariaAppyStyleClass() {
+		const expression = (String(this.caixaLancamento.formaPagamento) !== 'CONTA_BANCARIA');
+		if (expression) {
+			return 'hidden';
+		} else {
+			return '';
+		}
+		
+	}
+	ruleCartaoCreditoAppyStyleClass() {
+		const expression = (String(this.caixaLancamento.formaPagamento) !== 'CARTAO_CREDITO');
+		if (expression) {
+			return 'hidden';
+		} else {
+			return '';
+		}
+		
+	}
+	ruleClienteAppyStyleClass() {
+		const expression = (String(this.caixaLancamento.tipoLancamentoFinanceiro) !== 'CREDITO');
+		if (expression) {
+			return 'hidden';
+		} else {
+			return '';
+		}
+		
+	}
+	ruleFornecedorAppyStyleClass() {
+		const expression = (String(this.caixaLancamento.tipoLancamentoFinanceiro) !== 'DEBITO');
+		if (expression) {
+			return 'hidden';
+		} else {
+			return '';
+		}
+		
+	}
+	// End Begin RuleWithSlotAppyStyleClass
 	
 }
