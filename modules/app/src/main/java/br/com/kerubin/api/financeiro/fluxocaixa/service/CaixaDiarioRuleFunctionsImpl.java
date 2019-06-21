@@ -120,16 +120,17 @@ public class CaixaDiarioRuleFunctionsImpl implements CaixaDiarioRuleFunctions {
 		JPAQueryFactory query = new JPAQueryFactory(em);
 		QCaixaLancamentoEntity qCaixaLancamento = QCaixaLancamentoEntity.caixaLancamentoEntity;
 		
-		Coalesce<BigDecimal> sumValor = qCaixaLancamento.valor.sum().coalesce(BigDecimal.ZERO);
+		Coalesce<BigDecimal> sumValorCredito = qCaixaLancamento.valorCredito.sum().coalesce(BigDecimal.ZERO);
+		Coalesce<BigDecimal> sumValorDebito = qCaixaLancamento.valorDebito.sum().coalesce(BigDecimal.ZERO);
 		
 		JPQLQuery<BigDecimal> sumCredito = JPAExpressions
-				.select(sumValor.as("sumCredito"))
+				.select(sumValorCredito.as("sumCredito"))
 				.from(qCaixaLancamento)
 				.where(qCaixaLancamento.caixaDiario.id.eq(caixaDiarioId).
 						and(qCaixaLancamento.tipoLancamentoFinanceiro.eq(TipoLancamentoFinanceiro.CREDITO)));
 		
 		JPQLQuery<BigDecimal> sumDebito = JPAExpressions
-				.select(sumValor.as("sumDebito"))
+				.select(sumValorDebito.as("sumDebito"))
 				.from(qCaixaLancamento)
 				.where(qCaixaLancamento.caixaDiario.id.eq(caixaDiarioId).
 						and(qCaixaLancamento.tipoLancamentoFinanceiro.eq(TipoLancamentoFinanceiro.DEBITO)));

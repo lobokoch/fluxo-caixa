@@ -127,10 +127,12 @@ service fluxo_caixa {
 		
 		caixaDiario: refers CaixaDiario manyToOne // readOnly, do próprio usuário, aberto
 		label: "Caixa"
-		web(styleClass: "ui-md-8")
+		web(styleClass: "ui-md-6")
 		
-		tipoFonteMovimento: TipoFonteMovimento // readOnly
-		web(styleClass: "ui-md-4" readOnly)
+		descricao: string
+		label: "Descrição do lançamento"
+		web(styleClass: "ui-md-6")
+		
 		///////////////////
 		
 		dataLancamento: date 
@@ -140,11 +142,17 @@ service fluxo_caixa {
 		
 		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
 		web(styleClass: "ui-md-2")
+		grid(hidden)
 		
-		valor: money
-		label: "Valor"
-		web(styleClass: "ui-md-4")
-		sum(styleClass:"kb-conta-valor-apagar" label:"A")
+		valorCredito: money optional
+		label: "Valor crédito"
+		web(styleClass: "ui-md-4 kb-fin-credito")
+		sum(styleClass:"kb-fin-credito" label:"A")
+		
+		valorDebito: money optional
+		label: "Valor débito"
+		web(styleClass: "ui-md-4 kb-fin-debito")
+		sum(styleClass:"kb-fin-debito" label:"B")
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
@@ -152,15 +160,14 @@ service fluxo_caixa {
 		
 		
 		///////
-		descricao: string
-		label: "Descrição do lançamento"
-		web(styleClass: "ui-md-6")
 		
 		planoContas: refers PlanoConta optional manyToOne
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-8")
 		grid(hidden)
 		
-		
+		tipoFonteMovimento: TipoFonteMovimento
+		web(styleClass: "ui-md-4" readOnly)
+		grid(hidden)
 		////////////////////////
 		
 		//--
@@ -203,6 +210,9 @@ service fluxo_caixa {
 			with(cartaoCredito).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CARTAO_CREDITO))
 			with(cliente).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
 			with(fornecedor).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
+			with(valorCredito).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
+			with(valorDebito).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
+			with(grid.sumRow.lastCell).apply((valorCredito - valorDebito)) // xx
 		}
 		
 	}
