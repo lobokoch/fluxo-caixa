@@ -79,6 +79,7 @@ service fluxo_caixa {
 		
 		caixaDiarioSituacao: CaixaDiarioSituacao
 		web(styleClass: "ui-md-4" readOnly)
+		autoComplete(data)
 		
 		/////
 		
@@ -124,6 +125,7 @@ service fluxo_caixa {
 	@version // xx
 	@label("Lançamentos no caixa")
 	entity CaixaLancamento {
+		id: uuid
 		
 		caixaDiario: refers CaixaDiario manyToOne // readOnly, do próprio usuário, aberto
 		label: "Caixa"
@@ -148,11 +150,13 @@ service fluxo_caixa {
 		label: "Valor crédito"
 		web(styleClass: "ui-md-4 kb-fin-credito")
 		sum(styleClass:"kb-fin-credito" label:"A")
+		grid(noCurrencySimbol label: "Crédito (R$)" columnWidth: "12em" )
 		
 		valorDebito: money optional
 		label: "Valor débito"
 		web(styleClass: "ui-md-4 kb-fin-debito")
 		sum(styleClass:"kb-fin-debito" label:"B")
+		grid(showNumberAsNegative noCurrencySimbol label: "Débito (R$)" columnWidth: "12em" )
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
@@ -168,7 +172,7 @@ service fluxo_caixa {
 		tipoFonteMovimento: TipoFonteMovimento
 		web(styleClass: "ui-md-4" readOnly)
 		grid(hidden)
-		////////////////////////
+		///////////////////////
 		
 		//--
 		contaBancaria: refers ContaBancaria? manyToOne 
@@ -205,6 +209,7 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-12")
 		
 		rules { //xx
+			with(form).apply(disableCUD).when(id.isNotNull and caixaDiario.caixaDiarioSituacao.isNotEquals(CaixaDiarioSituacao.ABERTO))
 			with(form).apply(dataLancamento = today).when(entityForm.onInit)
 			with(contaBancaria).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CONTA_BANCARIA))
 			with(cartaoCredito).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CARTAO_CREDITO))
