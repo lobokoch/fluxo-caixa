@@ -10,19 +10,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import br.com.kerubin.api.financeiro.fluxocaixa.CaixaDiarioSituacao;
+import br.com.kerubin.api.financeiro.fluxocaixa.TipoPlanoContaFinanceiro;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixa.CaixaAutoCompleteImpl;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioAutoComplete;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioAutoCompleteImpl;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioRepository;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.QCaixaDiarioEntity;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamento;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoRepository;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoServiceImpl;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaAutoCompleteImpl;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.QPlanoContaEntity;
+import static br.com.kerubin.api.messaging.utils.Utils.*;
 
 @Primary
 @Service
@@ -36,6 +43,88 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 	
 	@Inject
 	private CaixaLancamentoRepository caixaLancamentoRepository;
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<PlanoContaAutoComplete> planoContaPlanoContasAutoComplete(String query,
+			CaixaLancamento caixaLancamento) {
+		
+		TipoPlanoContaFinanceiro tipoPlanoContaFinanceiro = null;
+		
+		if (isNotEmpty(caixaLancamento)) {
+			switch (caixaLancamento.getTipoLancamentoFinanceiro()) {
+			case CREDITO:
+				tipoPlanoContaFinanceiro = TipoPlanoContaFinanceiro.RECEITA;
+				break;
+				
+			case DEBITO:
+				tipoPlanoContaFinanceiro = TipoPlanoContaFinanceiro.DESPESA;
+				break;
+				
+			default:
+				break;
+			}
+		}
+		
+		JPAQueryFactory queryDSL = new JPAQueryFactory(em);
+		QPlanoContaEntity qPlanoConta = QPlanoContaEntity.planoContaEntity;
+		
+		BooleanBuilder where = new BooleanBuilder();
+		if (isNotEmpty(query)) {
+			where.and(qPlanoConta.descricao.containsIgnoreCase(query));
+		}
+		
+		where.and(qPlanoConta.ativo.isTrue())
+		.and(qPlanoConta.deleted.isFalse());
+		
+		if (isNotEmpty(tipoPlanoContaFinanceiro)) {
+			where.and(qPlanoConta.tipoFinanceiro.eq(tipoPlanoContaFinanceiro));
+		}
+		
+		
+		Collection<? extends PlanoContaAutoComplete> result = queryDSL.select(
+				Projections.bean(PlanoContaAutoCompleteImpl.class, 
+						qPlanoConta.id, 
+						qPlanoConta.codigo, 
+						qPlanoConta.descricao
+						)
+		)
+		.from(qPlanoConta)
+		.where(where)
+		.orderBy(qPlanoConta.codigo.asc())
+		.fetch();
+		 
+		return (Collection<PlanoContaAutoComplete>) result;
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public Collection<CaixaDiarioAutoComplete> caixaDiarioCaixaDiarioAutoComplete(String query) {
+		JPAQueryFactory queryDSL = new JPAQueryFactory(em);
+		 QCaixaDiarioEntity qCaixaDiario = QCaixaDiarioEntity.caixaDiarioEntity;
+		 
+		 Collection<? extends CaixaDiarioAutoComplete> result = queryDSL.select(
+				Projections.bean(CaixaDiarioAutoCompleteImpl.class, 
+				qCaixaDiario.id, 
+					Projections.bean(
+							CaixaAutoCompleteImpl.class, 
+							qCaixaDiario.caixa.id,
+							qCaixaDiario.caixa.nome,
+							qCaixaDiario.caixa.version).as("caixa"),
+				qCaixaDiario.dataHoraAbertura, 
+				qCaixaDiario.version)
+		)
+		.from(qCaixaDiario)
+		.where(
+				qCaixaDiario.caixa.nome.containsIgnoreCase(query).
+				and(qCaixaDiario.caixaDiarioSituacao.eq(CaixaDiarioSituacao.ABERTO))
+			)
+		.orderBy(qCaixaDiario.dataHoraAbertura.desc())
+		.fetch();
+		 
+		return (Collection<CaixaDiarioAutoComplete>) result;
+	}
 	
 	@Override
 	public CaixaLancamentoEntity create(CaixaLancamentoEntity caixaLancamentoEntity) {
@@ -82,32 +171,6 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 		}
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public Collection<CaixaDiarioAutoComplete> caixaDiarioCaixaDiarioAutoComplete(String query) {
-		JPAQueryFactory queryDSL = new JPAQueryFactory(em);
-		 QCaixaDiarioEntity qCaixaDiario = QCaixaDiarioEntity.caixaDiarioEntity;
-		 
-		 Collection<? extends CaixaDiarioAutoComplete> result = queryDSL.select(
-				Projections.bean(CaixaDiarioAutoCompleteImpl.class, 
-				qCaixaDiario.id, 
-					Projections.bean(
-							CaixaAutoCompleteImpl.class, 
-							qCaixaDiario.caixa.id,
-							qCaixaDiario.caixa.nome,
-							qCaixaDiario.caixa.version).as("caixa"),
-				qCaixaDiario.dataHoraAbertura, 
-				qCaixaDiario.version)
-		)
-		.from(qCaixaDiario)
-		.where(
-				qCaixaDiario.caixa.nome.containsIgnoreCase(query).
-				and(qCaixaDiario.caixaDiarioSituacao.eq(CaixaDiarioSituacao.ABERTO))
-			)
-		.orderBy(qCaixaDiario.dataHoraAbertura.desc())
-		.fetch();
-		 
-		return (Collection<CaixaDiarioAutoComplete>) result;
-	}
+	
 
 }
