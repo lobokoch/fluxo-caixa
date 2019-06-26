@@ -159,3 +159,7 @@ ALTER TABLE cartao_credito ADD CONSTRAINT fk_cartao_credito_banco FOREIGN KEY (b
 ALTER TABLE cartao_credito ADD CONSTRAINT fk_cartao_credito_bandeira_cartao FOREIGN KEY (bandeira_cartao) REFERENCES bandeira_cartao (id);
 ALTER TABLE plano_conta ADD CONSTRAINT fk_plano_conta_plano_conta_pai FOREIGN KEY (plano_conta_pai) REFERENCES plano_conta (id);
 
+-- Caixa Geral
+INSERT INTO caixa
+(id, nome, ativo, saldo, observacoes, created_by, created_date, last_modified_by, last_modified_date, "version")
+VALUES('bd1e9cb7-e7f6-40da-af5c-1f461dac1d11', 'Caixa geral', true, 0, NULL, 'Kerubin', current_timestamp, 'Kerubin', current_timestamp, 0);
