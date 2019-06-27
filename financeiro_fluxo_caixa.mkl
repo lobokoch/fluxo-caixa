@@ -390,6 +390,43 @@ service fluxo_caixa {
 		
 	}
 	
+	/*@subscribe(domain= financeiro, service=contas_receber, events=[updated])
+	entity ContaReceber {
+		
+		planoContas: refers PlanoConta manyToOne
+		//publishedInEvents
+		
+		descricao: string
+		//publishedInEvents
+		//--
+		
+		
+		formaPagamento: FormaPagamento
+		//publishedInEvents
+		
+		//--
+		contaBancaria: refers ContaBancaria? manyToOne 
+		//publishedInEvents
+		
+		cartaoCredito: refers CartaoCredito? manyToOne
+		//publishedInEvents
+		
+		//--
+		dataPagamento: date? 
+		//publishedInEvents
+		
+		valorPago: money? 
+		//publishedInEvents
+		//--
+		
+		cliente: refers Cliente? manyToOne
+		//publishedInEvents
+		
+		numDocumento: string? 
+		//publishedInEvents
+		
+	}/*
+	
 	/*@subscribe(domain= financeiro, service=contas_pagar, events=[updated])
 	entity ContaPagar {
 		
