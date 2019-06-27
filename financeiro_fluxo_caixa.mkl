@@ -41,6 +41,7 @@ service fluxo_caixa {
 	@auditing
 	@label("Cadastro de caixa")
 	entity Caixa {
+		id: uuid
 		
 		nome: string
 		label: "Nome do caixa"
@@ -63,6 +64,9 @@ service fluxo_caixa {
 		
 		rules {
 			with(form).apply(saldo = 0).when(entityForm.onCreate)
+			
+			// Não permite alterar/apagar o caixa geral 
+			with(form).apply(disableCUD).when(id.isNotNull and id.isEquals("bd1e9cb7-e7f6-40da-af5c-1f461dac1d11"))
 		}
 	}
 	
@@ -449,7 +453,7 @@ service fluxo_caixa {
 		label: "Outros"
 	}
 	
-	// From Plano de Contas
+	// From Plano de Contas ///
 	@label("Tipo da receita/despesa")
 	enum TipoReceitaDespesa {
 		VARIAVEL
