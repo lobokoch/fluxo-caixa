@@ -13,6 +13,8 @@ import br.com.kerubin.api.messaging.core.DomainEvent;
 public class ContaPagarEvent implements DomainEvent {
 	
 	public static final String CONTA_PAGAR_CONTAPAGA = "contaPagarContaPaga";
+	public static final String CONTA_PAGAR_CONTAESTORNADA = "contaPagarContaEstornada";
+	
 	private java.util.UUID id;
 	
 	private java.util.UUID planoContas;

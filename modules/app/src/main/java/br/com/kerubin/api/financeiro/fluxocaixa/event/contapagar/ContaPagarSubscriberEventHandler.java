@@ -8,6 +8,9 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 
 package br.com.kerubin.api.financeiro.fluxocaixa.event.contapagar;
 
+import static br.com.kerubin.api.messaging.utils.Utils.isEmpty;
+import static br.com.kerubin.api.messaging.utils.Utils.isNotEmpty;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -61,6 +64,11 @@ public class ContaPagarSubscriberEventHandler {
 			
 				doContaPaga(envelope.getPayload());
 				break;
+				
+			case ContaPagarEvent.CONTA_PAGAR_CONTAESTORNADA:
+				
+				doContaPagaEstornada(envelope.getPayload());
+				break;
 			
 			default:
 				log.warn("Unexpected entity event: {} for: {}.", envelope.getPrimitive(), "br.com.kerubin.api.financeiro.contaspagar.entity.contapagar.ContaPagar");
@@ -73,47 +81,84 @@ public class ContaPagarSubscriberEventHandler {
 	}
 	
 	
-	private void doContaPaga(ContaPagarEvent contaPagarEvent) {
+	private void doContaPaga(ContaPagarEvent event) {
+		doContaPagaOuEstornada(event, true);
+	}
+	
+	private void doContaPagaEstornada(ContaPagarEvent event) {
+		doContaPagaOuEstornada(event, false);
+	}
+	
+	private void doContaPagaOuEstornada(ContaPagarEvent event, boolean isPaga) {
 		log.info("Recebendo conta paga para registrar no caixa...");
+		
+		if (isEmpty(event.getDataPagamento())) {
+			throw new IllegalStateException("A data de pagamento é nula.");
+		}
+		
+		if (isEmpty(event.getValorPago())) {
+			throw new IllegalStateException("O valor pago é nulo.");
+		}
+		
 		CaixaLancamentoEntity caixaLancamentoEntity = new CaixaLancamentoEntity();
 		
 		caixaLancamentoEntity.setCaixaDiario(caixaGeral.getCaixaGeralDiarioAberto());
-		caixaLancamentoEntity.setDescricao(contaPagarEvent.getDescricao());
-		caixaLancamentoEntity.setDataLancamento(contaPagarEvent.getDataPagamento());
-		caixaLancamentoEntity.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamentoEntity.setValorDebito(contaPagarEvent.getValorPago());
+		
+		String descricao = event.getDescricao();
+		if (!isPaga) {
+			if (isNotEmpty(descricao)) {
+				descricao = "(ESTORNO) - " + descricao;
+			}
+			else {
+				descricao = "(ESTORNO)";
+			}
+		}
+		
+		caixaLancamentoEntity.setDescricao(descricao);
+		
+		caixaLancamentoEntity.setDataLancamento(event.getDataPagamento());
+		
+		TipoLancamentoFinanceiro tipoLancamento = isPaga ? TipoLancamentoFinanceiro.DEBITO : TipoLancamentoFinanceiro.CREDITO;
+		caixaLancamentoEntity.setTipoLancamentoFinanceiro(tipoLancamento);
+		
+		if (isPaga) {
+			caixaLancamentoEntity.setValorDebito(event.getValorPago());
+		}
+		else {
+			caixaLancamentoEntity.setValorCredito(event.getValorPago());
+		}
 		
 		FormaPagamento formaPagamento = FormaPagamento.DINHEIRO;
 		try {
-			if (contaPagarEvent != null && contaPagarEvent.getFormaPagamento() != null) {
-				formaPagamento = FormaPagamento.valueOf(contaPagarEvent.getFormaPagamento().name());
+			if (event != null && event.getFormaPagamento() != null) {
+				formaPagamento = FormaPagamento.valueOf(event.getFormaPagamento().name());
 			}
 		} catch(Exception e) {
-			log.error("Error converting FormaPagamento of: " + contaPagarEvent.getFormaPagamento().name(), e);
+			log.error("Error converting FormaPagamento of: " + event.getFormaPagamento().name(), e);
 		}
 		
 		caixaLancamentoEntity.setFormaPagamento(formaPagamento);
 		
-		if (contaPagarEvent.getPlanoContas() != null) {
-			caixaLancamentoEntity.setPlanoContas(planoContasRepository.findById(contaPagarEvent.getPlanoContas()).orElse(null));
+		if (event.getPlanoContas() != null) {
+			caixaLancamentoEntity.setPlanoContas(planoContasRepository.findById(event.getPlanoContas()).orElse(null));
 		}
 		
 		caixaLancamentoEntity.setTipoFonteMovimento(TipoFonteMovimento.CONTAS_PAGAR);
 		
-		if (contaPagarEvent.getContaBancaria() != null) {
-			caixaLancamentoEntity.setContaBancaria(contaBancariaRepository.findById(contaPagarEvent.getContaBancaria()).orElse(null));
+		if (event.getContaBancaria() != null) {
+			caixaLancamentoEntity.setContaBancaria(contaBancariaRepository.findById(event.getContaBancaria()).orElse(null));
 		}
 		
-		if (contaPagarEvent.getCartaoCredito() != null) {
-			caixaLancamentoEntity.setCartaoCredito(cartaoCreditoRepository.findById(contaPagarEvent.getCartaoCredito()).orElse(null));
+		if (event.getCartaoCredito() != null) {
+			caixaLancamentoEntity.setCartaoCredito(cartaoCreditoRepository.findById(event.getCartaoCredito()).orElse(null));
 		}
 		
-		if (contaPagarEvent.getFornecedor() != null) {
-			caixaLancamentoEntity.setFornecedor(fornecedorRepository.findById(contaPagarEvent.getFornecedor()).orElse(null));
+		if (event.getFornecedor() != null) {
+			caixaLancamentoEntity.setFornecedor(fornecedorRepository.findById(event.getFornecedor()).orElse(null));
 		}
 		
 		
-		caixaLancamentoEntity.setDocumento(contaPagarEvent.getNumDocumento());
+		caixaLancamentoEntity.setDocumento(event.getNumDocumento());
 		
 		caixaLancamentoService.create(caixaLancamentoEntity);
 		
