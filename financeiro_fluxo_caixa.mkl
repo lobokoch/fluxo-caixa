@@ -1,4 +1,4 @@
-@label("Financeiro") // xxxx
+@label("Financeiro") // xxx
 domain financeiro
 
 @label("Fluxo de caixa")
@@ -152,20 +152,35 @@ service fluxo_caixa {
 		
 		valorCredito: money optional
 		label: "Valor crédito"
-		web(styleClass: "ui-md-4 kb-fin-credito")
+		web(styleClass: "ui-md-2 kb-fin-credito")
 		sum(styleClass:"kb-fin-credito" label:"A")
 		grid(noCurrencySimbol label: "Crédito (R$)" columnWidth: "12em" )
 		
 		valorDebito: money optional
 		label: "Valor débito"
-		web(styleClass: "ui-md-4 kb-fin-debito")
+		web(styleClass: "ui-md-2 kb-fin-debito")
 		sum(styleClass:"kb-fin-debito" label:"B")
 		grid(showNumberAsNegative noCurrencySimbol label: "Débito (R$)" columnWidth: "12em" )
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
+		web(styleClass: "ui-md-2")
+		
+		/////
+		contaBancaria: refers ContaBancaria? manyToOne 
+		grid(hidden)
+		label: "Dados da conta bancária"
 		web(styleClass: "ui-md-4")
 		
+		cartaoCredito: refers CartaoCredito? manyToOne
+		label: "Dados do cartão de crédito"
+		grid(hidden)
+		web(styleClass: "ui-md-4")
+		
+		outrosDescricao: string?
+		label: "Dados complementares"
+		web(styleClass: "ui-md-4")
+		grid(hidden)
 		
 		///////
 		
@@ -179,17 +194,7 @@ service fluxo_caixa {
 		grid(hidden)
 		///////////////////////
 		
-		//--
-		contaBancaria: refers ContaBancaria? manyToOne 
-		grid(hidden)
-		label: "Pagamento com conta bancária"
-		web(styleClass: "ui-md-6")
 		
-		cartaoCredito: refers CartaoCredito? manyToOne
-		label: "Pagamento com cartão de crédito"
-		grid(hidden)
-		web(styleClass: "ui-md-6")
-		//--
 		
 		cliente: refers Cliente? manyToOne
 		web(styleClass: "ui-md-12")
@@ -214,10 +219,12 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-12")
 		
 		rules { //xx
-			with(form).apply(disableCUD).when(id.isNotNull and caixaDiario.caixaDiarioSituacao.isNotEquals(CaixaDiarioSituacao.ABERTO))
-			with(form).apply(dataLancamento = today).when(entityForm.onInit)
 			with(contaBancaria).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CONTA_BANCARIA))
 			with(cartaoCredito).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CARTAO_CREDITO))
+			with(outrosDescricao).apply(styleClass:"hidden").when(formaPagamento.isEquals(FormaPagamento.CONTA_BANCARIA) or formaPagamento.isEquals(FormaPagamento.CARTAO_CREDITO) )
+		
+			with(form).apply(disableCUD).when(id.isNotNull and caixaDiario.caixaDiarioSituacao.isNotEquals(CaixaDiarioSituacao.ABERTO))
+			with(form).apply(dataLancamento = today).when(entityForm.onInit)
 			with(cliente).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
 			with(fornecedor).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
 			with(valorCredito).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
@@ -478,10 +485,16 @@ service fluxo_caixa {
 		default
 		
 		CONTA_BANCARIA
-		label: "Conta bancária"
+		label: "Débito em conta"
 		
 		CARTAO_CREDITO
 		label: "Cartão de crédito"
+		
+		VALE_REFEICAO
+		label: "Vale refeição"
+		
+		VALE_ALIMENTACAO
+		label: "Vale alimentação"
 		
 		CHEQUE
 		label: "Cheque"

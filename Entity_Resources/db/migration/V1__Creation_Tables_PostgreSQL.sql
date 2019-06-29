@@ -50,10 +50,11 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	valor_credito DECIMAL /* valorCredito */,
 	valor_debito DECIMAL /* valorDebito */,
 	forma_pagamento VARCHAR(255) NOT NULL /* formaPagamento */,
-	plano_contas UUID /* planoContas */,
-	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
 	conta_bancaria UUID /* contaBancaria */,
 	cartao_credito UUID /* cartaoCredito */,
+	outros_descricao VARCHAR(255) /* outrosDescricao */,
+	plano_contas UUID /* planoContas */,
+	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
 	cliente UUID,
 	fornecedor UUID,
 	documento VARCHAR(255),
@@ -148,9 +149,9 @@ ALTER TABLE plano_conta ADD CONSTRAINT pk_plano_conta_id PRIMARY KEY (id);
 /* FOREIGN KEYS */
 ALTER TABLE caixa_diario ADD CONSTRAINT fk_caixa_diario_caixa FOREIGN KEY (caixa) REFERENCES caixa (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_caixa_diario FOREIGN KEY (caixa_diario) REFERENCES caixa_diario (id);
-ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_plano_contas FOREIGN KEY (plano_contas) REFERENCES plano_conta (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_conta_bancaria FOREIGN KEY (conta_bancaria) REFERENCES conta_bancaria (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_cartao_credito FOREIGN KEY (cartao_credito) REFERENCES cartao_credito (id);
+ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_plano_contas FOREIGN KEY (plano_contas) REFERENCES plano_conta (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_cliente FOREIGN KEY (cliente) REFERENCES cliente (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_fornecedor FOREIGN KEY (fornecedor) REFERENCES fornecedor (id);
 ALTER TABLE agencia_bancaria ADD CONSTRAINT fk_agencia_bancaria_banco FOREIGN KEY (banco) REFERENCES banco (id);

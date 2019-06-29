@@ -45,15 +45,16 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	id UUID NOT NULL,
 	caixa_diario UUID NOT NULL /* caixaDiario */,
 	descricao VARCHAR(255) NOT NULL,
-	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
 	data_lancamento DATE NOT NULL /* dataLancamento */,
 	tipo_lancamento_financeiro VARCHAR(255) NOT NULL /* tipoLancamentoFinanceiro */,
 	valor_credito DECIMAL /* valorCredito */,
 	valor_debito DECIMAL /* valorDebito */,
 	forma_pagamento VARCHAR(255) NOT NULL /* formaPagamento */,
-	plano_contas UUID /* planoContas */,
 	conta_bancaria UUID /* contaBancaria */,
 	cartao_credito UUID /* cartaoCredito */,
+	outros_descricao VARCHAR(255) /* outrosDescricao */,
+	plano_contas UUID /* planoContas */,
+	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
 	cliente UUID,
 	fornecedor UUID,
 	documento VARCHAR(255),
@@ -148,9 +149,9 @@ ALTER TABLE plano_conta ADD CONSTRAINT pk_plano_conta_id PRIMARY KEY (id);
 /* FOREIGN KEYS */
 ALTER TABLE caixa_diario ADD CONSTRAINT fk_caixa_diario_caixa FOREIGN KEY (caixa) REFERENCES caixa (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_caixa_diario FOREIGN KEY (caixa_diario) REFERENCES caixa_diario (id);
-ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_plano_contas FOREIGN KEY (plano_contas) REFERENCES plano_conta (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_conta_bancaria FOREIGN KEY (conta_bancaria) REFERENCES conta_bancaria (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_cartao_credito FOREIGN KEY (cartao_credito) REFERENCES cartao_credito (id);
+ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_plano_contas FOREIGN KEY (plano_contas) REFERENCES plano_conta (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_cliente FOREIGN KEY (cliente) REFERENCES cliente (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_fornecedor FOREIGN KEY (fornecedor) REFERENCES fornecedor (id);
 ALTER TABLE agencia_bancaria ADD CONSTRAINT fk_agencia_bancaria_banco FOREIGN KEY (banco) REFERENCES banco (id);
@@ -158,6 +159,8 @@ ALTER TABLE conta_bancaria ADD CONSTRAINT fk_conta_bancaria_agencia FOREIGN KEY 
 ALTER TABLE cartao_credito ADD CONSTRAINT fk_cartao_credito_banco FOREIGN KEY (banco) REFERENCES banco (id);
 ALTER TABLE cartao_credito ADD CONSTRAINT fk_cartao_credito_bandeira_cartao FOREIGN KEY (bandeira_cartao) REFERENCES bandeira_cartao (id);
 ALTER TABLE plano_conta ADD CONSTRAINT fk_plano_conta_plano_conta_pai FOREIGN KEY (plano_conta_pai) REFERENCES plano_conta (id);
+
+
 
 -- Caixa Geral
 INSERT INTO caixa
