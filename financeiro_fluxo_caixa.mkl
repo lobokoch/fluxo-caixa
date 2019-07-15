@@ -378,7 +378,7 @@ service fluxo_caixa {
 		
 		codigo: string
 		label: "Código"
-		autoComplete(sort:asc)
+		autoComplete(data sort:asc)
 		
 		descricao: string
 		label: "Descrição"
