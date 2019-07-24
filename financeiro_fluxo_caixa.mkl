@@ -1,4 +1,4 @@
-@label("Financeiro") // xxx
+@label("Financeiro") // xxxx
 domain financeiro
 
 @label("Fluxo de caixa")
@@ -138,6 +138,7 @@ service fluxo_caixa {
 		descricao: string
 		label: "Descrição do lançamento"
 		web(styleClass: "ui-md-6")
+		listFilter(many:"Descrição do(s) lançamento(s)")
 		
 		///////////////////
 		
@@ -145,6 +146,7 @@ service fluxo_caixa {
 		label: "Data"
 		sort: desc
 		web(styleClass: "ui-md-2")
+		listFilter(between: "Lançamentos de;Até;Intervalo de tempo")
 		
 		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
 		web(styleClass: "ui-md-2")
@@ -239,13 +241,14 @@ service fluxo_caixa {
 	@label("Cliente")
 	entity Cliente {		
 		
+		tipoPessoa: TipoPessoa?
+		
 		nome: string
 		label: "Nome"
-		autoComplete
+		listFilter(many: "Nome do cliente")
 		
-		cpfCNPJ: string?
+		cnpjCPF: string?
 		label: "Documento (CNPJ/CPF)"
-		autoComplete
 	}
 	
 	@externalEntity
@@ -253,13 +256,14 @@ service fluxo_caixa {
 	@label("Fornecedor")
 	entity Fornecedor {		
 		
+		tipoPessoa: TipoPessoa?
+		
 		nome: string
 		label: "Nome"
-		autoComplete
+		listFilter(many: "Nome do fornecedor")
 		
-		cpfCNPJ: string?
-		label: "Documento (CPF/CNPJ)"
-		autoComplete
+		cnpjCPF: string?
+		label: "Documento (CNPJ/CPF)"
 	}
 	
 	@externalEntity
@@ -560,6 +564,16 @@ service fluxo_caixa {
 		
 		DESPESA
 		label: "Despesa"
+	}
+	
+	@label("Tipo da pessoa")
+	enum TipoPessoa {		
+		PESSOA_JURIDICA
+		label: "Pessoa jurídica"
+		default
+		
+		PESSOA_FISICA
+		label: "Pessoa física"
 	}
 	
 }
