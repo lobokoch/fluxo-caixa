@@ -14,14 +14,14 @@ public class FluxoCaixaMonthItemImpl implements FluxoCaixaMonthItem {
 	private Integer monthId;
 	private String monthName;
 	private BigDecimal creditValue;
-	private BigDecimal deditValue;
+	private BigDecimal debitValue;
 	private BigDecimal balanceValue;
 	
 	public FluxoCaixaMonthItemImpl() {
 		monthId = 0;
 		monthName = null;
 		creditValue = BigDecimal.ZERO;
-		deditValue = BigDecimal.ZERO;
+		debitValue = BigDecimal.ZERO;
 		balanceValue = BigDecimal.ZERO;
 	}
 	

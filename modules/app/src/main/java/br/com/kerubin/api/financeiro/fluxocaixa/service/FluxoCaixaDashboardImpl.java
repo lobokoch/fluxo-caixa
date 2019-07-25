@@ -46,16 +46,16 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		
 		NumberExpression<Integer> monthId = qLancamentos.dataLancamento.month();
 		Coalesce<BigDecimal> creditValue = qLancamentos.valorCredito.sum().coalesce(BigDecimal.ZERO);
-		Coalesce<BigDecimal> deditValue = qLancamentos.valorDebito.sum().coalesce(BigDecimal.ZERO);
+		Coalesce<BigDecimal> debitValue = qLancamentos.valorDebito.sum().coalesce(BigDecimal.ZERO);
 		
-		NumberExpression<?> balanceValue = creditValue.asNumber().subtract(deditValue.asNumber());
+		NumberExpression<?> balanceValue = creditValue.asNumber().subtract(debitValue.asNumber());
 		
 		List<FluxoCaixaMonthItemImpl> dbItems = query
 			.select(
 				Projections.bean(FluxoCaixaMonthItemImpl.class,
 				monthId.as("monthId"),
 				creditValue.as("creditValue"),
-				deditValue.as("deditValue"),
+				debitValue.as("debitValue"),
 				balanceValue.as("balanceValue")
 				)
 			)
