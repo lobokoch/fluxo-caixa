@@ -22,6 +22,8 @@ import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaMonthItem;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaMonthItemImpl;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.MonthVisitor;
 
+import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
+
 @Service
 public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 	
@@ -72,10 +74,17 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 	private List<FluxoCaixaMonthItem> buildFullYearList(List<FluxoCaixaMonthItemImpl> actual) {
 		
 		List<FluxoCaixaMonthItem> items = new ArrayList<>(12);
+		BigDecimal balanceAccumulated = new BigDecimal(0.0);
+		int currentMonth = LocalDate.now().getMonthValue();
 		for (Integer month = 1; month <= 12; month++) {
 			final Integer monthId = month;
 			FluxoCaixaMonthItem item = actual.stream().filter(it -> monthId.equals(it.getMonthId())).findFirst().orElse(new FluxoCaixaMonthItemImpl(monthId));
 			item.accectMonthVisitor(monthVisitor);
+			if (month <= currentMonth ) {
+				BigDecimal itemBalanceValue = getSafeVal(item.getBalanceValue());
+				balanceAccumulated = balanceAccumulated.add(itemBalanceValue);
+				item.setBalanceAccumulated(balanceAccumulated);
+			}
 			items.add(item);
 		}
 		

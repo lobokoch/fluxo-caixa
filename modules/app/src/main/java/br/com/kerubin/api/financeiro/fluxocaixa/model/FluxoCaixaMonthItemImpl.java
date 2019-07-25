@@ -16,6 +16,7 @@ public class FluxoCaixaMonthItemImpl implements FluxoCaixaMonthItem {
 	private BigDecimal creditValue;
 	private BigDecimal debitValue;
 	private BigDecimal balanceValue;
+	private BigDecimal balanceAccumulated;
 	
 	public FluxoCaixaMonthItemImpl() {
 		monthId = 0;
@@ -23,6 +24,7 @@ public class FluxoCaixaMonthItemImpl implements FluxoCaixaMonthItem {
 		creditValue = BigDecimal.ZERO;
 		debitValue = BigDecimal.ZERO;
 		balanceValue = BigDecimal.ZERO;
+		balanceAccumulated = null;
 	}
 	
 	public FluxoCaixaMonthItemImpl(int monthId) {
