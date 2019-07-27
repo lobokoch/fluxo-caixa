@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaMonthItem;
+import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaPlanoContasForMonth;
 import br.com.kerubin.api.financeiro.fluxocaixa.service.FluxoCaixaDashboard;
 
 @RestController
@@ -30,6 +31,30 @@ public class FluxoCaixaDashboardController {
 	@GetMapping("/getFluxoCaixaFromYear")
 	public List<FluxoCaixaMonthItem> getFluxoCaixaFromYear() {
 		return fluxoCaixaDashboard.getFluxoCaixaFromCurrentYear();
+	}
+	
+	@Transactional(readOnly = true)
+	@GetMapping("/getResumoMensalPorPlanoContasDebitos/{year}")
+	public List<FluxoCaixaPlanoContasForMonth> getResumoMensalPorPlanoContasDebitos(int year) {
+		return fluxoCaixaDashboard.getResumoMensalPorPlanoContasDebitos(year);
+	}
+	
+	@Transactional(readOnly = true)
+	@GetMapping("/getResumoMensalPorPlanoContasDebitos")
+	public List<FluxoCaixaPlanoContasForMonth> getResumoMensalPorPlanoContasDebitos() {
+		return fluxoCaixaDashboard.getResumoMensalPorPlanoContasDebitos();
+	}
+	
+	@Transactional(readOnly = true)
+	@GetMapping("/getResumoMensalPorPlanoContasCreditos/{year}")
+	public List<FluxoCaixaPlanoContasForMonth> getResumoMensalPorPlanoContasCreditos(int year) {
+		return fluxoCaixaDashboard.getResumoMensalPorPlanoContasCreditos(year);
+	}
+	
+	@Transactional(readOnly = true)
+	@GetMapping("/getResumoMensalPorPlanoContasCreditos")
+	public List<FluxoCaixaPlanoContasForMonth> getResumoMensalPorPlanoContasCreditos() {
+		return fluxoCaixaDashboard.getResumoMensalPorPlanoContasCreditos();
 	}
 
 }

@@ -40,12 +40,12 @@ public class MonthVisitorImpl implements MonthVisitor {
 	}
 
 	@Override
-	public void visit(FluxoCaixaMonthItem fluxoCaixaMonthItem) {
+	public void visit(MonthItem monthItem) {
 		
-		int month = fluxoCaixaMonthItem.getMonthId();
+		int month = monthItem.getMonthId();
 		String monthName = MONTHS.get(month);
 		if (isNotEmpty(monthName)) {
-			fluxoCaixaMonthItem.setMonthName(monthName);
+			monthItem.setMonthName(monthName);
 		}
 	}
 
