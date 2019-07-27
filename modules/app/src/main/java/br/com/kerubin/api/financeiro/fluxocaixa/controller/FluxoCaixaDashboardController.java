@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.kerubin.api.financeiro.fluxocaixa.model.CaixaMovimentoItem;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaMonthItem;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaPlanoContasForMonth;
 import br.com.kerubin.api.financeiro.fluxocaixa.service.FluxoCaixaDashboard;
@@ -55,6 +56,12 @@ public class FluxoCaixaDashboardController {
 	@GetMapping("/getResumoMensalPorPlanoContasCreditos")
 	public List<FluxoCaixaPlanoContasForMonth> getResumoMensalPorPlanoContasCreditos() {
 		return fluxoCaixaDashboard.getResumoMensalPorPlanoContasCreditos();
+	}
+	
+	@Transactional(readOnly = true)
+	@GetMapping("/getFluxoCaixaResumoMovimentacoes")
+	public List<CaixaMovimentoItem> getFluxoCaixaResumoMovimentacoes() {
+		return fluxoCaixaDashboard.getFluxoCaixaResumoMovimentacoes();
 	}
 
 }

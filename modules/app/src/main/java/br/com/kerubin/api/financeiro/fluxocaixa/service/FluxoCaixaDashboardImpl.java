@@ -1,11 +1,16 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.service;
 
-import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeVal;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.lowerWithFirstUpper;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.format.TextStyle;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -16,15 +21,19 @@ import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Coalesce;
 import com.querydsl.core.types.dsl.NumberExpression;
 import com.querydsl.core.types.dsl.NumberPath;
+import com.querydsl.jpa.JPAExpressions;
+import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.QCaixaLancamentoEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.QPlanoContaEntity;
+import br.com.kerubin.api.financeiro.fluxocaixa.model.CaixaMovimentoItem;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaMonthItem;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaMonthItemImpl;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaPlanoContasForMonth;
@@ -35,11 +44,18 @@ import br.com.kerubin.api.financeiro.fluxocaixa.model.MonthVisitor;
 @Service
 public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 	
+	
 	@PersistenceContext
 	private EntityManager em;
 	
 	@Inject
 	private MonthVisitor monthVisitor;
+	
+	private QCaixaLancamentoEntity qCaixaLancamentos;
+	
+	public FluxoCaixaDashboardImpl() {
+		qCaixaLancamentos = QCaixaLancamentoEntity.caixaLancamentoEntity;
+	}
 	
 	@Transactional(readOnly = true)
 	@Override
@@ -256,6 +272,94 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		return itemsByMonth;
 	}
 	
+	@Transactional(readOnly = true)
+	@Override
+	public List<CaixaMovimentoItem> getFluxoCaixaResumoMovimentacoes() {
+		NumberPath<BigDecimal> fieldValorCredito = qCaixaLancamentos.valorCredito;
+		NumberPath<BigDecimal> fieldValorDebito = qCaixaLancamentos.valorDebito;
+		
+		LocalDate today = LocalDate.now();
+		LocalDate yesterday = today.minusDays(1);
+		LocalDate monthStart = today.withDayOfMonth(1);
+		LocalDate monthEnd = today.withDayOfMonth(today.lengthOfMonth());
+		
+		// Mês atual
+		JPQLQuery<BigDecimal> querySomaCreditosDoMes = buildFieldSumQueryBetweenDates(fieldValorCredito, monthStart, monthEnd, "somaCreditosDoMes");
+		JPQLQuery<BigDecimal> querySomaDebitosDoMes = buildFieldSumQueryBetweenDates(fieldValorDebito, monthStart, monthEnd, "somaDebitosDoMes");
+		
+		// Últimos n=3 dias
+		long lastDays = 3;
+		LocalDate lastDaysDate = today.minusDays(lastDays);
+		JPQLQuery<BigDecimal> querySomaCreditosLastDays = buildFieldSumQueryBetweenDates(fieldValorCredito, lastDaysDate, today, "somaCreditosLastDays");
+		JPQLQuery<BigDecimal> querySomaDebitosLastDays = buildFieldSumQueryBetweenDates(fieldValorDebito, lastDaysDate, today, "somaDebitosLastDays");
+		
+		// Ontem
+		JPQLQuery<BigDecimal> querySomaCreditosOntem = buildFieldSumQueryBetweenDates(fieldValorCredito, yesterday, yesterday, "somaCreditosOntem");
+		JPQLQuery<BigDecimal> querySomaDebitosOntem = buildFieldSumQueryBetweenDates(fieldValorDebito, yesterday, yesterday, "somaDebitosOntem");
+		
+		// Saldo Atual
+		LocalDate statDate = LocalDate.of(2019, 1, 1);
+		JPQLQuery<BigDecimal> querySomaCreditosTudo = buildFieldSumQueryBetweenDates(fieldValorCredito, statDate, today, "somaCreditosTudo");
+		JPQLQuery<BigDecimal> querySomaDebitosTudo = buildFieldSumQueryBetweenDates(fieldValorDebito, statDate, today, "somaDebitosTudo");
+		
+		JPAQueryFactory query = new JPAQueryFactory(em);
+		
+		Tuple tuple = query
+				.selectDistinct( //TODO: deveria ser apenas "select", vide TODO logo abaixo.
+						querySomaCreditosTudo, 
+						querySomaDebitosTudo,
+						
+						querySomaCreditosDoMes,
+						querySomaDebitosDoMes,
+						
+						querySomaCreditosLastDays,
+						querySomaDebitosLastDays,
+						
+						querySomaCreditosOntem,
+						querySomaDebitosOntem
+				)
+				.from(qCaixaLancamentos) // TODO: O PostgreSQL suporta sem o from mas o JPA parece que não, dá erro: java.lang.IllegalArgumentException: No sources given.
+				.fetchOne();
+		
+		List<CaixaMovimentoItem> movimentos = new ArrayList<>();
+		if (isNotEmpty(tuple)) {
+			final Locale PT_BR = new Locale("pt", "BR"); //Locale para o Brasil
+			String yesterdayStr = yesterday.getDayOfWeek().getDisplayName(TextStyle.FULL, PT_BR);
+			
+			int index = 0;
+			CaixaMovimentoItem item = new CaixaMovimentoItem("Tudo até o momento", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
+			movimentos.add(item);
+			
+			String thisMontName = today.getMonth().getDisplayName(TextStyle.FULL, PT_BR);
+			item = new CaixaMovimentoItem("Este mês (" + thisMontName + ")", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
+			movimentos.add(item);
+			
+			item = new CaixaMovimentoItem("Últimos " + lastDays + " dias", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
+			movimentos.add(item);
+			
+			
+			item = new CaixaMovimentoItem("Ontem (" + yesterdayStr + ")", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
+			movimentos.add(item);
+		}
+		
+		return movimentos;
+	}
+	
+	private BigDecimal getTupleValue(Tuple tuple, int index) {
+		return tuple.get(index, BigDecimal.class);
+	}
+	
+	private JPQLQuery<BigDecimal> buildFieldSumQueryBetweenDates(NumberPath<BigDecimal> fieldToSum, LocalDate dateFrom, LocalDate dateTo, String alias) {
+		
+		Coalesce<BigDecimal> fieldValue = fieldToSum.sum().coalesce(BigDecimal.ZERO);
+		
+		JPQLQuery<BigDecimal> query = JPAExpressions
+				.select(fieldValue.as(alias))
+				.from(qCaixaLancamentos)
+				.where(qCaixaLancamentos.dataLancamento.between(dateFrom, dateTo));
+		
+		return query;
+	}
 	
 
 }
