@@ -241,7 +241,7 @@ service fluxo_caixa {
 	@label("Cliente")
 	entity Cliente {		
 		
-		tipoPessoa: TipoPessoa?
+		tipoPessoa: TipoPessoa
 		
 		nome: string
 		label: "Nome"
@@ -256,7 +256,7 @@ service fluxo_caixa {
 	@label("Fornecedor")
 	entity Fornecedor {		
 		
-		tipoPessoa: TipoPessoa?
+		tipoPessoa: TipoPessoa
 		
 		nome: string
 		label: "Nome"

@@ -64,7 +64,7 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 
 CREATE TABLE cliente /* Cliente */  (
 	id UUID NOT NULL,
-	tipo_pessoa VARCHAR(255) /* tipoPessoa */,
+	tipo_pessoa VARCHAR(255) NOT NULL /* tipoPessoa */,
 	nome VARCHAR(255) NOT NULL,
 	cnpj_cpf VARCHAR(255) /* cnpjCPF */,
 	deleted BOOLEAN DEFAULT false
@@ -72,7 +72,7 @@ CREATE TABLE cliente /* Cliente */  (
 
 CREATE TABLE fornecedor /* Fornecedor */  (
 	id UUID NOT NULL,
-	tipo_pessoa VARCHAR(255) /* tipoPessoa */,
+	tipo_pessoa VARCHAR(255) NOT NULL /* tipoPessoa */,
 	nome VARCHAR(255) NOT NULL,
 	cnpj_cpf VARCHAR(255) /* cnpjCPF */,
 	deleted BOOLEAN DEFAULT false
