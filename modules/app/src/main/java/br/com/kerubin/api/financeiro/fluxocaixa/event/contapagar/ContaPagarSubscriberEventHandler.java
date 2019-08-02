@@ -11,6 +11,8 @@ package br.com.kerubin.api.financeiro.fluxocaixa.event.contapagar;
 import static br.com.kerubin.api.messaging.utils.Utils.isEmpty;
 import static br.com.kerubin.api.messaging.utils.Utils.isNotEmpty;
 
+import java.time.LocalDate;
+
 import javax.inject.Inject;
 
 import org.slf4j.Logger;
@@ -92,8 +94,13 @@ public class ContaPagarSubscriberEventHandler {
 	private void doContaPagaOuEstornada(ContaPagarEvent event, boolean isPaga) {
 		log.info("Recebendo conta paga para registrar no caixa...");
 		
-		if (isEmpty(event.getDataPagamento())) {
-			throw new IllegalStateException("A data de pagamento é nula.");
+		LocalDate dataMovimento = LocalDate.now(); // Para estorno usa a data atual.
+		if (isPaga && isEmpty(event.getDataPagamento())) {
+			throw new IllegalStateException("A data de pagamento é nula para o pagamento da conta.");
+		}
+		
+		if (isPaga) {
+			dataMovimento = event.getDataPagamento();
 		}
 		
 		if (isEmpty(event.getValorPago())) {
@@ -116,7 +123,7 @@ public class ContaPagarSubscriberEventHandler {
 		
 		caixaLancamentoEntity.setDescricao(descricao);
 		
-		caixaLancamentoEntity.setDataLancamento(event.getDataPagamento());
+		caixaLancamentoEntity.setDataLancamento(dataMovimento);
 		
 		TipoLancamentoFinanceiro tipoLancamento = isPaga ? TipoLancamentoFinanceiro.DEBITO : TipoLancamentoFinanceiro.CREDITO;
 		caixaLancamentoEntity.setTipoLancamentoFinanceiro(tipoLancamento);

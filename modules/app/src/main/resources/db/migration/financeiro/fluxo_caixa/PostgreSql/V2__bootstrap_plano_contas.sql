@@ -11,7 +11,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('3309a884-a49a-4aa5-8c27-a8c6638e4945','2.2.2','Vale Refeição','RECEITA','FIXO','52b982d9-b48e-4f71-a431-f759617165d9',true)
 ,('180ae4b6-248b-4fc6-8f2a-83c213a06d51','2.2.3','Vale Combustível','RECEITA','FIXO','52b982d9-b48e-4f71-a431-f759617165d9',true)
 ,('e56e6da7-d57e-405f-abc9-724d3a3e58e0','2.2.4','Diversos','RECEITA','FIXO','52b982d9-b48e-4f71-a431-f759617165d9',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('e2516f3d-6f29-4933-88ac-c4f697c5222b','2.3','VENDAS','RECEITA',NULL,'1ea1d30c-83e2-4f8f-8c39-ee53ef0d79fe',true)
 ,('9f857938-19f9-46eb-8c2a-ab5f4cd94d61','2.3.1','Diversos','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true)
@@ -23,7 +24,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('a425a8ba-1012-43b8-a43a-9ea9276a7b45','2.5.2','Diversos','RECEITA',NULL,'0dbdbdeb-2780-4789-beee-3a0f034c588b',true)
 ,('4d405422-53e1-48ad-9335-f57cece3563a','1.1','HABITAÇÃO','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
 ,('e80d6a4b-75cc-4155-9463-b71ac3e65600','1.1.1','Aluguel','DESPESA','FIXO','4d405422-53e1-48ad-9335-f57cece3563a',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('773a2908-3a4d-4626-ad20-307039bc8e64','1.1.2','Condomínio','DESPESA','FIXO','4d405422-53e1-48ad-9335-f57cece3563a',true)
 ,('f3561fe4-53ea-4949-8bf3-47e73320ab3b','1.1.3','Financiamento','DESPESA','FIXO','4d405422-53e1-48ad-9335-f57cece3563a',true)
@@ -35,7 +37,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('20455e6c-b917-460d-b957-a94a8d68e871','1.1.9','Manutenção','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true)
 ,('05ed638b-770f-4fed-b553-c1ae6161fa9e','1.1.10','Construção','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true)
 ,('9a97b0be-d78c-4e3b-9463-6d453ac347bc','1.1.11','Reforma','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('f4048192-acd9-45e6-b4b3-1cb30f1ba4ca','1.1.12','Telefone Fixo','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true)
 ,('0d4b36ff-44e7-4e11-8b27-c705ea7c7d80','1.1.13','Internet','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true)
@@ -47,7 +50,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('98e6eea9-4d99-4c8a-96f4-4e9bf22fb78b','1.2.2','Refeição','DESPESA',NULL,'58f3021f-b45d-4df0-8f51-0fb47ddf0d99',true)
 ,('58997062-6666-4eec-b262-5434d2eec1db','1.2.3','Padaria','DESPESA',NULL,'58f3021f-b45d-4df0-8f51-0fb47ddf0d99',true)
 ,('0817c1d7-a89d-451e-a8e5-f5da9f0379ed','1.2.4','Açougue','DESPESA',NULL,'58f3021f-b45d-4df0-8f51-0fb47ddf0d99',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('f56eb5ec-44c2-4500-b5c9-f04d66441c40','1.2.5','Verdureira','DESPESA',NULL,'58f3021f-b45d-4df0-8f51-0fb47ddf0d99',true)
 ,('be26fe80-4785-4c57-b7a8-7a3002b55e49','1.2.6','Peixaria','DESPESA',NULL,'58f3021f-b45d-4df0-8f51-0fb47ddf0d99',true)
@@ -59,7 +63,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('8f4eb4c8-ac86-4b56-b434-b109abb2857e','1.3.4','Seguro de Vida','DESPESA',NULL,'b2389da7-e107-455a-a654-e27ce5b91150',true)
 ,('040ee4a4-baa5-4c06-866e-17448a108768','1.3.5','Acessórios','DESPESA',NULL,'b2389da7-e107-455a-a654-e27ce5b91150',true)
 ,('4f42bdec-50f6-4c7a-abaf-656c7cf32a71','1.4','AUTOMÓVEIS','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('c66c7f4e-7e96-4576-84e4-93c53e427191','1.4.1','Compra','DESPESA',NULL,'4f42bdec-50f6-4c7a-abaf-656c7cf32a71',true)
 ,('ce400245-b602-4954-b9d5-f378fe604646','1.4.2','Combustível','DESPESA',NULL,'4f42bdec-50f6-4c7a-abaf-656c7cf32a71',true)
@@ -71,7 +76,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('81dde4f7-6954-4569-8b7e-996e8f9bd179','1.4.8','Seguro','DESPESA',NULL,'4f42bdec-50f6-4c7a-abaf-656c7cf32a71',true)
 ,('b6020e13-80e6-41bf-a0f2-f86ba28b1f36','1.4.9','Pedágio','DESPESA',NULL,'4f42bdec-50f6-4c7a-abaf-656c7cf32a71',true)
 ,('169bb575-c3f6-452c-ac7c-a2383372ec0e','1.4.10','Diversos','DESPESA',NULL,'4f42bdec-50f6-4c7a-abaf-656c7cf32a71',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('591c77cd-de73-4a05-967c-1fd6302fddbd','1.5','CELULARES','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
 ,('8450ba34-592f-436d-8255-2501613b2a02','1.5.1','Mensalidade','DESPESA',NULL,'591c77cd-de73-4a05-967c-1fd6302fddbd',true)
@@ -83,7 +89,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('ed59f26e-28ee-4df0-a769-cf810b534487','1.6.2','Previdência Privada','DESPESA',NULL,'6dfc8963-d84a-4a37-bc81-06289c773105',true)
 ,('ca590814-8576-47fc-917c-0db012773560','1.6.3','Tesouro Direto','DESPESA',NULL,'6dfc8963-d84a-4a37-bc81-06289c773105',true)
 ,('fbc135be-b11d-4de2-a1af-f07e147586ca','1.6.4','CDB','DESPESA',NULL,'6dfc8963-d84a-4a37-bc81-06289c773105',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('6f933e80-073b-4a59-98bc-4adb3d0c76ec','1.6.5','Bolsa de Ações','DESPESA',NULL,'6dfc8963-d84a-4a37-bc81-06289c773105',true)
 ,('df5003ac-4a2e-4b02-810d-c76ad039d940','1.6.6','Diversos','DESPESA',NULL,'6dfc8963-d84a-4a37-bc81-06289c773105',true)
@@ -95,7 +102,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('79913e3e-ed71-49b2-bac1-50bb579bdfb3','1.8.1','Escola','DESPESA',NULL,'4f34b5bb-e0bf-40a8-b434-5f91cea88039',true)
 ,('fe833363-85f9-4d54-afae-d4658acffe62','1.8.2','Cursos','DESPESA',NULL,'4f34b5bb-e0bf-40a8-b434-5f91cea88039',true)
 ,('119463eb-6930-4a45-8f50-a2acd6e6b1a0','1.8.3','Materias','DESPESA',NULL,'4f34b5bb-e0bf-40a8-b434-5f91cea88039',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('7b504f62-86c6-4d42-b29e-6df6ab2d48af','1.8.4','Transporte','DESPESA',NULL,'4f34b5bb-e0bf-40a8-b434-5f91cea88039',true)
 ,('51f19f60-3523-42a6-a729-6cfebf0f4829','1.8.5','Diversos','DESPESA',NULL,'4f34b5bb-e0bf-40a8-b434-5f91cea88039',true)
@@ -107,7 +115,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('2d2077c2-239d-48bf-9b2e-29f15e6a714f','1.10','TRANSPORTE','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
 ,('44da1429-e2c2-4496-bde6-e68d591a486a','1.10.1','Ônibus','DESPESA',NULL,'2d2077c2-239d-48bf-9b2e-29f15e6a714f',true)
 ,('fc3143c2-1c42-4e47-87dc-1052e686e58e','1.10.2','Topique','DESPESA',NULL,'2d2077c2-239d-48bf-9b2e-29f15e6a714f',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('c4ed3976-44be-47dc-b4cc-d474b08489dc','1.10.3','Uber','DESPESA',NULL,'2d2077c2-239d-48bf-9b2e-29f15e6a714f',true)
 ,('aed3a589-836a-4cb6-b016-969930869bc2','1.10.4','Taxi','DESPESA',NULL,'2d2077c2-239d-48bf-9b2e-29f15e6a714f',true)
@@ -119,7 +128,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('a0dfc59c-43fc-49d1-ad05-0ad3fc38b063','1.11','LAZER','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
 ,('4c1ebad0-d117-465e-a047-48c5e802c6b4','1.11.1','Cinema','DESPESA',NULL,'a0dfc59c-43fc-49d1-ad05-0ad3fc38b063',true)
 ,('d7c72cd8-e7ef-4a57-b601-481a2ae7f82d','1.11.2','Restaurante','DESPESA',NULL,'a0dfc59c-43fc-49d1-ad05-0ad3fc38b063',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('aeece084-7c14-4b0a-97cb-fb014b6fd26b','1.11.3','Pizzaria','DESPESA',NULL,'a0dfc59c-43fc-49d1-ad05-0ad3fc38b063',true)
 ,('d88e9343-4ec3-4f1c-b350-3b205525cb4d','1.11.4','Festa','DESPESA',NULL,'a0dfc59c-43fc-49d1-ad05-0ad3fc38b063',true)
@@ -131,7 +141,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('e237f583-a771-4838-841d-5806f94b79d0','1.12','FITNESS','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
 ,('cb899d34-af0b-4c75-a3de-886a07761ffd','1.12.1','Acadêmia','DESPESA',NULL,'e237f583-a771-4838-841d-5806f94b79d0',true)
 ,('c9056789-35e7-4e4a-aece-446c7d435cdf','1.12.2','Esportes','DESPESA',NULL,'e237f583-a771-4838-841d-5806f94b79d0',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('50a58c44-9e92-4862-bb0a-15c7cf816622','1.12.3','Pilates','DESPESA',NULL,'e237f583-a771-4838-841d-5806f94b79d0',true)
 ,('3520863a-84a0-4ae8-8455-4984c2729ef3','1.12.4','Nutrição','DESPESA',NULL,'e237f583-a771-4838-841d-5806f94b79d0',true)
@@ -143,7 +154,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('cf467e0b-cf75-4035-90a9-dd00ecd0596d','1.13.3','Vacinas','DESPESA',NULL,'8ee9d849-e95d-48a1-bb92-8941a8bda4ac',true)
 ,('41135481-0754-48fd-8383-38cb2a3a3249','1.13.4','Alimentação','DESPESA',NULL,'8ee9d849-e95d-48a1-bb92-8941a8bda4ac',true)
 ,('9988feb2-1b58-4eb7-bf60-47188996c3a2','1.13.5','Medicamentos','DESPESA',NULL,'8ee9d849-e95d-48a1-bb92-8941a8bda4ac',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('e63f2dbc-c394-41a8-8333-1f1021ce33ee','1.13.6','Produtos Para Higiene','DESPESA',NULL,'8ee9d849-e95d-48a1-bb92-8941a8bda4ac',true)
 ,('8556f29b-3d7b-4c5b-b26d-fc16018789f1','1.13.7','Acessórios','DESPESA',NULL,'8ee9d849-e95d-48a1-bb92-8941a8bda4ac',true)
@@ -155,7 +167,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('f0ad1aff-098d-4c32-bd4c-a6e32ac290c3','1.14.3','Adubos','DESPESA',NULL,'d07164ce-a5b2-41e8-8d7f-d60bd6df9103',true)
 ,('999cdcba-68cf-4ea6-bf32-909956c623d4','1.14.4','Inseticidas','DESPESA',NULL,'d07164ce-a5b2-41e8-8d7f-d60bd6df9103',true)
 ,('baa81af1-41fc-4cbf-b113-52049951666c','1.14.5','Equipamentos','DESPESA',NULL,'d07164ce-a5b2-41e8-8d7f-d60bd6df9103',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('621ae932-1031-4206-bcd7-66475edfcab9','1.14.6','Acessórios','DESPESA',NULL,'d07164ce-a5b2-41e8-8d7f-d60bd6df9103',true)
 ,('cd2ea036-38de-4dec-9a14-032d1c3a9f27','1.14.7','Diversos','DESPESA',NULL,'d07164ce-a5b2-41e8-8d7f-d60bd6df9103',true)
@@ -167,7 +180,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('6ad68b3a-6ad2-4660-b0c0-42b598f81380','1.16.1','Igreja','DESPESA',NULL,'8befebfe-c735-489b-88b5-95626096b822',true)
 ,('6925cd3a-5d26-456d-bbcb-f613804195ef','1.16.2','Escola','DESPESA',NULL,'8befebfe-c735-489b-88b5-95626096b822',true)
 ,('1ad1d145-8053-4eb4-993c-89b381d97a8c','1.16.3','ONGs','DESPESA',NULL,'8befebfe-c735-489b-88b5-95626096b822',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('7de9db62-f894-4bd4-a4f1-b2bbe4f02aa7','1.16.4','Diversos','DESPESA',NULL,'8befebfe-c735-489b-88b5-95626096b822',true)
 ,('361736d5-d8c3-44e9-a71e-c28cf8dede6f','1.17','DESPESAS DIVERSAS','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
@@ -179,7 +193,8 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('f965ee15-df2b-4e82-a348-6d862671ad14','1.7.1','Saque','DESPESA','VARIAVEL','5337768e-f7e8-423a-b0dd-4f47c32b8db6',true)
 ,('3bfb55f9-d85b-4197-897e-28ccda7aade7','1.7.2','Transferência','DESPESA',NULL,'5337768e-f7e8-423a-b0dd-4f47c32b8db6',true)
 ,('5645b648-1d79-49b7-ae1d-87d0a9c75854','1.7.6','Diversos','DESPESA',NULL,'5337768e-f7e8-423a-b0dd-4f47c32b8db6',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
 INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo) VALUES 
 ('3ad7a43d-2766-4b22-bd0c-045888ec22f4','1.1.17','Lavanderia','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true)
 ,('25b25559-6221-4215-96e3-13dd28f1830c','1.19','BELEZA','DESPESA',NULL,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true)
@@ -190,4 +205,4 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('452b47c3-08ea-4091-beab-ccc16e509e71','1.19.5','Unhas','DESPESA',NULL,'25b25559-6221-4215-96e3-13dd28f1830c',true)
 ,('b759d996-0174-4ecd-a388-e0d19ae9b210','1.19.6','Barba/bigode','DESPESA',NULL,'25b25559-6221-4215-96e3-13dd28f1830c',true)
 ,('238b6101-dd5d-4b99-9967-1edf9dbb6f4b','1.19.7','Completo','DESPESA',NULL,'25b25559-6221-4215-96e3-13dd28f1830c',true)
-;
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
