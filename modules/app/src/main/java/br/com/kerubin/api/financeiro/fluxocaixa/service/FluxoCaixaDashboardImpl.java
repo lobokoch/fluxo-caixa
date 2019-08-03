@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -176,6 +177,15 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		
 		Map<Integer, List<FluxoCaixaPlanoContasMonthDBProjection>> itemsGroupedByMonth = dbItems.stream().collect(Collectors.groupingBy(FluxoCaixaPlanoContasMonthDBProjection::getMonthId));
 		
+		// Check if current month is in the results.
+		int currentMonth = LocalDate.now().getMonthValue(); 
+		if (!itemsGroupedByMonth.containsKey(currentMonth)) {
+			FluxoCaixaPlanoContasMonthDBProjection thisMonth = new FluxoCaixaPlanoContasMonthDBProjection();
+			thisMonth.setMonthId(currentMonth);
+			thisMonth.setValue(BigDecimal.ZERO);
+			itemsGroupedByMonth.put(currentMonth, Arrays.asList(thisMonth));
+		}
+		
 		List<FluxoCaixaPlanoContasForMonth> itemsByMonth = new ArrayList<>();
 		itemsGroupedByMonth.entrySet().stream().forEach(monthGrouped -> {
 			FluxoCaixaPlanoContasForMonth forMonth = new FluxoCaixaPlanoContasForMonth();
@@ -204,6 +214,8 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 			
 			itemsByMonth.add(forMonth);
 		});
+		
+		
 		
 		return itemsByMonth;
 	}
