@@ -1,6 +1,6 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.service;
 
-import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeVal;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeValue;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.lowerWithFirstUpper;
@@ -106,7 +106,7 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 			FluxoCaixaMonthItem item = actual.stream().filter(it -> monthId.equals(it.getMonthId())).findFirst().orElse(new FluxoCaixaMonthItemImpl(monthId));
 			item.accectMonthVisitor(monthVisitor);
 			if (month <= currentMonth ) {
-				BigDecimal itemBalanceValue = getSafeVal(item.getBalanceValue());
+				BigDecimal itemBalanceValue = getSafeValue(item.getBalanceValue());
 				balanceAccumulated = balanceAccumulated.add(itemBalanceValue);
 				item.setBalanceAccumulated(balanceAccumulated);
 			}
