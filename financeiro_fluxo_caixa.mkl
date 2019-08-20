@@ -1,4 +1,4 @@
-@label("Financeiro") // xxxx
+@label("Financeiro") // xxx
 domain financeiro
 
 @label("Fluxo de caixa")
@@ -126,7 +126,7 @@ service fluxo_caixa {
 		
 	}
 	
-	@version // xx
+	@version // xxx
 	@label("Lançamentos no caixa")
 	entity CaixaLancamento {
 		id: uuid
@@ -151,22 +151,26 @@ service fluxo_caixa {
 		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
 		web(styleClass: "ui-md-2")
 		grid(hidden)
+		listFilter(isEqualTo: "Tipo do movimento" styleClass: "ui-md-4")
 		
 		valorCredito: money optional
 		label: "Valor crédito"
 		web(styleClass: "ui-md-2 kb-fin-credito")
 		sum(styleClass:"kb-fin-credito" label:"A")
 		grid(noCurrencySimbol label: "Crédito (R$)" columnWidth: "12em" )
+		listFilter(between: "Créditos com valores de;até;" styleClass: "ui-md-3")
 		
 		valorDebito: money optional
 		label: "Valor débito"
 		web(styleClass: "ui-md-2 kb-fin-debito")
 		sum(styleClass:"kb-fin-debito" label:"B")
 		grid(showNumberAsNegative noCurrencySimbol label: "Débito (R$)" columnWidth: "12em" )
+		listFilter(between: "Déditos com valores de;até;" styleClass: "ui-md-3")
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
 		web(styleClass: "ui-md-2")
+		listFilter(isEqualTo: "Forma de pagamento" styleClass: "ui-md-4")
 		
 		/////
 		contaBancaria: refers ContaBancaria? manyToOne 
@@ -186,7 +190,7 @@ service fluxo_caixa {
 		
 		///////
 		
-		planoContas: refers PlanoConta optional manyToOne
+		planoContas: refers PlanoConta manyToOne
 		web(styleClass: "ui-md-8")
 		grid(hidden)
 		autoCompleteWithOwnerParams
@@ -194,6 +198,7 @@ service fluxo_caixa {
 		tipoFonteMovimento: TipoFonteMovimento
 		web(styleClass: "ui-md-4" readOnly)
 		grid(hidden)
+		listFilter(isEqualTo: "Fonte do movimento" styleClass: "ui-md-4")
 		///////////////////////
 		
 		

@@ -53,7 +53,7 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	conta_bancaria UUID /* contaBancaria */,
 	cartao_credito UUID /* cartaoCredito */,
 	outros_descricao VARCHAR(255) /* outrosDescricao */,
-	plano_contas UUID /* planoContas */,
+	plano_contas UUID NOT NULL /* planoContas */,
 	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
 	cliente UUID,
 	fornecedor UUID,

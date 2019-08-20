@@ -153,14 +153,19 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		boolean isCredito = TipoLancamentoFinanceiro.CREDITO.equals(tipoLancamento);
 		NumberPath<BigDecimal> valueField = isCredito ? qLancamentos.valorCredito : qLancamentos.valorDebito;
 		
-		Coalesce<BigDecimal> sumValueField = valueField.sum().coalesce(BigDecimal.ZERO); 
+		Coalesce<BigDecimal> sumValueField = valueField.sum().coalesce(BigDecimal.ZERO);
+		
+		Coalesce<String> planoContaCode = qPlanoContasPai.codigo.coalesce(qPlanoContas.codigo);
+		Coalesce<String> planoContaDescription = qPlanoContasPai.descricao.coalesce(qPlanoContas.descricao);
 				
 		List<FluxoCaixaPlanoContasMonthDBProjection> dbItems = query
 			.select(
 				Projections.bean(FluxoCaixaPlanoContasMonthDBProjection.class,
 				monthId.as("monthId"),
-				qPlanoContasPai.codigo.as("planoContaCode"),
-				qPlanoContasPai.descricao.as("planoContaDescription"),
+				planoContaCode.as("planoContaCode"),
+				//qPlanoContasPai.codigo.as("planoContaCode"),
+				//qPlanoContasPai.descricao.as("planoContaDescription"),
+				planoContaDescription.as("planoContaDescription"),
 				sumValueField.as("value")
 				)
 			)
@@ -171,11 +176,13 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 					qLancamentos.dataLancamento.year().eq(year).
 					and(qLancamentos.tipoLancamentoFinanceiro.eq(tipoLancamento))
 			)
-			.groupBy(monthId, qPlanoContasPai.codigo, qPlanoContasPai.descricao)
+			//.groupBy(monthId, qPlanoContasPai.codigo, qPlanoContasPai.descricao)
+			.groupBy(monthId, planoContaCode, planoContaDescription)
 			.orderBy(monthId.asc(), sumValueField.desc())
 			.fetch();
 		
-		Map<Integer, List<FluxoCaixaPlanoContasMonthDBProjection>> itemsGroupedByMonth = dbItems.stream().collect(Collectors.groupingBy(FluxoCaixaPlanoContasMonthDBProjection::getMonthId));
+		Map<Integer, List<FluxoCaixaPlanoContasMonthDBProjection>> itemsGroupedByMonth = dbItems.stream() //
+				.collect(Collectors.groupingBy(FluxoCaixaPlanoContasMonthDBProjection::getMonthId));
 		
 		// Check if current month is in the results.
 		int currentMonth = LocalDate.now().getMonthValue(); 
@@ -195,7 +202,11 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 			
 			List<FluxoCaixaPlanoContasItem> items = monthGrouped.getValue()
 				.stream()
-				.map(dbProjection -> new FluxoCaixaPlanoContasItem(dbProjection.getValue(), dbProjection.getPlanoContaCode(), dbProjection.getPlanoContaDescription()))
+				.map(dbProjection -> new FluxoCaixaPlanoContasItem( //
+						dbProjection.getValue(), //
+						dbProjection.getPlanoContaCode(), // 
+						dbProjection.getPlanoContaDescription()) //
+						) //
 				.collect(Collectors.toList());
 			
 			items.forEach(it -> {
