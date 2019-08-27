@@ -1,4 +1,4 @@
-@label("Financeiro") // xxx
+@label("Financeiro") // xx
 domain financeiro
 
 @label("Fluxo de caixa")

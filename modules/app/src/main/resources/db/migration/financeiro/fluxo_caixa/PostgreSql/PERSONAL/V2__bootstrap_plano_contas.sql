@@ -206,3 +206,29 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('b759d996-0174-4ecd-a388-e0d19ae9b210','1.19.6','Barba/bigode','DESPESA',NULL,'25b25559-6221-4215-96e3-13dd28f1830c',true)
 ,('238b6101-dd5d-4b99-9967-1edf9dbb6f4b','1.19.7','Completo','DESPESA',NULL,'25b25559-6221-4215-96e3-13dd28f1830c',true)
 ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
+INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo,created_by,created_date,last_modified_by,last_modified_date) VALUES 
+('ebb32268-5a82-4da6-8db5-2b3843097cf5','1.1.18','Acessórios','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true,'lobokoch@gmail.com','2019-07-25 20:58:05.513','lobokoch@gmail.com','2019-07-25 20:58:05.513')
+,('1824cff8-ceea-41e4-85f9-31fac02d8a79','1.1.19','Produtos Limpeza','DESPESA',NULL,'4d405422-53e1-48ad-9335-f57cece3563a',true,'lobokoch@gmail.com','2019-08-10 10:11:55.164','lobokoch@gmail.com','2019-08-10 10:11:55.164')
+,('07fa03bd-7c7f-4b0e-9a33-ab584e776d17','1.17.3','Presentes','DESPESA',NULL,'361736d5-d8c3-44e9-a71e-c28cf8dede6f',true,'lobokoch@gmail.com','2019-07-25 21:00:13.889','lobokoch@gmail.com','2019-07-25 21:00:13.889')
+,('ffd33323-f1af-4d67-b105-2327e6511a5a','1.19.8','Higiene Pessoal','DESPESA',NULL,'25b25559-6221-4215-96e3-13dd28f1830c',true,'lobokoch@gmail.com','2019-07-25 20:56:21.884','lobokoch@gmail.com','2019-07-25 20:56:21.884')
+,('87057271-2858-445a-9ebe-fd08684bb487','1.3.7','Dentista','DESPESA',NULL,'b2389da7-e107-455a-a654-e27ce5b91150',true,'lobokoch@gmail.com','2019-08-06 20:10:24.436','lobokoch@gmail.com','2019-08-06 20:10:24.436')
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
+INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo,created_by,created_date,last_modified_by,last_modified_date) VALUES 
+('a9e6be7f-c79c-46b8-b935-ae0ff4762bfa','2.3.2','Terreno','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-07-25 21:14:17.927','lobokoch@gmail.com','2019-07-25 21:14:17.927')
+,('edfab525-ed6e-4d93-9e12-196a9946c6ef','2.3.3','Casa','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-08-22 06:49:05.742','lobokoch@gmail.com','2019-08-22 06:49:05.742')
+,('7be58cf0-12f4-487f-9cac-1ea138749a63','2.3.4','Apartamento','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-08-22 06:49:13.912','lobokoch@gmail.com','2019-08-22 06:49:13.912')
+,('23dce40f-77b5-4eda-9052-aa79617d076f','2.3.5','Automóvel','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-08-22 06:49:26.288','lobokoch@gmail.com','2019-08-22 06:49:26.288')
+,('649dba27-bd83-4d09-a31f-ec52843d2031','2.3.6','Bicicleta','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-08-22 06:49:33.463','lobokoch@gmail.com','2019-08-22 06:49:33.463')
+,('f095da7f-5779-4f77-afdf-86e672d35048','2.3.7','Motocicleta','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-08-22 06:50:11.725','lobokoch@gmail.com','2019-08-22 06:50:11.725')
+,('45224d52-bc47-4f7d-86cb-8bdec214a701','2.3.8','Eletrodoméstico','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-08-22 06:50:22.461','lobokoch@gmail.com','2019-08-22 06:50:22.461')
+,('38ad7042-abbc-4708-abd0-ccaf7b344f41','2.3.9','Imóvel','RECEITA',NULL,'e2516f3d-6f29-4933-88ac-c4f697c5222b',true,'lobokoch@gmail.com','2019-08-22 06:56:04.078','lobokoch@gmail.com','2019-08-22 06:56:04.078')
+,('23de3c57-1c7f-4ac3-a4ab-6192ddbdd39a','2.6','REEMBOLSOS','RECEITA',NULL,'1ea1d30c-83e2-4f8f-8c39-ee53ef0d79fe',true,'lobokoch@gmail.com','2019-08-12 20:41:00.195','lobokoch@gmail.com','2019-08-12 20:41:00.195')
+,('68fef6de-142a-42d9-8201-4ccf2facf685','2.6.1','Unimed','RECEITA',NULL,'23de3c57-1c7f-4ac3-a4ab-6192ddbdd39a',true,'lobokoch@gmail.com','2019-08-12 20:41:49.470','lobokoch@gmail.com','2019-08-12 20:41:49.470')
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
+INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo,created_by,created_date,last_modified_by,last_modified_date) VALUES 
+('c05676c7-5467-4dd0-905a-4318c4432f41','2.7','AJUSTE DE SALDO','RECEITA',NULL,'1ea1d30c-83e2-4f8f-8c39-ee53ef0d79fe',true,'lobokoch@gmail.com','2019-08-12 21:18:58.481','lobokoch@gmail.com','2019-08-12 21:18:58.481')
+,('48526fc3-a9c5-4d16-8631-f7dc826b110c','2.7.1','Ajuste de Saldo','RECEITA',NULL,'c05676c7-5467-4dd0-905a-4318c4432f41',true,'lobokoch@gmail.com','2019-08-12 21:20:04.294','lobokoch@gmail.com','2019-08-12 21:20:04.294')
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
