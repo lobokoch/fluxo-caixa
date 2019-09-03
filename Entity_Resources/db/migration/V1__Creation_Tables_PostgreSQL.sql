@@ -22,7 +22,7 @@ CREATE TABLE caixa /* Caixa */  (
 	created_date TIMESTAMP /* createdDate */,
 	last_modified_by VARCHAR(255) /* lastModifiedBy */,
 	last_modified_date TIMESTAMP /* lastModifiedDate */,
-	version SMALLINT
+	entity_version SMALLINT /* version */
 );
 
 CREATE TABLE caixa_diario /* CaixaDiario */  (
@@ -38,7 +38,7 @@ CREATE TABLE caixa_diario /* CaixaDiario */  (
 	created_date TIMESTAMP /* createdDate */,
 	last_modified_by VARCHAR(255) /* lastModifiedBy */,
 	last_modified_date TIMESTAMP /* lastModifiedDate */,
-	version SMALLINT
+	entity_version SMALLINT /* version */
 );
 
 CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
@@ -59,7 +59,7 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	fornecedor UUID,
 	documento VARCHAR(255),
 	observacoes VARCHAR(1000),
-	version SMALLINT
+	entity_version SMALLINT /* version */
 );
 
 CREATE TABLE cliente /* Cliente */  (

@@ -22,7 +22,7 @@ CREATE TABLE caixa /* Caixa */  (
 	created_date TIMESTAMP /* createdDate */,
 	last_modified_by VARCHAR(255) /* lastModifiedBy */,
 	last_modified_date TIMESTAMP /* lastModifiedDate */,
-	version SMALLINT
+	entity_version SMALLINT /* version */
 );
 
 CREATE TABLE caixa_diario /* CaixaDiario */  (
@@ -38,7 +38,7 @@ CREATE TABLE caixa_diario /* CaixaDiario */  (
 	created_date TIMESTAMP /* createdDate */,
 	last_modified_by VARCHAR(255) /* lastModifiedBy */,
 	last_modified_date TIMESTAMP /* lastModifiedDate */,
-	version SMALLINT
+	entity_version SMALLINT /* version */
 );
 
 CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
@@ -53,13 +53,13 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	conta_bancaria UUID /* contaBancaria */,
 	cartao_credito UUID /* cartaoCredito */,
 	outros_descricao VARCHAR(255) /* outrosDescricao */,
-	plano_contas UUID /* planoContas */,
+	plano_contas UUID NOT NULL /* planoContas */,
 	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
 	cliente UUID,
 	fornecedor UUID,
 	documento VARCHAR(255),
 	observacoes VARCHAR(1000),
-	version SMALLINT
+	entity_version SMALLINT /* version */
 );
 
 CREATE TABLE cliente /* Cliente */  (
@@ -162,3 +162,5 @@ ALTER TABLE cartao_credito ADD CONSTRAINT fk_cartao_credito_banco FOREIGN KEY (b
 ALTER TABLE cartao_credito ADD CONSTRAINT fk_cartao_credito_bandeira_cartao FOREIGN KEY (bandeira_cartao) REFERENCES bandeira_cartao (id);
 ALTER TABLE plano_conta ADD CONSTRAINT fk_plano_conta_plano_conta_pai FOREIGN KEY (plano_conta_pai) REFERENCES plano_conta (id);
 
+
+/* INDEXES */
