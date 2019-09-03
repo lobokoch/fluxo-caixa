@@ -48,8 +48,10 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.QPlanoContaEnt
 @Service
 public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl {
 	
-	private static final UUID PLANO_CONTA_RECEITAS_ID = UUID.fromString("1ea1d30c-83e2-4f8f-8c39-ee53ef0d79fe");
-	private static final UUID PLANO_CONTA_DESPESA_ID =  UUID.fromString("5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5");
+	// private static final UUID PLANO_CONTA_RECEITAS_ID = UUID.fromString("1ea1d30c-83e2-4f8f-8c39-ee53ef0d79fe");
+	// private static final UUID PLANO_CONTA_DESPESA_ID =  UUID.fromString("5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5");
+	private static final String EMPTY_PLANO_CONTA_PAI_DESC =  " -  / ";
+	
 	
 	@Autowired
 	private EntityManager em;
@@ -152,14 +154,8 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 			} // for
 		}
 		
-		if (items.size() > 0) {
-			PlanoContaAutoComplete plano = items.get(0);
-			if (PLANO_CONTA_RECEITAS_ID.equals(plano.getId()) || PLANO_CONTA_DESPESA_ID.equals(plano.getId())) { // "descricao": "- / 1-DESPESAS"
-				((PlanoContaAutoCompleteImpl) plano).setDescricao(plano.getDescricao().replace(" -  / ", ""));
-			}
-		}
-		
 		items = items.stream()
+				.peek(it -> it.setDescricao(it.getDescricao().replace(EMPTY_PLANO_CONTA_PAI_DESC, "")))
 				.sorted(Comparator.comparingInt(this::codigoToInt))
 				.collect(Collectors.toList());
 		
