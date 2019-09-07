@@ -236,7 +236,7 @@ service fluxo_caixa {
 			with(fornecedor).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
 			with(valorCredito).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
 			with(valorDebito).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
-			with(grid.sumRow.lastCell).apply((valorCredito - valorDebito)) // xx
+			with(grid.sumRow.lastCell).apply(equation(valorCredito - valorDebito)) // xx
 		}
 		
 	}
