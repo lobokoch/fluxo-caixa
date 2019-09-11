@@ -1,4 +1,4 @@
-@label("Financeiro") // xx
+@label("Financeiro") // x
 domain financeiro
 
 @label("Fluxo de caixa")
@@ -133,7 +133,7 @@ service fluxo_caixa {
 		
 		caixaDiario: refers CaixaDiario manyToOne // readOnly, do próprio usuário, aberto
 		label: "Caixa"
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-6" rememberValue)
 		
 		descricao: string
 		label: "Descrição do lançamento"
@@ -145,7 +145,7 @@ service fluxo_caixa {
 		dataLancamento: date 
 		label: "Data"
 		sort: desc
-		web(styleClass: "ui-md-2")
+		web(styleClass: "ui-md-2" rememberValue)
 		listFilter(between: "Lançamentos de;Até;Intervalo de tempo")
 		
 		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
@@ -169,29 +169,29 @@ service fluxo_caixa {
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
-		web(styleClass: "ui-md-2")
+		web(styleClass: "ui-md-2" rememberValue)
 		listFilter(isEqualTo: "Forma de pagamento" styleClass: "ui-md-4")
 		
 		/////
 		contaBancaria: refers ContaBancaria? manyToOne 
 		grid(hidden)
 		label: "Dados da conta bancária"
-		web(styleClass: "ui-md-4")
+		web(styleClass: "ui-md-4" rememberValue)
 		
 		cartaoCredito: refers CartaoCredito? manyToOne
 		label: "Dados do cartão de crédito"
 		grid(hidden)
-		web(styleClass: "ui-md-4")
+		web(styleClass: "ui-md-4" rememberValue)
 		
 		outrosDescricao: string?
 		label: "Dados complementares"
 		web(styleClass: "ui-md-4")
 		grid(hidden)
 		
-		///////
+		//////
 		
 		planoContas: refers PlanoConta manyToOne
-		web(styleClass: "ui-md-8")
+		web(styleClass: "ui-md-8" rememberValue)
 		grid(hidden)
 		autoCompleteWithOwnerParams
 		
@@ -204,12 +204,12 @@ service fluxo_caixa {
 		
 		
 		cliente: refers Cliente? manyToOne
-		web(styleClass: "ui-md-12")
+		web(styleClass: "ui-md-12" rememberValue)
 		grid(hidden)
 		////
 		
 		fornecedor: refers Fornecedor? manyToOne
-		web(styleClass: "ui-md-12")
+		web(styleClass: "ui-md-12" rememberValue)
 		grid(hidden)
 		////
 		
@@ -223,7 +223,7 @@ service fluxo_caixa {
 		observacoes: string[1000]? 
 		label: "Observações"
 		grid(hidden) 
-		web(styleClass: "ui-md-12")
+		web(styleClass: "ui-md-12")//
 		
 		rules { //xx
 			with(contaBancaria).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CONTA_BANCARIA))
