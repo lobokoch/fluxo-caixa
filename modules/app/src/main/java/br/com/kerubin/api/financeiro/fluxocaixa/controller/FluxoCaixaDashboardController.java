@@ -16,7 +16,7 @@ import br.com.kerubin.api.financeiro.fluxocaixa.model.FluxoCaixaPlanoContasForMo
 import br.com.kerubin.api.financeiro.fluxocaixa.service.FluxoCaixaDashboard;
 
 @RestController
-@RequestMapping("dashboard")
+@RequestMapping("financeiro/fluxo_caixa/dashboard")
 public class FluxoCaixaDashboardController {
 	
 	@Inject

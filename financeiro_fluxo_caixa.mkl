@@ -1,7 +1,8 @@
-@label("Financeiro") // x
+@label("Financeiro") // xxxx
 domain financeiro
 
 @label("Fluxo de caixa")
+@enableCustomTestConfig
 service fluxo_caixa {
 	
 	config {
