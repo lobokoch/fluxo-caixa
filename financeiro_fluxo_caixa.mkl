@@ -221,6 +221,18 @@ service fluxo_caixa {
 		
 		///////
 		
+		viaConcBancaria: boolean?
+		label: "Baixado via conc. banc."
+		grid(hidden)
+		web(styleClass: "ui-md-6")
+		
+		numDocConcBancaria: string? 
+		//publishedInEvents
+		label: "Documento da conc. banc."
+		grid(hidden) 
+		web(styleClass: "ui-md-6")
+		///////////
+		
 		observacoes: string[1000]? 
 		label: "Observações"
 		grid(hidden) 

@@ -58,6 +58,8 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	cliente UUID,
 	fornecedor UUID,
 	documento VARCHAR(255),
+	via_conc_bancaria BOOLEAN DEFAULT false /* viaConcBancaria */,
+	num_doc_conc_bancaria VARCHAR(255) /* numDocConcBancaria */,
 	observacoes VARCHAR(1000),
 	entity_version SMALLINT /* version */
 );
