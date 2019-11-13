@@ -1,4 +1,4 @@
-@label("Financeiro") // xxxx
+@label("Financeiro") // xxx
 domain financeiro
 
 @label("Fluxo de caixa")
@@ -221,16 +221,17 @@ service fluxo_caixa {
 		
 		///////
 		
-		viaConcBancaria: boolean?
-		label: "Baixado via conc. banc."
-		grid(hidden)
-		web(styleClass: "ui-md-6")
-		
 		numDocConcBancaria: string? 
 		//publishedInEvents
-		label: "Documento da conc. banc."
+		label: "Doc. conc. banc."
 		grid(hidden) 
-		web(styleClass: "ui-md-6")
+		web(styleClass: "ui-md-4" readOnly)
+		listFilter(isNotNull: "Baixa via conciliação")
+		
+		HistConcBancaria: string?
+		label: "Histórico da conciliação bancária"
+		grid(hidden)
+		web(styleClass: "ui-md-8" readOnly)
 		///////////
 		
 		observacoes: string[1000]? 
@@ -339,6 +340,10 @@ service fluxo_caixa {
 		autoComplete
 		
 		agencia: refers AgenciaBancaria manyToOne
+		findBy( ////
+			custom: "findByNumeroContaAndAgenciaNumeroAgenciaAndAgenciaBancoNumero(String conta, String agencia, String banco)" 
+			documentation: "Busca a conta bancária, pelo número da conta, número da agência e número o banco."
+			)
 		
 		tipoContaBancaria: TipoContaBancaria
 		label: "Tipo da conta"

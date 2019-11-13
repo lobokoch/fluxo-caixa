@@ -98,3 +98,12 @@ INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despes
 ,('7024bd56-fa22-4f9a-8c45-af38ee5b3546','4.1.1','Vendas de Produtos','RECEITA',NULL,'cd1e6fda-0d80-4198-a961-1c41977879a3',true,false)
 ,('850c6667-ef5e-446f-aabb-0355a0da3cd8','4.1.2','Vendas de Serviços','RECEITA',NULL,'cd1e6fda-0d80-4198-a961-1c41977879a3',true,false)
 ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;
+
+-- Para conciliação bancária
+INSERT INTO plano_conta (id,codigo,descricao,tipo_financeiro,tipo_receita_despesa,plano_conta_pai,ativo,deleted) VALUES 
+('edd70429-20ba-4a07-a15b-942051e5eb29','3.999','BANCO','DESPESA',null,'5cd7d81e-7e69-4c26-bf2f-12ad2e286fc5',true,false)
+,('5c29f176-eef5-4658-b00a-7e6d282429db','3.999.1','Conciliação bancária (dédito)','DESPESA',NULL,'edd70429-20ba-4a07-a15b-942051e5eb29',true,false)
+--
+,('02dcf115-a574-47dc-a598-93394d1e0b94','4.999','BANCO','RECEITA',null,'1ea1d30c-83e2-4f8f-8c39-ee53ef0d79fe',true,false)
+,('34ff8dca-0bea-41ef-84a6-25440c87b211','4.999.1','Conciliação bancária (crédito)','RECEITA',NULL,'02dcf115-a574-47dc-a598-93394d1e0b94',true,false)
+ON CONFLICT ON CONSTRAINT pk_plano_conta_id DO NOTHING;

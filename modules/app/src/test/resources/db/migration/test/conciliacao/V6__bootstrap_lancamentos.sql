@@ -1,0 +1,5 @@
+/*
+INSERT INTO caixa_lancamento
+(       id,                                    caixa_diario,                            descricao, data_lancamento, tipo_lancamento_financeiro, valor_credito, valor_debito, forma_pagamento,  conta_bancaria,                         cartao_credito, outros_descricao, plano_contas,                            tipo_fonte_movimento, cliente, fornecedor, documento, observacoes, entity_version, num_doc_conc_bancaria, hist_conc_bancaria)
+VALUES('606a7132-cbf6-445a-aa95-73379892fb2d', '2e6c3d1d-9b25-4c15-b8de-3ddf5fac6fd5', 'Padaria',  '2019-07-17',    'DEBITO',                   NULL,          88.07,        'CONTA_BANCARIA', 'e6b46988-769a-4e95-a947-f73697a962b2', NULL,           NULL,             '5c29f176-eef5-4658-b00a-7e6d282429db', 'LANCEMENTO_CAIXA',    NULL,    null,       NULL,      NULL,        0,              NULL,                  NULL);
+*/
