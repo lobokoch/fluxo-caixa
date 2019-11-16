@@ -219,6 +219,7 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(LocalDate.of(2019, 7, 4))
 				.tituloConciliadoId(null)
+				.trnId("1")
 				.trnDocumento("1")
 				.trnHistorico("Teste 1")
 				.build();
@@ -229,10 +230,12 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(LocalDate.of(2019, 8, 4))
 				.tituloConciliadoId(null)
+				.trnId("2")
 				.trnDocumento("2")
 				.trnHistorico("Teste 2")
 				.build();
 		
+		lanc2.setIdConcBancaria(t2.getTrnId());
 		lanc2.setNumDocConcBancaria(t2.getTrnDocumento());
 		lanc2.setHistConcBancaria(t2.getTrnHistorico());
 		
@@ -242,6 +245,7 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(LocalDate.of(2019, 9, 4))
 				.tituloConciliadoId(null)
+				.trnId("3")
 				.trnDocumento("3")
 				.trnHistorico("Teste 3")
 				.build();
@@ -252,6 +256,7 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(LocalDate.of(2019, 9, 5))
 				.tituloConciliadoId(null)
+				.trnId("4")
 				.trnDocumento("4")
 				.trnHistorico("Teste 4")
 				.build();

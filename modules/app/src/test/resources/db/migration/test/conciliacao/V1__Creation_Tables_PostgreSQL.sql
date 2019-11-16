@@ -58,6 +58,7 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	cliente UUID,
 	fornecedor UUID,
 	documento VARCHAR(255),
+	id_conc_bancaria VARCHAR(255) /* idConcBancaria */,
 	num_doc_conc_bancaria VARCHAR(255) /* numDocConcBancaria */,
 	hist_conc_bancaria VARCHAR(255) /* HistConcBancaria */,
 	observacoes VARCHAR(1000),

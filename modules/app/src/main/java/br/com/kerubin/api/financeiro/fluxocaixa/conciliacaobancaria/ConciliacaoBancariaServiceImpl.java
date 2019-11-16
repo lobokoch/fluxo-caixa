@@ -88,7 +88,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		for (ConciliacaoTransacaoDTO transacao : transacoes) {
 			msg = null;
 			String logHeader = MessageFormat.format("Tran. id: {0}, doc.: {1}, hist.: {2}", 
-					transacao.getId(), transacao.getTrnDocumento(), transacao.getTrnHistorico());
+					transacao.getId(), transacao.getTrnId(), transacao.getTrnHistorico());
 			
 			if (isNotEmpty(transacao.getTituloConciliadoId())) {
 				msg = format("A transação já possui id ({0}) de título de conciliação", transacao.getTituloConciliadoId());
@@ -181,6 +181,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		
 		caixaLancamentoEntity.setDocumento(transacao.getTrnDocumento());
 		
+		caixaLancamentoEntity.setIdConcBancaria(transacao.getTrnId());
 		caixaLancamentoEntity.setNumDocConcBancaria(transacao.getTrnDocumento());
 		caixaLancamentoEntity.setHistConcBancaria(transacao.getTrnHistorico());
 		
@@ -204,7 +205,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			transacao.setTituloConciliadoId(lancamento.getId());
 			transacao.setTituloConciliadoDesc(lancamento.getDescricao());
 			
-			if (isNotEmpty(lancamento.getNumDocConcBancaria())) {
+			if (isNotEmpty(lancamento.getIdConcBancaria())) {
 				situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CONCILIADO_CAIXA;
 				transacao.setDataConciliacao(LocalDate.now());
 			}

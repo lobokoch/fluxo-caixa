@@ -179,6 +179,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(data1)
 				.tituloConciliadoId(null)
+				.trnId("012345")
 				.trnDocumento("012345")
 				.trnHistorico("Teste de conciliação 012345")
 				.build();
@@ -191,6 +192,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(data2)
 				.tituloConciliadoId(null)
+				.trnId("98765")
 				.trnDocumento("98765")
 				.trnHistorico("Teste de conciliação 98765")
 				.build();
@@ -218,6 +220,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				CaixaLancamentoEntity::getTipoFonteMovimento,
 				CaixaLancamentoEntity::getContaBancaria,
 				CaixaLancamentoEntity::getDocumento,
+				CaixaLancamentoEntity::getIdConcBancaria,
 				CaixaLancamentoEntity::getNumDocConcBancaria,
 				CaixaLancamentoEntity::getHistConcBancaria)
 		.contains(
@@ -230,6 +233,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						TipoFonteMovimento.LANCEMENTO_CAIXA, 
 						contaBancaria, 
 						t1.getTrnDocumento(), 
+						t1.getTrnId(), 
 						t1.getTrnDocumento(), 
 						t1.getTrnHistorico()),
 				
@@ -243,6 +247,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						TipoFonteMovimento.LANCEMENTO_CAIXA,
 						contaBancaria,
 						t2.getTrnDocumento(),
+						t2.getTrnId(),
 						t2.getTrnDocumento(),
 						t2.getTrnHistorico())
 				);
@@ -301,6 +306,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(data1)
 				.tituloConciliadoId(null)
+				.trnId("012345")
 				.trnDocumento("012345")
 				.trnHistorico("Teste de conciliação 012345")
 				.build();
@@ -313,6 +319,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(data2)
 				.tituloConciliadoId(null)
+				.trnId("98765")
 				.trnDocumento("98765")
 				.trnHistorico("Teste de conciliação 98765")
 				.build();
@@ -383,6 +390,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(data1)
 				.tituloConciliadoId(fakeTituloConciliadoId1)
+				.trnId("012345")
 				.trnDocumento("012345")
 				.trnHistorico("Teste de conciliação 012345")
 				.build();
@@ -395,6 +403,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(data2)
 				.tituloConciliadoId(null)
+				.trnId("98765")
 				.trnDocumento("98765")
 				.trnHistorico("Teste de conciliação 98765")
 				.build();
@@ -421,6 +430,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				CaixaLancamentoEntity::getTipoFonteMovimento,
 				CaixaLancamentoEntity::getContaBancaria,
 				CaixaLancamentoEntity::getDocumento,
+				CaixaLancamentoEntity::getIdConcBancaria,
 				CaixaLancamentoEntity::getNumDocConcBancaria,
 				CaixaLancamentoEntity::getHistConcBancaria)
 		.contains(
@@ -433,6 +443,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						planoContas2,
 						TipoFonteMovimento.LANCEMENTO_CAIXA,
 						contaBancaria,
+						t2.getTrnId(),
 						t2.getTrnDocumento(),
 						t2.getTrnDocumento(),
 						t2.getTrnHistorico())
@@ -494,6 +505,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(data1)
 				.tituloConciliadoId(null)
+				.trnId("012345")
 				.trnDocumento("012345")
 				.trnHistorico("Teste de conciliação 012345")
 				.build();
@@ -506,6 +518,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(data2)
 				.tituloConciliadoId(null)
+				.trnId("98765")
 				.trnDocumento("98765")
 				.trnHistorico("Teste de conciliação 98765")
 				.build();
@@ -532,6 +545,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				CaixaLancamentoEntity::getTipoFonteMovimento,
 				CaixaLancamentoEntity::getContaBancaria,
 				CaixaLancamentoEntity::getDocumento,
+				CaixaLancamentoEntity::getIdConcBancaria,
 				CaixaLancamentoEntity::getNumDocConcBancaria,
 				CaixaLancamentoEntity::getHistConcBancaria)
 		.contains(
@@ -544,6 +558,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						planoContas2,
 						TipoFonteMovimento.LANCEMENTO_CAIXA,
 						contaBancaria,
+						t2.getTrnId(),
 						t2.getTrnDocumento(),
 						t2.getTrnDocumento(),
 						t2.getTrnHistorico())
@@ -605,6 +620,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(data1)
 				.tituloConciliadoId(null)
+				.trnId(null)
 				.trnDocumento(null)
 				.trnHistorico("Teste de conciliação 012345")
 				.build();
@@ -617,6 +633,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(data2)
 				.tituloConciliadoId(null)
+				.trnId("98765")
 				.trnDocumento("98765")
 				.trnHistorico("Teste de conciliação 98765")
 				.build();
@@ -643,6 +660,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				CaixaLancamentoEntity::getTipoFonteMovimento,
 				CaixaLancamentoEntity::getContaBancaria,
 				CaixaLancamentoEntity::getDocumento,
+				CaixaLancamentoEntity::getIdConcBancaria,
 				CaixaLancamentoEntity::getNumDocConcBancaria,
 				CaixaLancamentoEntity::getHistConcBancaria)
 		.contains(
@@ -655,6 +673,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						planoContas2,
 						TipoFonteMovimento.LANCEMENTO_CAIXA,
 						contaBancaria,
+						t2.getTrnId(),
 						t2.getTrnDocumento(),
 						t2.getTrnDocumento(),
 						t2.getTrnHistorico())
@@ -716,6 +735,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(data1)
 				.tituloConciliadoId(null)
+				.trnId(null)
 				.trnDocumento(null)
 				.trnHistorico("Teste de conciliação 012345")
 				.build();
@@ -728,6 +748,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(data2)
 				.tituloConciliadoId(null)
+				.trnId("98765")
 				.trnDocumento("98765")
 				.trnHistorico("Teste de conciliação 98765")
 				.build();
@@ -739,7 +760,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 		
 		conciliacaoBancariaDTO = conciliacaoBancariaService.aplicarConciliacaoBancaria(conciliacaoBancariaDTO);
 		
-		// Valida os lançamentos criados a partir das transações bancárias consolidades.
+		// Valida os lançamentos criados a partir das transações bancárias consolidadas.
 		PlanoContaEntity planoContas2 = conciliacaoBancariaHelper.findPlanoContaPelaTransacaoBancaria(t2);
 		
 		List<CaixaLancamentoEntity> lancamentos = caixaLancamentoRepository.findAll();
@@ -754,6 +775,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				CaixaLancamentoEntity::getTipoFonteMovimento,
 				CaixaLancamentoEntity::getContaBancaria,
 				CaixaLancamentoEntity::getDocumento,
+				CaixaLancamentoEntity::getIdConcBancaria,
 				CaixaLancamentoEntity::getNumDocConcBancaria,
 				CaixaLancamentoEntity::getHistConcBancaria)
 		.contains(
@@ -767,6 +789,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						TipoFonteMovimento.LANCEMENTO_CAIXA,
 						contaBancaria,
 						t2.getTrnDocumento(),
+						t2.getTrnId(),
 						t2.getTrnDocumento(),
 						t2.getTrnHistorico())
 				);
@@ -830,6 +853,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(data1)
 				.tituloConciliadoId(null)
+				.trnId("012345")
 				.trnDocumento("012345")
 				.trnHistorico("Teste de conciliação 012345")
 				.build();
@@ -842,6 +866,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(data2)
 				.tituloConciliadoId(null)
+				.trnId("98765")
 				.trnDocumento("98765")
 				.trnHistorico("Teste de conciliação 98765")
 				.build();
@@ -871,6 +896,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 				CaixaLancamentoEntity::getTipoFonteMovimento,
 				CaixaLancamentoEntity::getContaBancaria,
 				CaixaLancamentoEntity::getDocumento,
+				CaixaLancamentoEntity::getIdConcBancaria,
 				CaixaLancamentoEntity::getNumDocConcBancaria,
 				CaixaLancamentoEntity::getHistConcBancaria)
 		.contains(
@@ -883,6 +909,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						planoContas2,
 						TipoFonteMovimento.LANCEMENTO_CAIXA,
 						contaBancaria,
+						t2.getTrnId(),
 						t2.getTrnDocumento(),
 						t2.getTrnDocumento(),
 						t2.getTrnHistorico())
@@ -942,6 +969,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 		caixaLancamentoEntity.setCliente(null);
 		caixaLancamentoEntity.setFornecedor(null);
 		caixaLancamentoEntity.setDocumento(null);
+		caixaLancamentoEntity.setIdConcBancaria(null);
 		caixaLancamentoEntity.setNumDocConcBancaria(null);
 		caixaLancamentoEntity.setHistConcBancaria(null);
 		caixaLancamentoEntity.setObservacoes(null);
