@@ -1,8 +1,6 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.conciliacaobancaria;
 
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.isEquals;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -44,7 +42,7 @@ public class ConciliacaoBancariaHelperImpl implements ConciliacaoBancariaHelper 
 	
 	@Transactional(readOnly = true)
 	@Override
-	public CaixaLancamentoEntity findLancamentoPelaTransacaoBancaria(ConciliacaoTransacaoDTO transacao) {
+	public List<CaixaLancamentoEntity> findLancamentosPelaTransacaoBancaria(ConciliacaoTransacaoDTO transacao) {
 		
 		if (isEmpty(transacao)) {
 			return null;
@@ -58,7 +56,7 @@ public class ConciliacaoBancariaHelperImpl implements ConciliacaoBancariaHelper 
 		
 		BooleanBuilder filtroDados = new BooleanBuilder();
 		filtroDados
-		.and(qCaixaLancamentoEntity.numDocConcBancaria.eq(transacao.getTrnDocumento()))
+		.and(qCaixaLancamentoEntity.idConcBancaria.eq(transacao.getTrnId()))
 		.or(valor.eq(transacao.getTrnValor()));
 		
 		LocalDate from = transacao.getTrnData().minusDays(30);
@@ -70,23 +68,13 @@ public class ConciliacaoBancariaHelperImpl implements ConciliacaoBancariaHelper 
 		BooleanBuilder where = new BooleanBuilder();
 		where.and(filtroDados).and(filtroPerido);
 		
-		List<CaixaLancamentoEntity> contas = query.selectFrom(qCaixaLancamentoEntity).where(where).fetch();
+		List<CaixaLancamentoEntity> lancamentos = query
+				.selectFrom(qCaixaLancamentoEntity)
+				.where(where)
+				.orderBy(qCaixaLancamentoEntity.dataLancamento.asc())
+				.fetch();
 		
-		if (isNotEmpty(contas)) {
-			CaixaLancamentoEntity contaCandidata = contas.stream().filter(conta -> transacao.getTrnDocumento().equals(conta.getNumDocConcBancaria())).findFirst().orElse(null);
-			
-			if (isEmpty(contaCandidata)) {
-				if (isCredito) {
-					contaCandidata = contas.stream().filter(conta -> isEquals(transacao.getTrnValor(), conta.getValorCredito())).findFirst().orElse(null);
-				}
-				else {
-					contaCandidata = contas.stream().filter(conta -> isEquals(transacao.getTrnValor(), conta.getValorDebito())).findFirst().orElse(null);
-				}
-			}
-			return contaCandidata;
-		}
-		
-		return null;
+		return lancamentos;
 	}
 	
 	@Transactional(readOnly = true)

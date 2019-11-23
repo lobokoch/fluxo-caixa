@@ -7,6 +7,7 @@ import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -50,13 +51,50 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		
 		conciliacaoBancariaDTO.getTransacoes().forEach(transacao -> {
 			
-			CaixaLancamentoEntity lancamento = conciliacaoBancariaHelper.findLancamentoPelaTransacaoBancaria(transacao);
-				
+			List<CaixaLancamentoEntity> lancamentos = conciliacaoBancariaHelper.findLancamentosPelaTransacaoBancaria(transacao);
+			
+			CaixaLancamentoEntity lancamento = null;
+			if (isNotEmpty(lancamentos)) {
+				lancamento = lancamentos.stream().filter(it -> isConciliado(it, transacao)).findFirst().orElse(lancamentos.get(0));
+			}
 			atualizarTransacaoSemErroPeloLancamento(transacao, lancamento);
+			
+			
+			// Caso tenha mais de um título, empacota eles junto para o usuário decidir qual é o título certo.
+			if (isNotEmpty(lancamentos) && lancamentos.size() > 0) {
+				
+				List<ConciliacaoTransacaoTituloDTO> titulos = lancamentos.stream().map(it -> {
+					ConciliacaoTransacaoTituloDTO titulo = ConciliacaoTransacaoTituloDTO.builder()
+							.tituloConciliadoId(it.getId())
+							.tituloConciliadoDesc(it.getDescricao())
+							.tituloConciliadoDataVen(it.getDataLancamento())
+							.tituloConciliadoDataPag(it.getDataLancamento())
+							.build();
+					
+					// Situação do título
+					SituacaoConciliacaoTrn situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CAIXA_BAIXADO_SEM_CONCILIACAO;
+					if (isNotEmpty(it.getIdConcBancaria())) {
+						situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CONCILIADO_CAIXA;
+						titulo.setDataConciliacao(it.getDataLancamento());
+					}
+					titulo.setSituacaoConciliacaoTrn(situacaoConciliacaoTrn);
+					
+					return titulo;
+					
+				}).collect(Collectors.toList());
+				
+				transacao.setConciliacaoTransacaoTitulosDTO(titulos);
+				
+			} // if (lancamentos.size() > 1)
 			
 		});
 		
 		return conciliacaoBancariaDTO;
+	}
+	
+	private boolean isConciliado(CaixaLancamentoEntity lancamento, ConciliacaoTransacaoDTO transacao) {
+		boolean result = transacao.getTrnId().equals(lancamento.getIdConcBancaria());
+		return result;
 	}
 
 	@Override
@@ -112,8 +150,10 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 				continue;
 			}
 			
-			CaixaLancamentoEntity lancamento = conciliacaoBancariaHelper.findLancamentoPelaTransacaoBancaria(transacao);
-			if (isNotEmpty(lancamento)) { // Encontrou lançamento, não pode ser baixado via conciliação
+			List<CaixaLancamentoEntity> lancamentos = conciliacaoBancariaHelper.findLancamentosPelaTransacaoBancaria(transacao);
+			CaixaLancamentoEntity lancamento = null;
+			if (isNotEmpty(lancamentos)) { // Encontrou lançamento, não pode ser baixado via conciliação
+				lancamento = lancamentos.get(0);
 				msg = format("Transação já baixada no lançamento id: {0}, data: {1}, descrição: {2}", lancamento.getId(), lancamento.getDataLancamento(), lancamento.getDescricao());
 				log.warn(msg);
 				

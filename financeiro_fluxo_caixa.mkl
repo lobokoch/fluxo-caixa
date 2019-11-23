@@ -234,7 +234,7 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-4" readOnly)
 		listFilter(isNotNull: "Doc. Baixa via conciliação")
 		
-		HistConcBancaria: string?
+		histConcBancaria: string?
 		label: "Histórico da conciliação bancária"
 		grid(hidden)
 		web(styleClass: "ui-md-4" readOnly)

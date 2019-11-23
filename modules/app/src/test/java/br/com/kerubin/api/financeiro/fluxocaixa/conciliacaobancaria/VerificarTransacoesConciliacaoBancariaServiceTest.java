@@ -164,6 +164,7 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				.trnTipo(TipoTransacao.DEBITO)
 				.trnData(LocalDate.of(2019, 6, 10))
 				.tituloConciliadoId(null)
+				.trnId("123")
 				.trnDocumento("123")
 				.trnHistorico("Teste 123")
 				.build();
@@ -174,6 +175,7 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				.trnTipo(TipoTransacao.CREDITO)
 				.trnData(LocalDate.of(2019, 6, 10))
 				.tituloConciliadoId(null)
+				.trnId("321")
 				.trnDocumento("321")
 				.trnHistorico("Teste 321")
 				.build();
