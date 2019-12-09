@@ -14,6 +14,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
@@ -42,6 +43,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 	@Inject
 	private CaixaGeral caixaGeral;
 	
+	@Transactional(readOnly = true)
 	@Override
 	public ConciliacaoBancariaDTO verificarTransacoes(ConciliacaoBancariaDTO conciliacaoBancariaDTO) {
 		
@@ -96,7 +98,8 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		boolean result = transacao.getTrnId().equals(lancamento.getIdConcBancaria());
 		return result;
 	}
-
+	
+	@Transactional
 	@Override
 	public ConciliacaoBancariaDTO aplicarConciliacaoBancaria(ConciliacaoBancariaDTO conciliacaoBancariaDTO) {
 		
@@ -224,6 +227,13 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		caixaLancamentoEntity.setIdConcBancaria(transacao.getTrnId());
 		caixaLancamentoEntity.setNumDocConcBancaria(transacao.getTrnDocumento());
 		caixaLancamentoEntity.setHistConcBancaria(transacao.getTrnHistorico());
+		
+		StringBuilder sb = new StringBuilder("Baixa via conciliacao bancária: documento: ")
+				.append(transacao.getTrnDocumento())
+				.append(", histórico: ")
+				.append(transacao.getTrnHistorico());
+		
+		caixaLancamentoEntity.setObservacoes(sb.toString());
 		
 		return caixaLancamentoEntity;
 	}
