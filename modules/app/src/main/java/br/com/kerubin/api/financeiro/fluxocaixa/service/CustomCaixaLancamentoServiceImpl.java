@@ -86,6 +86,7 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 		return result;
 	}
 	
+	@Transactional
 	@Override
 	public Collection<PlanoContaAutoComplete> planoContaPlanoContasAutoComplete(String query,
 			CaixaLancamento caixaLancamento) {
@@ -163,7 +164,9 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 		
 	}
 	
+	
 	@SuppressWarnings("unchecked")
+	@Transactional(readOnly = true)
 	@Override
 	public Collection<CaixaDiarioAutoComplete> caixaDiarioCaixaDiarioAutoComplete(String query) {
 		JPAQueryFactory queryDSL = new JPAQueryFactory(em);
@@ -191,6 +194,7 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 		return (Collection<CaixaDiarioAutoComplete>) result;
 	}
 	
+	@Transactional
 	@Override
 	public CaixaLancamentoEntity create(CaixaLancamentoEntity caixaLancamentoEntity) {
 		validateCaixa(caixaLancamentoEntity);
@@ -198,6 +202,7 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 		return super.create(caixaLancamentoEntity);
 	}
 	
+	@Transactional
 	@Override
 	public CaixaLancamentoEntity update(UUID id, CaixaLancamentoEntity caixaLancamentoEntity) {
 		validateCaixa(caixaLancamentoEntity);
@@ -205,6 +210,7 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 		return super.update(id, caixaLancamentoEntity);
 	}
 	
+	@Transactional
 	@Override
 	public void delete(UUID id) {
 		CaixaLancamentoEntity caixaLancamentoEntity = caixaLancamentoRepository.findById(id).orElse(null);

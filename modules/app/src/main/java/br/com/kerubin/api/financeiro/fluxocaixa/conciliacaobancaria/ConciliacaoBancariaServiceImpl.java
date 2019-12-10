@@ -102,7 +102,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		return result;
 	}
 	
-	@Transactional
+	//@Transactional
 	@Override
 	public ConciliacaoBancariaDTO aplicarConciliacaoBancaria(ConciliacaoBancariaDTO conciliacaoBancariaDTO) {
 		
@@ -179,7 +179,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			}
 			
 			try {
-				caixaLancamentoService.create(lancamento);
+				lancamento = caixaLancamentoService.create(lancamento);
 				transacao = atualizarTransacaoSemErroPeloLancamento(transacao, lancamento);
 				transacao.setDataConciliacao(LocalDate.now());
 			} catch(Exception e) {
