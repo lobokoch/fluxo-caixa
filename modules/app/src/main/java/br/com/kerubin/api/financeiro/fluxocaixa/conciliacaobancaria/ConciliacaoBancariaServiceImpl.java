@@ -1,6 +1,7 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.conciliacaobancaria;
 
 import static br.com.kerubin.api.servicecore.util.CoreUtils.format;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.formatMoney;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
 
@@ -65,19 +66,21 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			// Caso tenha mais de um título, empacota eles junto para o usuário decidir qual é o título certo.
 			if (isNotEmpty(lancamentos) && lancamentos.size() > 0) {
 				
-				List<ConciliacaoTransacaoTituloDTO> titulos = lancamentos.stream().map(it -> {
+				List<ConciliacaoTransacaoTituloDTO> titulos = lancamentos.stream().map(lanc -> {
+					String valor = transacao.isCredito() ? formatMoney(lanc.getValorCredito()) : formatMoney(lanc.getValorDebito());
+					
 					ConciliacaoTransacaoTituloDTO titulo = ConciliacaoTransacaoTituloDTO.builder()
-							.tituloConciliadoId(it.getId())
-							.tituloConciliadoDesc(it.getDescricao())
-							.tituloConciliadoDataVen(it.getDataLancamento())
-							.tituloConciliadoDataPag(it.getDataLancamento())
+							.tituloConciliadoId(lanc.getId())
+							.tituloConciliadoDesc(lanc.getDescricao() + " (" + valor + ")")
+							.tituloConciliadoDataVen(lanc.getDataLancamento())
+							.tituloConciliadoDataPag(lanc.getDataLancamento())
 							.build();
 					
 					// Situação do título
 					SituacaoConciliacaoTrn situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CAIXA_BAIXADO_SEM_CONCILIACAO;
-					if (isNotEmpty(it.getIdConcBancaria())) {
+					if (isNotEmpty(lanc.getIdConcBancaria())) {
 						situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CONCILIADO_CAIXA;
-						titulo.setDataConciliacao(it.getDataLancamento());
+						titulo.setDataConciliacao(lanc.getDataLancamento());
 					}
 					titulo.setSituacaoConciliacaoTrn(situacaoConciliacaoTrn);
 					
@@ -178,6 +181,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			try {
 				caixaLancamentoService.create(lancamento);
 				transacao = atualizarTransacaoSemErroPeloLancamento(transacao, lancamento);
+				transacao.setDataConciliacao(LocalDate.now());
 			} catch(Exception e) {
 				msg = format("Erro ao salvar lancamento no caixa via conciliação: " + e.getMessage());
 				log.error(msg, e);
@@ -239,7 +243,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 	}
 
 	private ConciliacaoTransacaoDTO atualizarTransacaoSemErroPeloLancamento(ConciliacaoTransacaoDTO transacao, CaixaLancamentoEntity lancamento) {
-		return atualizarTransacaoPeloLancamento(transacao, lancamento, false, "Sucesso");
+		return atualizarTransacaoPeloLancamento(transacao, lancamento, false, null);
 	}
 	
 	private ConciliacaoTransacaoDTO atualizarTransacaoComErroPeloLancamento(ConciliacaoTransacaoDTO transacao, CaixaLancamentoEntity lancamento, String msg) {
@@ -253,11 +257,17 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		SituacaoConciliacaoTrn situacaoConciliacaoTrn = transacao.getSituacaoConciliacaoTrn(); // Valor atual é o default.
 		if (isNotEmpty(lancamento)) {
 			transacao.setTituloConciliadoId(lancamento.getId());
-			transacao.setTituloConciliadoDesc(lancamento.getDescricao());
+			
+			// TODO: temporário, criar coluna valor
+			String valor = transacao.isCredito() ? formatMoney(lancamento.getValorCredito()) : formatMoney(lancamento.getValorDebito());
+			
+			transacao.setTituloConciliadoDesc(lancamento.getDescricao() + " (" + valor  + ")");
 			
 			if (isNotEmpty(lancamento.getIdConcBancaria())) {
 				situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CONCILIADO_CAIXA;
-				transacao.setDataConciliacao(LocalDate.now());
+				if (isEmpty(transacao.getDataConciliacao())) {
+					transacao.setDataConciliacao(lancamento.getDataLancamento());
+				}
 			}
 			else {
 				situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CAIXA_BAIXADO_SEM_CONCILIACAO;
