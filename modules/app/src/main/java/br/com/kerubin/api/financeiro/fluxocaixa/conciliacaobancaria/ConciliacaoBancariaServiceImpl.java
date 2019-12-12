@@ -202,7 +202,8 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		CaixaDiarioEntity caixaDiario = caixaGeral.getCaixaGeralDiarioAberto();
 		caixaLancamentoEntity.setCaixaDiario(caixaDiario);
 		
-		caixaLancamentoEntity.setDescricao(transacao.getTrnHistorico());
+		String descricao = isNotEmpty(transacao.getTituloConciliadoDesc()) ? transacao.getTituloConciliadoDesc() : transacao.getTrnHistorico();
+		caixaLancamentoEntity.setDescricao(descricao);
 		caixaLancamentoEntity.setDataLancamento(transacao.getTrnData());
 		
 		boolean isCredito = transacao.isCredito();
