@@ -257,6 +257,7 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 		
 		SituacaoConciliacaoTrn situacaoConciliacaoTrn = transacao.getSituacaoConciliacaoTrn(); // Valor atual é o default.
 		if (isNotEmpty(lancamento)) {
+			
 			transacao.setTituloConciliadoId(lancamento.getId());
 			
 			// TODO: temporário, criar coluna valor
@@ -273,6 +274,20 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			else {
 				situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CAIXA_BAIXADO_SEM_CONCILIACAO;
 			}
+			
+			// About plano de contas
+			PlanoContaDTO tituloPlanoContas = null;
+			if (lancamento.getPlanoContas() != null) {
+				tituloPlanoContas = PlanoContaDTO.builder()
+						.id(lancamento.getPlanoContas().getId())
+						.codigo(lancamento.getPlanoContas().getCodigo())
+						.descricao(lancamento.getPlanoContas().getDescricao())
+						.build();
+			}
+			
+			transacao.setTituloPlanoContas(tituloPlanoContas);
+			
+			
 		}
 		else { // Não há lancamento para a transação, mas está apto a ter
 			situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CONCILIAR_CAIXA;

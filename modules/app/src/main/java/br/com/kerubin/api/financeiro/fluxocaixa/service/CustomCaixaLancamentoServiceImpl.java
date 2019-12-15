@@ -86,7 +86,7 @@ public class CustomCaixaLancamentoServiceImpl extends CaixaLancamentoServiceImpl
 		return result;
 	}
 	
-	@Transactional
+	@Transactional(readOnly = true)
 	@Override
 	public Collection<PlanoContaAutoComplete> planoContaPlanoContasAutoComplete(String query,
 			CaixaLancamento caixaLancamento) {

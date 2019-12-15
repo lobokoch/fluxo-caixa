@@ -1,6 +1,7 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.conciliacaobancaria;
 
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -85,10 +86,14 @@ public class ConciliacaoBancariaHelperImpl implements ConciliacaoBancariaHelper 
 			return null;
 		}
 		
-		boolean isCredito = transacao.isCredito();
-		UUID id = isCredito ? PLANO_CONTA_DEFAULT_CREDITO : PLANO_CONTA_DEFAULT_DEBITO;
+		UUID planoContaId = isNotEmpty(transacao.getTituloPlanoContas()) ? transacao.getTituloPlanoContas().getId() : null; 
 		
-		PlanoContaEntity planoConta = planoContasRepository.findById(id).orElse(null);
+		if (isEmpty(planoContaId)) {
+			boolean isCredito = transacao.isCredito();
+			planoContaId = isCredito ? PLANO_CONTA_DEFAULT_CREDITO : PLANO_CONTA_DEFAULT_DEBITO;
+		}
+		
+		PlanoContaEntity planoConta = planoContasRepository.findById(planoContaId).orElse(null);
 		
 		return planoConta;
 		
