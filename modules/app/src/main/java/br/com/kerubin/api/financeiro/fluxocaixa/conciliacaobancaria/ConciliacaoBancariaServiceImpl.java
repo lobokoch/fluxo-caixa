@@ -2,9 +2,12 @@ package br.com.kerubin.api.financeiro.fluxocaixa.conciliacaobancaria;
 
 import static br.com.kerubin.api.servicecore.util.CoreUtils.format;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.formatMoney;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getDiff;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEquals;
 
+import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDate;
 import java.util.List;
@@ -67,13 +70,17 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			if (isNotEmpty(lancamentos) && lancamentos.size() > 0) {
 				
 				List<ConciliacaoTransacaoTituloDTO> titulos = lancamentos.stream().map(lanc -> {
-					String valor = transacao.isCredito() ? formatMoney(lanc.getValorCredito()) : formatMoney(lanc.getValorDebito());
+					
+					PlanoContaDTO planoContas = lanc.getPlanoContas() != null ? PlanoContaDTO.builder().id(lanc.getPlanoContas().getId()).build() : null;
+					BigDecimal valor = transacao.isCredito() ? lanc.getValorCredito() : lanc.getValorDebito();
 					
 					ConciliacaoTransacaoTituloDTO titulo = ConciliacaoTransacaoTituloDTO.builder()
 							.tituloConciliadoId(lanc.getId())
-							.tituloConciliadoDesc(lanc.getDescricao() + " (" + valor + ")")
+							.tituloConciliadoDesc(lanc.getDescricao())
+							.tituloConciliadoValor(valor)
 							.tituloConciliadoDataVen(lanc.getDataLancamento())
 							.tituloConciliadoDataPag(lanc.getDataLancamento())
+							.tituloPlanoContas(planoContas)
 							.build();
 					
 					// Situação do título
@@ -260,10 +267,20 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			
 			transacao.setTituloConciliadoId(lancamento.getId());
 			
-			// TODO: temporário, criar coluna valor
-			String valor = transacao.isCredito() ? formatMoney(lancamento.getValorCredito()) : formatMoney(lancamento.getValorDebito());
+			BigDecimal valor = transacao.isCredito() ? lancamento.getValorCredito() : lancamento.getValorDebito();
+			if (isNotEquals(transacao.getTrnValor(), valor)) {
+				BigDecimal valDiff = getDiff(transacao.getTrnValor(), valor);
+				transacao.setConciliadoMsg(MessageFormat.format("Valor da transação e valor do lançamento são diferentes em: {0}", formatMoney(valDiff)));
+			}
 			
-			transacao.setTituloConciliadoDesc(lancamento.getDescricao() + " (" + valor  + ")");
+			transacao.setTituloConciliadoDesc(lancamento.getDescricao());
+			
+			transacao.setTituloConciliadoValor(valor);
+			transacao.setTituloConciliadoDataVen(lancamento.getDataLancamento());
+			transacao.setTituloConciliadoDataPag(lancamento.getDataLancamento());
+			
+			PlanoContaDTO planoContas = lancamento.getPlanoContas() != null ? PlanoContaDTO.builder().id(lancamento.getPlanoContas().getId()).build() : null;
+			transacao.setTituloPlanoContas(planoContas);
 			
 			if (isNotEmpty(lancamento.getIdConcBancaria())) {
 				situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CONCILIADO_CAIXA;
@@ -274,20 +291,6 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			else {
 				situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CAIXA_BAIXADO_SEM_CONCILIACAO;
 			}
-			
-			// About plano de contas
-			PlanoContaDTO tituloPlanoContas = null;
-			if (lancamento.getPlanoContas() != null) {
-				tituloPlanoContas = PlanoContaDTO.builder()
-						.id(lancamento.getPlanoContas().getId())
-						.codigo(lancamento.getPlanoContas().getCodigo())
-						.descricao(lancamento.getPlanoContas().getDescricao())
-						.build();
-			}
-			
-			transacao.setTituloPlanoContas(tituloPlanoContas);
-			
-			
 		}
 		else { // Não há lancamento para a transação, mas está apto a ter
 			situacaoConciliacaoTrn = SituacaoConciliacaoTrn.CONCILIAR_CAIXA;

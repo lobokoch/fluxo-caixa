@@ -4,7 +4,6 @@ import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,11 +59,12 @@ public class ConciliacaoBancariaHelperImpl implements ConciliacaoBancariaHelper 
 		.and(qCaixaLancamentoEntity.idConcBancaria.eq(transacao.getTrnId()))
 		.or(valor.eq(transacao.getTrnValor()));
 		
-		LocalDate from = transacao.getTrnData().minusDays(30);
-		LocalDate to = transacao.getTrnData().plusDays(30);
+		/*LocalDate from = transacao.getTrnData().minusDays(30);
+		LocalDate to = transacao.getTrnData().plusDays(30);*/
 		
 		BooleanBuilder filtroPerido = new BooleanBuilder();
-		filtroPerido.and(qCaixaLancamentoEntity.dataLancamento.between(from, to));
+		//filtroPerido.and(qCaixaLancamentoEntity.dataLancamento.between(from, to));
+		filtroPerido.and(qCaixaLancamentoEntity.dataLancamento.eq(transacao.getTrnData()));
 		
 		BooleanBuilder where = new BooleanBuilder();
 		where.and(filtroDados).and(filtroPerido);
