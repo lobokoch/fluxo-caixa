@@ -10,6 +10,7 @@ import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEquals;
 import java.math.BigDecimal;
 import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -59,12 +60,20 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 			
 			List<CaixaLancamentoEntity> lancamentos = conciliacaoBancariaHelper.findLancamentosPelaTransacaoBancaria(transacao);
 			
+			
 			CaixaLancamentoEntity lancamento = null;
 			if (isNotEmpty(lancamentos)) {
-				lancamento = lancamentos.stream().filter(it -> isConciliado(it, transacao)).findFirst().orElse(lancamentos.get(0));
+				// Só pega se for conciliado
+				lancamento = lancamentos.stream().filter(it -> isConciliado(it, transacao)).findFirst().orElse(null);
+				
+				// Se tem conciliação, ou a transação veio ser título associado, associa o lançamento encontrado.
+				if (isNotEmpty(lancamento) || isEmpty(transacao.getTituloConciliadoId())) {
+					if (isEmpty(lancamento)) {
+						lancamento = lancamentos.get(0);
+					}
+					atualizarTransacaoSemErroPeloLancamento(transacao, lancamento);
+				}
 			}
-			atualizarTransacaoSemErroPeloLancamento(transacao, lancamento);
-			
 			
 			// Caso tenha mais de um título, empacota eles junto para o usuário decidir qual é o título certo.
 			if (isNotEmpty(lancamentos) && lancamentos.size() > 0) {
@@ -95,7 +104,13 @@ public class ConciliacaoBancariaServiceImpl implements ConciliacaoBancariaServic
 					
 				}).collect(Collectors.toList());
 				
-				transacao.setConciliacaoTransacaoTitulosDTO(titulos);
+				// Soma os títulos atuais com os encontrados em lançamentos no caixa.
+				List<ConciliacaoTransacaoTituloDTO> conciliacaoTransacaoTitulosDTO = transacao.getConciliacaoTransacaoTitulosDTO();
+				if (isEmpty(conciliacaoTransacaoTitulosDTO)) {
+					conciliacaoTransacaoTitulosDTO = new ArrayList<>();
+				}
+				conciliacaoTransacaoTitulosDTO.addAll(titulos);
+				transacao.setConciliacaoTransacaoTitulosDTO(conciliacaoTransacaoTitulosDTO);
 				
 			} // if (lancamentos.size() > 1)
 			

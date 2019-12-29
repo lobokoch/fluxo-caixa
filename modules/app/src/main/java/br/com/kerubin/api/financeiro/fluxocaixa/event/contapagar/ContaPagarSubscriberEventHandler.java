@@ -166,6 +166,7 @@ public class ContaPagarSubscriberEventHandler {
 		
 		
 		caixaLancamentoEntity.setDocumento(event.getNumDocumento());
+		caixaLancamentoEntity.setIdFonteMovimento(event.getId());
 		
 		caixaLancamentoService.create(caixaLancamentoEntity);
 		

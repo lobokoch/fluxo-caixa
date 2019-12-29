@@ -58,9 +58,10 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	cliente UUID,
 	fornecedor UUID,
 	documento VARCHAR(255),
+	id_fonte_movimento UUID /* idFonteMovimento */,
 	id_conc_bancaria VARCHAR(255) /* idConcBancaria */,
-	num_doc_conc_bancaria VARCHAR(255) /* numDocConcBancaria */,
 	hist_conc_bancaria VARCHAR(255) /* histConcBancaria */,
+	num_doc_conc_bancaria VARCHAR(255) /* numDocConcBancaria */,
 	observacoes VARCHAR(1000),
 	entity_version SMALLINT /* version */
 );

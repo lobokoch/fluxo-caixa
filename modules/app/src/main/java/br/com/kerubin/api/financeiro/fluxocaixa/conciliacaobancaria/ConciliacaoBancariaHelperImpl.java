@@ -1,11 +1,11 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.conciliacaobancaria;
 
-import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.*;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
@@ -54,20 +54,27 @@ public class ConciliacaoBancariaHelperImpl implements ConciliacaoBancariaHelper 
 		boolean isCredito = TipoTransacao.CREDITO.equals(transacao.getTrnTipo());
 		NumberPath<BigDecimal> valor = isCredito ? qCaixaLancamentoEntity.valorCredito : qCaixaLancamentoEntity.valorDebito;
 		
+		List<ConciliacaoTransacaoTituloDTO> titulosDTO = toSafeList(transacao.getConciliacaoTransacaoTitulosDTO());
+		
 		BooleanBuilder filtroDados = new BooleanBuilder();
 		filtroDados
 		.and(qCaixaLancamentoEntity.idConcBancaria.eq(transacao.getTrnId()))
 		.or(valor.eq(transacao.getTrnValor()));
 		
+		if (isNotEmpty(titulosDTO)) {
+			List<UUID> ids = titulosDTO.stream().filter(it -> isNotEmpty(it.getTituloConciliadoId())).map(it -> it.getTituloConciliadoId()).collect(Collectors.toList());
+			filtroDados.andNot(qCaixaLancamentoEntity.idFonteMovimento.in(ids)); // Não pegar contas já baixadas no contas a pagar e a receber, vai ficar duplicado.
+		}
+		
 		/*LocalDate from = transacao.getTrnData().minusDays(30);
 		LocalDate to = transacao.getTrnData().plusDays(30);*/
 		
-		BooleanBuilder filtroPerido = new BooleanBuilder();
+		BooleanBuilder filtroPeriodo = new BooleanBuilder();
 		//filtroPerido.and(qCaixaLancamentoEntity.dataLancamento.between(from, to));
-		filtroPerido.and(qCaixaLancamentoEntity.dataLancamento.eq(transacao.getTrnData()));
+		filtroPeriodo.and(qCaixaLancamentoEntity.dataLancamento.eq(transacao.getTrnData()));
 		
 		BooleanBuilder where = new BooleanBuilder();
-		where.and(filtroDados).and(filtroPerido);
+		where.and(filtroDados).and(filtroPeriodo);
 		
 		List<CaixaLancamentoEntity> lancamentos = query
 				.selectFrom(qCaixaLancamentoEntity)
