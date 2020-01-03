@@ -1,4 +1,4 @@
-@label("Financeiro") // xxxx
+@label("Financeiro") // xxx
 domain financeiro
 
 @label("Fluxo de caixa")
@@ -145,7 +145,7 @@ service fluxo_caixa {
 		
 		dataLancamento: date 
 		label: "Data"
-		sort: desc
+		sort(order: desc position: 0)
 		web(styleClass: "ui-md-2" rememberValue)
 		listFilter(between: "Lançamentos de;Até;Intervalo de tempo")
 		
@@ -192,14 +192,9 @@ service fluxo_caixa {
 		//////
 		
 		planoContas: refers PlanoConta manyToOne
-		web(styleClass: "ui-md-8" rememberValue)
+		web(styleClass: "ui-md-12" rememberValue)
 		grid(hidden)
 		autoCompleteWithOwnerParams
-		
-		tipoFonteMovimento: TipoFonteMovimento
-		web(styleClass: "ui-md-4" readOnly)
-		grid(hidden)
-		listFilter(isEqualTo: "Fonte do movimento" styleClass: "ui-md-4")
 		
 		///////////////////////
 		
@@ -213,15 +208,21 @@ service fluxo_caixa {
 		grid(hidden)
 		////
 		
-		documento: string?
-		label: "Documento"
-		web(styleClass: "ui-md-12")
+		tipoFonteMovimento: TipoFonteMovimento
+		web(styleClass: "ui-md-6" readOnly)
 		grid(hidden)
+		// listFilter(isEqualTo: "Fonte do movimento" styleClass: "ui-md-4")
 		
 		idFonteMovimento: uuid?
 		web(readOnly styleClass: "ui-md-6")
 		label: "Id na fonte do movimento"
-		hidden
+		grid(hidden)
+		///// 
+		
+		documento: string?
+		label: "Documento"
+		web(styleClass: "ui-md-12")
+		grid(hidden)
 		
 		///////
 		// Begin conciliação bancária
@@ -254,6 +255,7 @@ service fluxo_caixa {
 			with(cartaoCredito).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CARTAO_CREDITO))
 			with(outrosDescricao).apply(styleClass:"hidden").when(formaPagamento.isEquals(FormaPagamento.CONTA_BANCARIA) or formaPagamento.isEquals(FormaPagamento.CARTAO_CREDITO) )
 			
+			with(idFonteMovimento).apply(styleClass:"hidden").when(idFonteMovimento.isNull)
 			with(idConcBancaria).apply(styleClass:"hidden").when(idConcBancaria.isNull)
 			with(numDocConcBancaria).apply(styleClass:"hidden").when(numDocConcBancaria.isNull)
 			with(histConcBancaria).apply(styleClass:"hidden").when(numDocConcBancaria.isNull)
@@ -419,7 +421,7 @@ service fluxo_caixa {
 		
 		codigo: string
 		label: "Código"
-		autoComplete(data sort:asc)
+		autoComplete(data sort(order:asc))
 		
 		descricao: string
 		label: "Descrição"
