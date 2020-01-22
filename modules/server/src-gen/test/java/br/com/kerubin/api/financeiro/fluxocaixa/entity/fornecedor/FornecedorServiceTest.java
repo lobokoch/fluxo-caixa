@@ -1,6 +1,6 @@
 /**********************************************************************************************
 Code generated with MKL Plug-in version: 47.8.0
-Code generated at time stamp: 2020-01-13T08:12:24.691
+Code generated at time stamp: 2020-01-22T08:31:13.792
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -83,6 +83,7 @@ public class FornecedorServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		fornecedor.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		fornecedor.setNome(generateRandomString(255));
 		fornecedor.setCnpjCPF(generateRandomString(255));
+		fornecedor.setAtivo(true);
 		fornecedor.setDeleted(false);
 		
 		testVisitor.visit(this, "testCreateWithAllFields", fornecedor, TestOperation.BEFORE);
@@ -158,6 +159,7 @@ public class FornecedorServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		fornecedor.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		fornecedor.setNome(generateRandomString(255));
 		fornecedor.setCnpjCPF(generateRandomString(255));
+		fornecedor.setAtivo(true);
 		fornecedor.setDeleted(false);
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", fornecedor, TestOperation.BEFORE);
@@ -427,6 +429,7 @@ public class FornecedorServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		fornecedorEntity.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		fornecedorEntity.setNome(generateRandomString(255));
 		fornecedorEntity.setCnpjCPF(generateRandomString(255));
+		fornecedorEntity.setAtivo(true);
 		fornecedorEntity.setDeleted(false);
 		
 		fornecedorEntity = em.persistAndFlush(fornecedorEntity);

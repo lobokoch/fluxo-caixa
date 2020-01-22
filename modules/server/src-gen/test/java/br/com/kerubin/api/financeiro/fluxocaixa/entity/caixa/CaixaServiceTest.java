@@ -1,6 +1,6 @@
 /**********************************************************************************************
 Code generated with MKL Plug-in version: 47.8.0
-Code generated at time stamp: 2020-01-13T08:12:24.691
+Code generated at time stamp: 2020-01-22T08:31:13.792
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -77,7 +77,7 @@ public class CaixaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		caixa.setId(java.util.UUID.randomUUID());
 		caixa.setNome(generateRandomString(255));
 		caixa.setAtivo(true);
-		caixa.setSaldo(new java.math.BigDecimal("4607.4823"));
+		caixa.setSaldo(new java.math.BigDecimal("8954.11197"));
 		caixa.setObservacoes(generateRandomString(255));
 		
 		testVisitor.visit(this, "testCreateWithAllFields", caixa, TestOperation.BEFORE);
@@ -158,7 +158,7 @@ public class CaixaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixa.setNome(generateRandomString(255));
 		caixa.setAtivo(true);
-		caixa.setSaldo(new java.math.BigDecimal("16827.23100"));
+		caixa.setSaldo(new java.math.BigDecimal("21095.23433"));
 		caixa.setObservacoes(generateRandomString(255));
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", caixa, TestOperation.BEFORE);
@@ -286,7 +286,7 @@ public class CaixaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("7173.2747"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("11463.22929"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);

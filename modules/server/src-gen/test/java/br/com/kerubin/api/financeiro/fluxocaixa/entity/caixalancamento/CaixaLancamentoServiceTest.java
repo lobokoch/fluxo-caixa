@@ -1,6 +1,6 @@
 /**********************************************************************************************
 Code generated with MKL Plug-in version: 47.8.0
-Code generated at time stamp: 2020-01-13T08:12:24.691
+Code generated at time stamp: 2020-01-22T08:31:13.792
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -148,8 +148,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("17282.26246"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("18192.17086"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("1333.5253"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("5453.19930"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -312,8 +312,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("31761.18104"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("14379.14138"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("32598.16819"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("4058.22236"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -1026,8 +1026,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamentoEntity.setDescricao(generateRandomString(255));
 		caixaLancamentoEntity.setDataLancamento(getNextDate());
 		caixaLancamentoEntity.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("7462.26831"));
-		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("28132.26603"));
+		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("32211.17935"));
+		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("18499.31204"));
 		caixaLancamentoEntity.setFormaPagamento(FormaPagamento.DINHEIRO);
 		caixaLancamentoEntity.setContaBancaria(newContaBancariaEntity());
 		caixaLancamentoEntity.setCartaoCredito(newCartaoCreditoEntity());
@@ -1065,9 +1065,9 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaDiarioEntity.setCaixa(newCaixaEntity());
 		caixaDiarioEntity.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiarioEntity.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("20008.30266"));
+		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("32341.22759"));
 		caixaDiarioEntity.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("28668.7963"));
+		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("1830.17967"));
 		caixaDiarioEntity.setObservacoes(generateRandomString(1000));
 		
 		caixaDiarioEntity = em.persistAndFlush(caixaDiarioEntity);
@@ -1093,7 +1093,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("18977.11218"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("22887.13177"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);
@@ -1200,7 +1200,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		cartaoCreditoEntity.setNomeTitular(generateRandomString(255));
 		cartaoCreditoEntity.setNumeroCartao(generateRandomString(50));
 		cartaoCreditoEntity.setValidade(getNextDate());
-		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("13366.14806"));
+		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("19791.10024"));
 		cartaoCreditoEntity.setBandeiraCartao(newBandeiraCartaoEntity());
 		cartaoCreditoEntity.setAtivo(true);
 		cartaoCreditoEntity.setDeleted(false);
@@ -1278,6 +1278,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		clienteEntity.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		clienteEntity.setNome(generateRandomString(255));
 		clienteEntity.setCnpjCPF(generateRandomString(255));
+		clienteEntity.setAtivo(true);
 		clienteEntity.setDeleted(false);
 		
 		clienteEntity = em.persistAndFlush(clienteEntity);
@@ -1302,6 +1303,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		fornecedorEntity.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		fornecedorEntity.setNome(generateRandomString(255));
 		fornecedorEntity.setCnpjCPF(generateRandomString(255));
+		fornecedorEntity.setAtivo(true);
 		fornecedorEntity.setDeleted(false);
 		
 		fornecedorEntity = em.persistAndFlush(fornecedorEntity);

@@ -1,6 +1,6 @@
 /**********************************************************************************************
 Code generated with MKL Plug-in version: 47.8.0
-Code generated at time stamp: 2020-01-13T08:12:24.691
+Code generated at time stamp: 2020-01-22T08:31:13.792
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -83,6 +83,7 @@ public class ClienteServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		cliente.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		cliente.setNome(generateRandomString(255));
 		cliente.setCnpjCPF(generateRandomString(255));
+		cliente.setAtivo(true);
 		cliente.setDeleted(false);
 		
 		testVisitor.visit(this, "testCreateWithAllFields", cliente, TestOperation.BEFORE);
@@ -158,6 +159,7 @@ public class ClienteServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		cliente.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		cliente.setNome(generateRandomString(255));
 		cliente.setCnpjCPF(generateRandomString(255));
+		cliente.setAtivo(true);
 		cliente.setDeleted(false);
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", cliente, TestOperation.BEFORE);
@@ -427,6 +429,7 @@ public class ClienteServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		clienteEntity.setTipoPessoa(TipoPessoa.PESSOA_JURIDICA);
 		clienteEntity.setNome(generateRandomString(255));
 		clienteEntity.setCnpjCPF(generateRandomString(255));
+		clienteEntity.setAtivo(true);
 		clienteEntity.setDeleted(false);
 		
 		clienteEntity = em.persistAndFlush(clienteEntity);

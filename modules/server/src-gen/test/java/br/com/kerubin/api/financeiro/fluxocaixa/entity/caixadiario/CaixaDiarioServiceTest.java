@@ -1,6 +1,6 @@
 /**********************************************************************************************
 Code generated with MKL Plug-in version: 47.8.0
-Code generated at time stamp: 2020-01-13T08:12:24.691
+Code generated at time stamp: 2020-01-22T08:31:13.792
 Copyright: Kerubin - logokoch@gmail.com
 
 WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CODE GENERATION.
@@ -89,9 +89,9 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaDiario.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiario.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoInicial(new java.math.BigDecimal("7396.17123"));
+		caixaDiario.setSaldoInicial(new java.math.BigDecimal("24061.12984"));
 		caixaDiario.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoFinal(new java.math.BigDecimal("5854.20154"));
+		caixaDiario.setSaldoFinal(new java.math.BigDecimal("21656.5343"));
 		caixaDiario.setObservacoes(generateRandomString(1000));
 		
 		testVisitor.visit(this, "testCreateWithAllFields", caixaDiario, TestOperation.BEFORE);
@@ -183,9 +183,9 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaDiario.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiario.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoInicial(new java.math.BigDecimal("20741.8156"));
+		caixaDiario.setSaldoInicial(new java.math.BigDecimal("17132.11012"));
 		caixaDiario.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoFinal(new java.math.BigDecimal("31052.32400"));
+		caixaDiario.setSaldoFinal(new java.math.BigDecimal("12988.25598"));
 		caixaDiario.setObservacoes(generateRandomString(1000));
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", caixaDiario, TestOperation.BEFORE);
@@ -365,9 +365,9 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		caixaDiarioEntity.setCaixa(newCaixaEntity());
 		caixaDiarioEntity.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiarioEntity.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("20968.21452"));
+		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("16442.29956"));
 		caixaDiarioEntity.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("26061.29842"));
+		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("24660.6431"));
 		caixaDiarioEntity.setObservacoes(generateRandomString(1000));
 		
 		caixaDiarioEntity = em.persistAndFlush(caixaDiarioEntity);
@@ -393,7 +393,7 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("6899.4838"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("27910.11260"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);
