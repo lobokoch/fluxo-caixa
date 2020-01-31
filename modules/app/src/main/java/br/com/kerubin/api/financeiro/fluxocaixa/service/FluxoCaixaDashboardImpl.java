@@ -3,6 +3,7 @@ package br.com.kerubin.api.financeiro.fluxocaixa.service;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeValue;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.formatDate;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.lowerWithFirstUpper;
 
 import java.math.BigDecimal;
@@ -311,7 +312,7 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		JPQLQuery<BigDecimal> querySomaDebitosDoMes = buildFieldSumQueryBetweenDates(fieldValorDebito, monthStart, monthEnd, "somaDebitosDoMes");
 		
 		// Últimos n=3 dias
-		long lastDays = 3;
+		long lastDays = 7;
 		LocalDate lastDaysDate = today.minusDays(lastDays);
 		JPQLQuery<BigDecimal> querySomaCreditosLastDays = buildFieldSumQueryBetweenDates(fieldValorCredito, lastDaysDate, today, "somaCreditosLastDays");
 		JPQLQuery<BigDecimal> querySomaDebitosLastDays = buildFieldSumQueryBetweenDates(fieldValorDebito, lastDaysDate, today, "somaDebitosLastDays");
@@ -321,16 +322,15 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		JPQLQuery<BigDecimal> querySomaDebitosOntem = buildFieldSumQueryBetweenDates(fieldValorDebito, yesterday, yesterday, "somaDebitosOntem");
 		
 		// Saldo Atual
-		LocalDate statDate = LocalDate.of(2019, 1, 1);
-		JPQLQuery<BigDecimal> querySomaCreditosTudo = buildFieldSumQueryBetweenDates(fieldValorCredito, statDate, today, "somaCreditosTudo");
-		JPQLQuery<BigDecimal> querySomaDebitosTudo = buildFieldSumQueryBetweenDates(fieldValorDebito, statDate, today, "somaDebitosTudo");
+		//LocalDate statDate = LocalDate.of(2019, 1, 1);
+		LocalDate statDate = today;
+		JPQLQuery<BigDecimal> querySomaCreditosHoje = buildFieldSumQueryBetweenDates(fieldValorCredito, statDate, today, "somaCreditosHoje");
+		JPQLQuery<BigDecimal> querySomaDebitosHoje = buildFieldSumQueryBetweenDates(fieldValorDebito, statDate, today, "somaDebitosHoje");
 		
 		JPAQueryFactory query = new JPAQueryFactory(em);
 		
 		Tuple tuple = query
 				.selectDistinct( //TODO: deveria ser apenas "select", vide TODO logo abaixo.
-						querySomaCreditosTudo, 
-						querySomaDebitosTudo,
 						
 						querySomaCreditosDoMes,
 						querySomaDebitosDoMes,
@@ -339,7 +339,10 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 						querySomaDebitosLastDays,
 						
 						querySomaCreditosOntem,
-						querySomaDebitosOntem
+						querySomaDebitosOntem,
+						
+						querySomaCreditosHoje, 
+						querySomaDebitosHoje
 				)
 				.from(qCaixaLancamentos) // TODO: O PostgreSQL suporta sem o from mas o JPA parece que não, dá erro: java.lang.IllegalArgumentException: No sources given.
 				.fetchOne();
@@ -350,11 +353,9 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 			String yesterdayStr = yesterday.getDayOfWeek().getDisplayName(TextStyle.FULL, PT_BR);
 			
 			int index = 0;
-			CaixaMovimentoItem item = new CaixaMovimentoItem("Tudo até o momento", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
-			movimentos.add(item);
 			
 			String thisMontName = today.getMonth().getDisplayName(TextStyle.FULL, PT_BR);
-			item = new CaixaMovimentoItem("Este mês (" + thisMontName + ")", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
+			CaixaMovimentoItem item = new CaixaMovimentoItem("Este mês (" + thisMontName + ")", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
 			movimentos.add(item);
 			
 			item = new CaixaMovimentoItem("Últimos " + lastDays + " dias", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
@@ -362,6 +363,10 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 			
 			
 			item = new CaixaMovimentoItem("Ontem (" + yesterdayStr + ")", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
+			movimentos.add(item);
+			
+			String todayStr = formatDate(today);
+			item = new CaixaMovimentoItem("Hoje (" + todayStr + ")", getTupleValue(tuple, index++), getTupleValue(tuple, index++));
 			movimentos.add(item);
 		}
 		
