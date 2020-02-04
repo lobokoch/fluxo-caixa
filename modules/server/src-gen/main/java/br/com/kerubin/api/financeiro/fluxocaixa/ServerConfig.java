@@ -35,6 +35,7 @@ public class ServerConfig {
 	        ConnectionFactory connectionFactory) {
 		
 	    SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+	    factory.setPrefetchCount(20);
 	    configurer.configure(factory, connectionFactory);
 	    factory.setConsumerTagStrategy(queue -> {
 	    	StringBuilder sb = new StringBuilder(DomainEvent.APPLICATION).append("_")

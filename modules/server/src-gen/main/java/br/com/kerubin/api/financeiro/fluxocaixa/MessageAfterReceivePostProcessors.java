@@ -8,6 +8,7 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 package br.com.kerubin.api.financeiro.fluxocaixa;
 
 import static br.com.kerubin.api.messaging.utils.Utils.isEmpty;
+import static br.com.kerubin.api.messaging.utils.Utils.isNotEmpty;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,6 +21,7 @@ import br.com.kerubin.api.messaging.core.DomainEventPublisher;
 
 import static br.com.kerubin.api.messaging.constants.MessagingConstants.HEADER_TENANT;
 import static br.com.kerubin.api.messaging.constants.MessagingConstants.HEADER_USER;
+import static br.com.kerubin.api.messaging.constants.MessagingConstants.HEADER_TENANT_ACCOUNT_TYPE;
 
 public class MessageAfterReceivePostProcessors implements MessagePostProcessor {
 	
@@ -27,11 +29,19 @@ public class MessageAfterReceivePostProcessors implements MessagePostProcessor {
 		
 	@Override
 	public Message postProcessMessage(Message message) throws AmqpException {
+		log.info("Thread.currentThread().getName(): {}", Thread.currentThread().getName());
 		
 		log.info(FinanceiroFluxoCaixaConstants.DOMAIN + "." + FinanceiroFluxoCaixaConstants.SERVICE + " receiving message: " + message);
 		
 		Object tenant = message.getMessageProperties().getHeaders().get(HEADER_TENANT);
 		Object user = message.getMessageProperties().getHeaders().get(HEADER_USER);
+		Object tenantAccountType = message.getMessageProperties().getHeaders().get(HEADER_TENANT_ACCOUNT_TYPE);
+		
+		if (isEmpty(tenant) || isEmpty(user)) {
+			log.error("Empty or null tenant/user received from broker in message header tenant: {}, user: {}, message: ", tenant, user, message);
+			
+			throw new IllegalStateException("Empty or null tenant/user received from broker in message header tenant: " + tenant + ", user: " + user);
+		}
 		
 		if (isEmpty(tenant) || isEmpty(user)) {
 			log.error("Empty or null tenant/user received from broker in message header tenant: {}, user: {}, message: ", tenant, user, message);
@@ -41,6 +51,12 @@ public class MessageAfterReceivePostProcessors implements MessagePostProcessor {
 		
 		ServiceContext.setTenant(tenant.toString());
 		ServiceContext.setUser(user.toString());
+		if (isNotEmpty(tenantAccountType)) {
+			ServiceContext.setTenantAccountType(tenantAccountType.toString());
+		}
+		else {
+			log.error("Empty or null tenantAccountType received from broker in message header tenant: {}, user: {}, message: ", tenant, user, message);
+		}
 		
 		ServiceContext.setDomain(FinanceiroFluxoCaixaConstants.DOMAIN);
 		ServiceContext.setService(FinanceiroFluxoCaixaConstants.SERVICE);
