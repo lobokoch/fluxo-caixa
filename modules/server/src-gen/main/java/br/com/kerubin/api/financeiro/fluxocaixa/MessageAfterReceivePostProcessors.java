@@ -29,7 +29,6 @@ public class MessageAfterReceivePostProcessors implements MessagePostProcessor {
 		
 	@Override
 	public Message postProcessMessage(Message message) throws AmqpException {
-		log.info("Thread.currentThread().getName(): {}", Thread.currentThread().getName());
 		
 		log.info(FinanceiroFluxoCaixaConstants.DOMAIN + "." + FinanceiroFluxoCaixaConstants.SERVICE + " receiving message: " + message);
 		
@@ -43,14 +42,9 @@ public class MessageAfterReceivePostProcessors implements MessagePostProcessor {
 			throw new IllegalStateException("Empty or null tenant/user received from broker in message header tenant: " + tenant + ", user: " + user);
 		}
 		
-		if (isEmpty(tenant) || isEmpty(user)) {
-			log.error("Empty or null tenant/user received from broker in message header tenant: {}, user: {}, message: ", tenant, user, message);
-			
-			throw new IllegalStateException("Empty or null tenant/user received from broker in message header tenant: " + tenant + ", user: " + user);
-		}
-		
 		ServiceContext.setTenant(tenant.toString());
 		ServiceContext.setUser(user.toString());
+		
 		if (isNotEmpty(tenantAccountType)) {
 			ServiceContext.setTenantAccountType(tenantAccountType.toString());
 		}

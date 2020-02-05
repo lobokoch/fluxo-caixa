@@ -147,8 +147,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("12030.22504"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("31841.5428"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("31203.29292"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("17741.14584"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -311,8 +311,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("12707.2800"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("20206.20715"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("13735.7494"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("32436.13612"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -1025,8 +1025,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamentoEntity.setDescricao(generateRandomString(255));
 		caixaLancamentoEntity.setDataLancamento(getNextDate());
 		caixaLancamentoEntity.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("20531.26176"));
-		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("15443.29727"));
+		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("3586.2904"));
+		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("20048.32689"));
 		caixaLancamentoEntity.setFormaPagamento(FormaPagamento.DINHEIRO);
 		caixaLancamentoEntity.setContaBancaria(newContaBancariaEntity());
 		caixaLancamentoEntity.setCartaoCredito(newCartaoCreditoEntity());
@@ -1064,9 +1064,9 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaDiarioEntity.setCaixa(newCaixaEntity());
 		caixaDiarioEntity.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiarioEntity.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("630.4973"));
+		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("15795.13246"));
 		caixaDiarioEntity.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("28502.12581"));
+		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("23436.18579"));
 		caixaDiarioEntity.setObservacoes(generateRandomString(1000));
 		
 		caixaDiarioEntity = em.persistAndFlush(caixaDiarioEntity);
@@ -1092,7 +1092,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("13415.25377"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("7625.31445"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);
@@ -1199,7 +1199,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		cartaoCreditoEntity.setNomeTitular(generateRandomString(255));
 		cartaoCreditoEntity.setNumeroCartao(generateRandomString(50));
 		cartaoCreditoEntity.setValidade(getNextDate());
-		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("7009.14886"));
+		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("21367.24763"));
 		cartaoCreditoEntity.setBandeiraCartao(newBandeiraCartaoEntity());
 		cartaoCreditoEntity.setAtivo(true);
 		cartaoCreditoEntity.setDeleted(false);
@@ -1248,7 +1248,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		planoContaEntity.setId(java.util.UUID.randomUUID());
 		planoContaEntity.setCodigo(generateRandomString(255));
 		planoContaEntity.setDescricao(generateRandomString(255));
-		planoContaEntity.setTipoFinanceiro(TipoPlanoContaFinanceiro.DESPESA);
+		planoContaEntity.setTipoFinanceiro(TipoPlanoContaFinanceiro.RECEITA);
 		planoContaEntity.setTipoReceitaDespesa(TipoReceitaDespesa.VARIAVEL);
 		planoContaEntity.setPlanoContaPai(null);
 		planoContaEntity.setAtivo(true);

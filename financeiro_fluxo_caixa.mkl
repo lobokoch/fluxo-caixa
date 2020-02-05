@@ -1,6 +1,7 @@
 @label("Financeiro") // xxx
 domain financeiro
 
+@messagingEventHandler
 @webAnalitycs(tagId: "UA-157001792-1" onlyInProduction: false)
 @label("Fluxo de caixa")
 @enableCustomTestConfig
