@@ -1,7 +1,7 @@
 
 package br.com.kerubin.api.financeiro.fluxocaixa.event.user;
 
-import java.text.MessageFormat;
+import javax.inject.Inject;
 
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
@@ -12,23 +12,31 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.kerubin.api.financeiro.fluxocaixa.FinanceiroFluxoCaixaConstants;
-import br.com.kerubin.api.messaging.core.DomainEvent;
 import br.com.kerubin.api.messaging.utils.DomainEventUtils;
 
 @ComponentScan({"br.com.kerubin.api.messaging.core"})
 @Configuration
-public class SecurityAuthorizationSubscriberEventRabbitConfig {
+public class SecurityAuthorizationSubscriberEventConfig {
+	
+	@Inject
+	@Qualifier("financeiroFluxoCaixaQueue")
+	private Queue financeiroFluxoCaixaQueue;
+	
+	public SecurityAuthorizationSubscriberEventConfig() {
+		System.out.println("SecurityAuthorizationSubscriberEventConfig created");
+	}
 	
 	@Bean
 	public TopicExchange securityAuthorizationTopic() {
-		String topicName = DomainEventUtils.mountTopicName(SecurityAuthorizationConstants.DOMAIN, 
+		// Listening to the Security Authorization Topic published messages.
+		String topicName = DomainEventUtils.mountTopicName(
+				SecurityAuthorizationConstants.DOMAIN, 
 				SecurityAuthorizationConstants.SERVICE);
 		
 		return new TopicExchange(topicName);
 	}
 	
-	@Bean
+	/*@Bean
 	public Queue securityAuthorizationQueue() {
 		// This service queue name for subscribe to the entity owner exchange topic.
 		String queueName = MessageFormat.format("{0}_{1}_{2}_for_{3}_{4}", //
@@ -39,18 +47,19 @@ public class SecurityAuthorizationSubscriberEventRabbitConfig {
 			SecurityAuthorizationConstants.SERVICE);
 		
 		return new Queue(queueName, true);
-	}
+	}*/
 	
 	@Bean
-	public Binding securityAuthorizationQueueBinding(@Qualifier("securityAuthorizationTopic") TopicExchange topic, 
-			@Qualifier("securityAuthorizationQueue") Queue queue) {
+	public Binding securityAuthorizationBinding(@Qualifier("securityAuthorizationTopic") TopicExchange securityAuthorizationTopic) {
 		
-		String rountingKey = DomainEventUtils.mountRoutingKey(SecurityAuthorizationConstants.DOMAIN, //
-				SecurityAuthorizationConstants.SERVICE, UserAccountConfirmedEvent.USER_ACCOUNT_CONFIRMED_EVENT);
+		String rountingKey = DomainEventUtils.mountRoutingKey(
+				SecurityAuthorizationConstants.DOMAIN, //
+				SecurityAuthorizationConstants.SERVICE, //
+				UserAccountConfirmedEvent.USER_ACCOUNT_CONFIRMED_EVENT);
 		
 		return BindingBuilder //
-				.bind(queue) //
-				.to(topic) //
+				.bind(financeiroFluxoCaixaQueue) //
+				.to(securityAuthorizationTopic) //
 				.with(rountingKey);
 	}
 	

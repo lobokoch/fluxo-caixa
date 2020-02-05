@@ -1,4 +1,4 @@
-package br.com.kerubin.api.financeiro.fluxocaixa.config;
+package br.com.kerubin.api.financeiro.fluxocaixa.messaging;
 
 import java.text.MessageFormat;
 
@@ -8,19 +8,19 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import br.com.kerubin.api.financeiro.fluxocaixa.FinanceiroFluxoCaixaConstants;
-import br.com.kerubin.api.messaging.core.DomainEvent;
+import br.com.kerubin.api.messaging.core.DomainEventConstants;
 
 @ComponentScan({"br.com.kerubin.api.messaging.core"})
 @Configuration
-public class BrokerConfig {
+public class FinanceiroFluxocaixaEventConfig {
 	
 	@Bean
 	public Queue financeiroFluxoCaixaQueue() {
 		// Default queue for this service.
 		String queueName = MessageFormat.format("{0}_{1}_{2}", //
-			DomainEvent.APPLICATION, //
+			DomainEventConstants.APPLICATION, //
 			FinanceiroFluxoCaixaConstants.DOMAIN, //
-			FinanceiroFluxoCaixaConstants.SERVICE);
+			FinanceiroFluxoCaixaConstants.SERVICE); //
 		
 		return new Queue(queueName, true);
 	}

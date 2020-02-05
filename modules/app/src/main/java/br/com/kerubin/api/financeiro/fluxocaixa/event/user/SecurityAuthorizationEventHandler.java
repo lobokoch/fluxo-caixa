@@ -5,7 +5,6 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import org.springframework.amqp.AmqpRejectAndDontRequeueException;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixa.CaixaRepository;
@@ -20,9 +19,7 @@ public class SecurityAuthorizationEventHandler {
 	@Inject
 	private CaixaRepository caixaRepository;
 	
-	@RabbitListener(queues = "#{securityAuthorizationQueue.name}")
-	public void onHandleEvent(DomainMessage message) {
-		log.info("Thread.currentThread().getName(): {}", Thread.currentThread().getName());
+	public void doHandleEvent(DomainMessage message) {
 		try {
 			switch (message.getPrimitive()) {
 			case UserAccountConfirmedEvent.USER_ACCOUNT_CONFIRMED_EVENT:
@@ -39,7 +36,7 @@ public class SecurityAuthorizationEventHandler {
 	}
 
 	private void handleUserAccountConfirmedEvent(UserAccountConfirmedEvent payload) {
-		log.info("Handle event: {} for: {}", UserAccountConfirmedEvent.USER_ACCOUNT_CONFIRMED_EVENT, payload);
+		log.info("Handling event: {} with payload: {}", UserAccountConfirmedEvent.USER_ACCOUNT_CONFIRMED_EVENT, payload);
 		
 		try {
 			// NOTE: this will force database migration very late to prepare it for users.
@@ -49,5 +46,6 @@ public class SecurityAuthorizationEventHandler {
 			log.warn("Error finding Caixa entity with id: \"bd1e9cb7-e7f6-40da-af5c-1f461dac1d11\" in database, error: " + e.getMessage(), e);
 		}
 	}
+
 
 }
