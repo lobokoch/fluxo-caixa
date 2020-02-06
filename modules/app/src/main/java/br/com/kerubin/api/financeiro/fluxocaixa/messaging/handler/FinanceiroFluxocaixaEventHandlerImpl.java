@@ -1,4 +1,4 @@
-package br.com.kerubin.api.financeiro.fluxocaixa.event.handler;
+package br.com.kerubin.api.financeiro.fluxocaixa.messaging.handler;
 
 import java.text.MessageFormat;
 

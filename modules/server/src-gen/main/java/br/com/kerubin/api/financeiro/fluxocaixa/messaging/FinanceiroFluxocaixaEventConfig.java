@@ -21,13 +21,15 @@ import br.com.kerubin.api.messaging.core.DomainEventConstants;
 @Configuration
 public class FinanceiroFluxoCaixaEventConfig {
 	
+	public static final String FINANCEIRO_FLUXO_CAIXA_QUEUE = "financeiroFluxoCaixaQueue";
+	
 	@Bean
 	public Queue financeiroFluxoCaixaQueue() {
 		// Default queue for this service.
 		String queueName = MessageFormat.format("{0}_{1}_{2}", //
 			DomainEventConstants.APPLICATION, //
 			FinanceiroFluxoCaixaConstants.DOMAIN, //
-			FinanceiroFluxoCaixaConstants.DOMAIN); //
+			FinanceiroFluxoCaixaConstants.SERVICE); //
 		
 		return new Queue(queueName, true);
 	}

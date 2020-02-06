@@ -17,7 +17,6 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessagePostProcessor;
 
 import br.com.kerubin.api.database.core.ServiceContext;
-import br.com.kerubin.api.messaging.core.DomainEventPublisher;
 
 import static br.com.kerubin.api.messaging.constants.MessagingConstants.HEADER_TENANT;
 import static br.com.kerubin.api.messaging.constants.MessagingConstants.HEADER_USER;
@@ -25,12 +24,11 @@ import static br.com.kerubin.api.messaging.constants.MessagingConstants.HEADER_T
 
 public class MessageAfterReceivePostProcessors implements MessagePostProcessor {
 	
-	private static final Logger log = LoggerFactory.getLogger(DomainEventPublisher.class);
+	private static final Logger log = LoggerFactory.getLogger(MessageAfterReceivePostProcessors.class);
 		
 	@Override
 	public Message postProcessMessage(Message message) throws AmqpException {
-		
-		log.info(FinanceiroFluxoCaixaConstants.DOMAIN + "." + FinanceiroFluxoCaixaConstants.SERVICE + " receiving message: " + message);
+		log.info("Receiving message from broker RabbitMQ, message data: {}", message);
 		
 		Object tenant = message.getMessageProperties().getHeaders().get(HEADER_TENANT);
 		Object user = message.getMessageProperties().getHeaders().get(HEADER_USER);

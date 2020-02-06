@@ -76,7 +76,7 @@ public class CaixaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		caixa.setId(java.util.UUID.randomUUID());
 		caixa.setNome(generateRandomString(255));
 		caixa.setAtivo(true);
-		caixa.setSaldo(new java.math.BigDecimal("32463.20300"));
+		caixa.setSaldo(new java.math.BigDecimal("7594.4755"));
 		caixa.setObservacoes(generateRandomString(255));
 		
 		testVisitor.visit(this, "testCreateWithAllFields", caixa, TestOperation.BEFORE);
@@ -157,7 +157,7 @@ public class CaixaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixa.setNome(generateRandomString(255));
 		caixa.setAtivo(true);
-		caixa.setSaldo(new java.math.BigDecimal("10256.9506"));
+		caixa.setSaldo(new java.math.BigDecimal("15355.2261"));
 		caixa.setObservacoes(generateRandomString(255));
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", caixa, TestOperation.BEFORE);
@@ -285,7 +285,7 @@ public class CaixaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("18985.10224"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("23134.20956"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);
