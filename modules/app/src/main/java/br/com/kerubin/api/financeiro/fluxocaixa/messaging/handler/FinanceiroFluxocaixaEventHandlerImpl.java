@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import br.com.kerubin.api.financeiro.fluxocaixa.event.user.SecurityAuthorizationConstants;
 import br.com.kerubin.api.financeiro.fluxocaixa.event.user.SecurityAuthorizationEventHandler;
 import br.com.kerubin.api.financeiro.fluxocaixa.messaging.EventMessageNotHandledException;
-import br.com.kerubin.api.financeiro.fluxocaixa.messaging.FinanceiroFluxoCaixaEventHandler;
+import br.com.kerubin.api.financeiro.fluxocaixa.messaging.FinanceiroFluxoCaixaEventHandler2;
 import br.com.kerubin.api.messaging.core.DomainMessage;
 
 
 @Service
-public class FinanceiroFluxocaixaEventHandlerImpl implements FinanceiroFluxoCaixaEventHandler {
+public class FinanceiroFluxocaixaEventHandlerImpl implements FinanceiroFluxoCaixaEventHandler2 {
 	
 	@Inject
 	private SecurityAuthorizationEventHandler securityAuthorizationEventHandler;

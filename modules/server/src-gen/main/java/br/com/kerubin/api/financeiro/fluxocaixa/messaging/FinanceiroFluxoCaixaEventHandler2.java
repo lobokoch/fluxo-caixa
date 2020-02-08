@@ -9,7 +9,7 @@ package br.com.kerubin.api.financeiro.fluxocaixa.messaging;
 
 import br.com.kerubin.api.messaging.core.DomainMessage;
 
-public interface FinanceiroFluxoCaixaEventHandler {
+public interface FinanceiroFluxoCaixaEventHandler2 {
 
 	void handleEvent(DomainMessage message);
 
