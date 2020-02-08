@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
-import br.com.kerubin.api.financeiro.fluxocaixa.messaging.FinanceiroFluxoCaixaEventConfig2;
+import br.com.kerubin.api.financeiro.fluxocaixa.messaging.FinanceiroFluxoCaixaEventConfig;
 import br.com.kerubin.api.messaging.utils.DomainEventUtils;
 
 @ComponentScan({"br.com.kerubin.api.messaging.core"})
@@ -20,7 +20,7 @@ import br.com.kerubin.api.messaging.utils.DomainEventUtils;
 public class SecurityAuthorizationSubscriberEventConfig {
 	
 	@Inject
-	@Qualifier(FinanceiroFluxoCaixaEventConfig2.FINANCEIRO_FLUXO_CAIXA_QUEUE)
+	@Qualifier(FinanceiroFluxoCaixaEventConfig.FINANCEIRO_FLUXO_CAIXA_QUEUE)
 	private Queue financeiroFluxoCaixaQueue;
 	
 	@Bean

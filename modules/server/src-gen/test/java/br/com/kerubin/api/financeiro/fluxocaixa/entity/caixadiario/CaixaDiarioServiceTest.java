@@ -88,9 +88,9 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaDiario.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiario.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoInicial(new java.math.BigDecimal("17314.27953"));
+		caixaDiario.setSaldoInicial(new java.math.BigDecimal("17191.6340"));
 		caixaDiario.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoFinal(new java.math.BigDecimal("4039.11129"));
+		caixaDiario.setSaldoFinal(new java.math.BigDecimal("16597.15400"));
 		caixaDiario.setObservacoes(generateRandomString(1000));
 		
 		testVisitor.visit(this, "testCreateWithAllFields", caixaDiario, TestOperation.BEFORE);
@@ -182,9 +182,9 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaDiario.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiario.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoInicial(new java.math.BigDecimal("2508.26416"));
+		caixaDiario.setSaldoInicial(new java.math.BigDecimal("6778.26214"));
 		caixaDiario.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiario.setSaldoFinal(new java.math.BigDecimal("21084.31117"));
+		caixaDiario.setSaldoFinal(new java.math.BigDecimal("31654.9228"));
 		caixaDiario.setObservacoes(generateRandomString(1000));
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", caixaDiario, TestOperation.BEFORE);
@@ -364,9 +364,9 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		caixaDiarioEntity.setCaixa(newCaixaEntity());
 		caixaDiarioEntity.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiarioEntity.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("18179.22766"));
+		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("8700.2817"));
 		caixaDiarioEntity.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("7463.19553"));
+		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("32032.24417"));
 		caixaDiarioEntity.setObservacoes(generateRandomString(1000));
 		
 		caixaDiarioEntity = em.persistAndFlush(caixaDiarioEntity);
@@ -392,7 +392,7 @@ public class CaixaDiarioServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("14984.19881"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("21097.30102"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);

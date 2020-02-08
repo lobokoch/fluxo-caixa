@@ -1,4 +1,4 @@
-@label("Financeiro") // xxx
+@label("Financeiro") // xxxxx
 domain financeiro
 
 @messagingEventHandler

@@ -24,10 +24,10 @@ import lombok.extern.slf4j.Slf4j;
  * */
 @Slf4j
 @Service
-public class FinanceiroFluxoCaixaListenerEventHandler2 {
+public class FinanceiroFluxoCaixaListenerEventHandler {
 	
 	@Inject
-	private FinanceiroFluxoCaixaEventHandler2 financeiroFluxoCaixaEventHandler;
+	private FinanceiroFluxoCaixaEventHandler financeiroFluxoCaixaEventHandler;
 	
 	@RabbitListener(queues = "#{financeiroFluxoCaixaQueue.name}")
 	public void onHandleEventListener(DomainMessage message) {

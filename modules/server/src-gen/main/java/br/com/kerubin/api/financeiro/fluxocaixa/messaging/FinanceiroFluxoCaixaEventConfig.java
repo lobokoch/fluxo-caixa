@@ -19,7 +19,7 @@ import br.com.kerubin.api.messaging.core.DomainEventConstants;
 
 @ComponentScan({"br.com.kerubin.api.messaging.core"})
 @Configuration
-public class FinanceiroFluxoCaixaEventConfig2 {
+public class FinanceiroFluxoCaixaEventConfig {
 	
 	public static final String FINANCEIRO_FLUXO_CAIXA_QUEUE = "financeiroFluxoCaixaQueue";
 	
