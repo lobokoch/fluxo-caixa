@@ -1,6 +1,7 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.service;
 
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeValue;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.getDiff;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.formatDate;
@@ -33,6 +34,11 @@ import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
+import br.com.kerubin.api.financeiro.fluxocaixa.analytics.ContasProvider;
+import br.com.kerubin.api.financeiro.fluxocaixa.analytics.model.MonthlySum;
+import br.com.kerubin.api.financeiro.fluxocaixa.analytics.model.MonthlySumContas;
+import br.com.kerubin.api.financeiro.fluxocaixa.analytics.model.MonthlySumContasPagar;
+import br.com.kerubin.api.financeiro.fluxocaixa.analytics.model.MonthlySumContasReceber;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.QCaixaLancamentoEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.QPlanoContaEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.model.CaixaMovimentoItem;
@@ -52,6 +58,9 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 	
 	@Inject
 	private MonthVisitor monthVisitor;
+	
+	@Inject
+	private ContasProvider contasProvider;
 	
 	private QCaixaLancamentoEntity qCaixaLancamentos;
 	
@@ -104,12 +113,19 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		int currentMonth = LocalDate.now().getMonthValue();
 		for (Integer month = 1; month <= 12; month++) {
 			final Integer monthId = month;
-			FluxoCaixaMonthItem item = actual.stream().filter(it -> monthId.equals(it.getMonthId())).findFirst().orElse(new FluxoCaixaMonthItemImpl(monthId));
+			FluxoCaixaMonthItem item = actual.stream()
+					.filter(it -> monthId.equals(it.getMonthId()))
+					.findFirst()
+					.orElse(new FluxoCaixaMonthItemImpl(monthId));
+			
 			item.accectMonthVisitor(monthVisitor);
 			if (month <= currentMonth ) {
 				BigDecimal itemBalanceValue = getSafeValue(item.getBalanceValue());
 				balanceAccumulated = balanceAccumulated.add(itemBalanceValue);
 				item.setBalanceAccumulated(balanceAccumulated);
+				if (month == currentMonth ) {
+					item.setMonthName("(ATUAL) " + ((FluxoCaixaMonthItemImpl) item).getMonthName());
+				}
 			}
 			items.add(item);
 		}
@@ -387,6 +403,54 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 				.where(qCaixaLancamentos.dataLancamento.between(dateFrom, dateTo));
 		
 		return query;
+	}
+
+	@Override
+	public List<FluxoCaixaMonthItem> decorateWithPrevision(List<FluxoCaixaMonthItem> fluxo) {
+		
+		MonthlySumContas monthlySumContas = contasProvider.getMonthlySumContas();
+		MonthlySumContasPagar monthlySumContasPagar = monthlySumContas.getMonthlySumContasPagar();
+		MonthlySumContasReceber monthlySumContasReceber = monthlySumContas.getMonthlySumContasReceber();
+		
+		List<BigDecimal> previsaoCreditos = mapMonthlySum(monthlySumContasReceber.getApagar());
+		List<BigDecimal> previsaoDebitos = mapMonthlySum(monthlySumContasPagar.getApagar());
+		
+		int month = LocalDate.now().getMonthValue();
+		if (month == 12) {
+			return fluxo;
+		}
+		
+		for (int i = month; i < 12; i++) {
+			FluxoCaixaMonthItemImpl item = (FluxoCaixaMonthItemImpl) fluxo.get(i);
+			BigDecimal creditos = getSafeValue(previsaoCreditos.get(i));
+			BigDecimal debitos = getSafeValue(previsaoDebitos.get(i));
+			
+			item.setCreditValue(creditos);
+			item.setDebitValue(debitos);
+			item.setBalanceValue(getDiff(creditos, debitos));
+			item.setMonthName("(Previsão) " + item.getMonthName());
+		}
+		
+		return fluxo;
+	}
+
+	private List<BigDecimal> mapMonthlySum(MonthlySum monthlySum) {
+		List<BigDecimal> result = Arrays.asList(
+				monthlySum.getJanuary(),
+				monthlySum.getFebruary(),
+				monthlySum.getMarch(),
+				monthlySum.getApril(),
+				monthlySum.getMay(),
+				monthlySum.getJune(),
+				monthlySum.getJuly(),
+				monthlySum.getAugust(),
+				monthlySum.getSeptember(),
+				monthlySum.getOctober(),				
+				monthlySum.getNovember(),
+				monthlySum.getDecember()
+				);
+		
+		return result;
 	}
 	
 

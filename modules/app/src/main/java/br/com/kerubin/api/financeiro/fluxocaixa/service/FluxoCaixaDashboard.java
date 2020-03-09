@@ -23,4 +23,6 @@ public interface FluxoCaixaDashboard {
 
 	List<CaixaMovimentoItem> getFluxoCaixaResumoMovimentacoes();
 
+	List<FluxoCaixaMonthItem> decorateWithPrevision(List<FluxoCaixaMonthItem> fluxo);
+
 }

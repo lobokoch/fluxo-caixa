@@ -28,10 +28,11 @@ public class FluxoCaixaDashboardController {
 		return fluxoCaixaDashboard.getFluxoCaixaFromYear(year);
 	}
 	
-	@Transactional(readOnly = true)
 	@GetMapping("/getFluxoCaixaFromYear")
 	public List<FluxoCaixaMonthItem> getFluxoCaixaFromYear() {
-		return fluxoCaixaDashboard.getFluxoCaixaFromCurrentYear();
+		List<FluxoCaixaMonthItem> fluxo = fluxoCaixaDashboard.getFluxoCaixaFromCurrentYear();
+		fluxo = fluxoCaixaDashboard.decorateWithPrevision(fluxo);
+		return fluxo;
 	}
 	
 	@Transactional(readOnly = true)
