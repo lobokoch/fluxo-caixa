@@ -128,6 +128,17 @@ public class CaixaLancamentoListFilterPredicateImpl implements CaixaLancamentoLi
 		}
 		// End field: histConcBancaria
 		
+		// Begin field: Estorno
+		if (caixaLancamentoListFilter.getEstornoIsNotNull() != null) {		
+			if (caixaLancamentoListFilter.isEstornoIsNotNull()) {
+				where.and(qEntity.estorno.isNotNull().and(qEntity.estorno.isTrue()));
+			}
+			else {
+				where.and(qEntity.estorno.isNull().or(qEntity.estorno.isFalse()));
+			}
+		}
+		// End field: Estorno
+		
 		return where;
 	}
 

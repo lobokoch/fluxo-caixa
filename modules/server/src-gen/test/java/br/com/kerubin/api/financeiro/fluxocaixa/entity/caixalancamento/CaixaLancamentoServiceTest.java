@@ -13,12 +13,14 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCredi
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorEntity;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.contabancaria.ContaBancariaLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCreditoLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorLookupResult;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
@@ -69,6 +71,7 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCredi
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaAutoComplete;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteAutoComplete;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorAutoComplete;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoAutoComplete;
 import java.math.BigDecimal;
 
 import org.junit.Test;
@@ -79,7 +82,7 @@ import br.com.kerubin.api.financeiro.fluxocaixa.FinanceiroFluxoCaixaBaseEntityTe
 @RunWith(SpringRunner.class)
 public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 	
-	private static final String[] IGNORED_FIELDS = { "id", "version" };
+	private static final String[] IGNORED_FIELDS = { "id", "createdBy", "createdDate", "lastModifiedBy", "lastModifiedDate", "version" };
 	
 	@TestConfiguration
 	static class CaixaLancamentoServiceTestConfig {
@@ -147,8 +150,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("29913.17344"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("29944.12747"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("2927.19956"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("29806.25690"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -182,6 +185,13 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setIdConcBancaria(generateRandomString(255));
 		caixaLancamento.setHistConcBancaria(generateRandomString(255));
 		caixaLancamento.setNumDocConcBancaria(generateRandomString(255));
+		caixaLancamento.setEstorno(false);
+		
+		CaixaLancamentoEntity caixaLancamentoEntityParam = newCaixaLancamentoEntity();
+		CaixaLancamentoLookupResult estornoLancamento = newCaixaLancamentoLookupResult(caixaLancamentoEntityParam);
+		caixaLancamento.setEstornoLancamento(estornoLancamento);
+		
+		caixaLancamento.setEstornoHistorico(generateRandomString(1000));
 		caixaLancamento.setObservacoes(generateRandomString(1000));
 		
 		testVisitor.visit(this, "testCreateWithAllFields", caixaLancamento, TestOperation.BEFORE);
@@ -220,6 +230,10 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		
 		assertThat(actual.getFornecedor().getId()).isNotNull();
 		assertThat(actual.getFornecedor()).isEqualToIgnoringGivenFields(caixaLancamento.getFornecedor(), IGNORED_FIELDS);
+		
+		
+		assertThat(actual.getEstornoLancamento().getId()).isNotNull();
+		assertThat(actual.getEstornoLancamento()).isEqualToIgnoringGivenFields(caixaLancamento.getEstornoLancamento(), IGNORED_FIELDS);
 		
 		
 	}
@@ -270,6 +284,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		assertThat(actual.getCartaoCredito()).isNull();
 		assertThat(actual.getCliente()).isNull();
 		assertThat(actual.getFornecedor()).isNull();
+		assertThat(actual.getEstornoLancamento()).isNull();
 		
 	}
 	// END CREATE TESTS
@@ -311,8 +326,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("6725.21686"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("15740.16621"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("27781.8281"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("10688.8445"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -346,6 +361,13 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setIdConcBancaria(generateRandomString(255));
 		caixaLancamento.setHistConcBancaria(generateRandomString(255));
 		caixaLancamento.setNumDocConcBancaria(generateRandomString(255));
+		caixaLancamento.setEstorno(false);
+		
+		CaixaLancamentoEntity caixaLancamentoEntityParam = newCaixaLancamentoEntity();
+		CaixaLancamentoLookupResult estornoLancamento = newCaixaLancamentoLookupResult(caixaLancamentoEntityParam);
+		caixaLancamento.setEstornoLancamento(estornoLancamento);
+		
+		caixaLancamento.setEstornoHistorico(generateRandomString(1000));
 		caixaLancamento.setObservacoes(generateRandomString(1000));
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", caixaLancamento, TestOperation.BEFORE);
@@ -384,6 +406,10 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		
 		assertThat(actual.getFornecedor().getId()).isNotNull();
 		assertThat(actual.getFornecedor()).isEqualToIgnoringGivenFields(caixaLancamento.getFornecedor(), IGNORED_FIELDS);
+		
+		
+		assertThat(actual.getEstornoLancamento().getId()).isNotNull();
+		assertThat(actual.getEstornoLancamento()).isEqualToIgnoringGivenFields(caixaLancamento.getEstornoLancamento(), IGNORED_FIELDS);
 		
 		
 	}
@@ -437,6 +463,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		assertThat(actual.getCartaoCredito()).isNull();
 		assertThat(actual.getCliente()).isNull();
 		assertThat(actual.getFornecedor()).isNull();
+		assertThat(actual.getEstornoLancamento()).isNull();
 		
 	}
 	// END UPDATE TESTS
@@ -967,6 +994,43 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		.containsExactlyInAnyOrderElementsOf(nomeListFilter);
 	}
 	
+	
+	@Test
+	public void testCaixaLancamentoEstornoLancamentoAutoComplete() {
+		// Reset lastDate field to start LocalDate fields with today in this test. 
+		resetNextDate();
+					
+		// Generate 33 records of data for CaixaLancamentoEntity for this test.
+		List<CaixaLancamentoEntity> testData = new ArrayList<>();
+		final int lastRecord = 33;
+		final int firstRecord = 1;
+		for (int i = firstRecord; i <= lastRecord; i++) {
+			testData.add(newCaixaLancamentoEntity());
+		}
+		
+		// Check if 33 records of CaixaLancamentoEntity was generated.
+		long count = caixaLancamentoRepository.count();
+		assertThat(count).isEqualTo(lastRecord);
+		
+		// Extracts 1 records of CaixaLancamentoEntity randomly from testData.
+		final int resultSize = 1;
+		List<CaixaLancamentoEntity> filterTestData = getRandomItemsOf(testData, resultSize);
+		
+		// Extracts a list with only CaixaLancamentoEntity.descricao field and configure this list as a filter.
+		List<String> descricaoListFilter = filterTestData.stream().map(CaixaLancamentoEntity::getDescricao).collect(Collectors.toList());
+		String query = descricaoListFilter.get(0);
+		
+		
+		testVisitor.visit(this, "testCaixaLancamentoEstornoLancamentoAutoComplete", query, TestOperation.BEFORE);
+		Collection<CaixaLancamentoAutoComplete> result = caixaLancamentoService.caixaLancamentoEstornoLancamentoAutoComplete(query);
+		
+		testVisitor.visit(this, "testCaixaLancamentoEstornoLancamentoAutoComplete", result, TestOperation.AFTER);
+		
+		assertThat(result).isNotNull().hasSize(1)
+		.extracting(CaixaLancamentoAutoComplete::getDescricao)
+		.containsExactlyInAnyOrderElementsOf(descricaoListFilter);
+	}
+	
 	// END Relationships Autocomplete TESTS
 	
 	// BEGIN tests for Sum Fields
@@ -1025,8 +1089,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamentoEntity.setDescricao(generateRandomString(255));
 		caixaLancamentoEntity.setDataLancamento(getNextDate());
 		caixaLancamentoEntity.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("7552.15151"));
-		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("24911.2535"));
+		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("12897.20080"));
+		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("7069.20380"));
 		caixaLancamentoEntity.setFormaPagamento(FormaPagamento.DINHEIRO);
 		caixaLancamentoEntity.setContaBancaria(newContaBancariaEntity());
 		caixaLancamentoEntity.setCartaoCredito(newCartaoCreditoEntity());
@@ -1040,6 +1104,9 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamentoEntity.setIdConcBancaria(generateRandomString(255));
 		caixaLancamentoEntity.setHistConcBancaria(generateRandomString(255));
 		caixaLancamentoEntity.setNumDocConcBancaria(generateRandomString(255));
+		caixaLancamentoEntity.setEstorno(false);
+		caixaLancamentoEntity.setEstornoLancamento(null);
+		caixaLancamentoEntity.setEstornoHistorico(generateRandomString(1000));
 		caixaLancamentoEntity.setObservacoes(generateRandomString(1000));
 		
 		caixaLancamentoEntity = em.persistAndFlush(caixaLancamentoEntity);
@@ -1064,9 +1131,9 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaDiarioEntity.setCaixa(newCaixaEntity());
 		caixaDiarioEntity.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiarioEntity.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("2002.20990"));
+		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("21161.13013"));
 		caixaDiarioEntity.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("31964.20832"));
+		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("14376.30339"));
 		caixaDiarioEntity.setObservacoes(generateRandomString(1000));
 		
 		caixaDiarioEntity = em.persistAndFlush(caixaDiarioEntity);
@@ -1092,7 +1159,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("2174.27385"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("5913.23168"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);
@@ -1199,7 +1266,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		cartaoCreditoEntity.setNomeTitular(generateRandomString(255));
 		cartaoCreditoEntity.setNumeroCartao(generateRandomString(50));
 		cartaoCreditoEntity.setValidade(getNextDate());
-		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("698.28246"));
+		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("16160.17617"));
 		cartaoCreditoEntity.setBandeiraCartao(newBandeiraCartaoEntity());
 		cartaoCreditoEntity.setAtivo(true);
 		cartaoCreditoEntity.setDeleted(false);

@@ -62,7 +62,14 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	id_conc_bancaria VARCHAR(255) /* idConcBancaria */,
 	hist_conc_bancaria VARCHAR(255) /* histConcBancaria */,
 	num_doc_conc_bancaria VARCHAR(255) /* numDocConcBancaria */,
+	estorno BOOLEAN DEFAULT false,
+	estorno_lancamento UUID /* estornoLancamento */,
+	estorno_historico VARCHAR(1000) /* estornoHistorico */,
 	observacoes VARCHAR(1000),
+	created_by VARCHAR(255) /* createdBy */,
+	created_date TIMESTAMP /* createdDate */,
+	last_modified_by VARCHAR(255) /* lastModifiedBy */,
+	last_modified_date TIMESTAMP /* lastModifiedDate */,
 	entity_version SMALLINT /* version */
 );
 
@@ -162,6 +169,7 @@ ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_cartao_credito F
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_plano_contas FOREIGN KEY (plano_contas) REFERENCES plano_conta (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_cliente FOREIGN KEY (cliente) REFERENCES cliente (id);
 ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_fornecedor FOREIGN KEY (fornecedor) REFERENCES fornecedor (id);
+ALTER TABLE caixa_lancamento ADD CONSTRAINT fk_caixa_lancamento_estorno_lancamento FOREIGN KEY (estorno_lancamento) REFERENCES caixa_lancamento (id);
 ALTER TABLE agencia_bancaria ADD CONSTRAINT fk_agencia_bancaria_banco FOREIGN KEY (banco) REFERENCES banco (id);
 ALTER TABLE conta_bancaria ADD CONSTRAINT fk_conta_bancaria_agencia FOREIGN KEY (agencia) REFERENCES agencia_bancaria (id);
 ALTER TABLE cartao_credito ADD CONSTRAINT fk_cartao_credito_banco FOREIGN KEY (banco) REFERENCES banco (id);

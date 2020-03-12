@@ -54,13 +54,14 @@ CREATE TABLE caixa_lancamento /* CaixaLancamento */  (
 	cartao_credito UUID /* cartaoCredito */,
 	outros_descricao VARCHAR(255) /* outrosDescricao */,
 	plano_contas UUID NOT NULL /* planoContas */,
-	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
 	cliente UUID,
 	fornecedor UUID,
+	tipo_fonte_movimento VARCHAR(255) NOT NULL /* tipoFonteMovimento */,
+	id_fonte_movimento UUID /* idFonteMovimento */,
 	documento VARCHAR(255),
 	id_conc_bancaria VARCHAR(255) /* idConcBancaria */,
+	hist_conc_bancaria VARCHAR(255) /* histConcBancaria */,
 	num_doc_conc_bancaria VARCHAR(255) /* numDocConcBancaria */,
-	hist_conc_bancaria VARCHAR(255) /* HistConcBancaria */,
 	observacoes VARCHAR(1000),
 	entity_version SMALLINT /* version */
 );
@@ -70,6 +71,7 @@ CREATE TABLE cliente /* Cliente */  (
 	tipo_pessoa VARCHAR(255) NOT NULL /* tipoPessoa */,
 	nome VARCHAR(255) NOT NULL,
 	cnpj_cpf VARCHAR(255) /* cnpjCPF */,
+	ativo BOOLEAN DEFAULT true,
 	deleted BOOLEAN DEFAULT false
 );
 
@@ -78,6 +80,7 @@ CREATE TABLE fornecedor /* Fornecedor */  (
 	tipo_pessoa VARCHAR(255) NOT NULL /* tipoPessoa */,
 	nome VARCHAR(255) NOT NULL,
 	cnpj_cpf VARCHAR(255) /* cnpjCPF */,
+	ativo BOOLEAN DEFAULT true,
 	deleted BOOLEAN DEFAULT false
 );
 

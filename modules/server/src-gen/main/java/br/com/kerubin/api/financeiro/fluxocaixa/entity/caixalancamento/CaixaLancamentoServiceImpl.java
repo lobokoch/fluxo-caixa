@@ -185,6 +185,13 @@ public class CaixaLancamentoServiceImpl implements CaixaLancamentoService {
 		return result;
 	}
 	
+	@Transactional(readOnly = true)
+	@Override
+	public Collection<CaixaLancamentoAutoComplete> caixaLancamentoEstornoLancamentoAutoComplete(String query) {
+		Collection<CaixaLancamentoAutoComplete> result = caixaLancamentoRepository.autoComplete(query);
+		return result;
+	}
+	
 	// End relationships autoComplete
 	
 	

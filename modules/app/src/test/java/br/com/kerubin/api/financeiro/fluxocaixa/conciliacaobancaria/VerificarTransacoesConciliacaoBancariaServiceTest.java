@@ -77,7 +77,7 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 	private static final String AGENDIA_ID = "12345";
 	private static final String CONTA_BANCARIA_ID = "98765";
 	private static final BigDecimal VALOR = new BigDecimal("1269.4");
-	private static final Object SUCESSO = "Sucesso";
+	private static final Object SUCESSO = null;
 	
 	@TestConfiguration
 	static class CaixaLancamentoServiceTestConfig {
@@ -199,8 +199,8 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				ConciliacaoTransacaoDTO::isDebito,
 				ConciliacaoTransacaoDTO::getSituacaoConciliacaoTrn)
 		.contains(
-				tuple(null, null, null, false, SUCESSO, true, SituacaoConciliacaoTrn.CONCILIAR_CAIXA),
-				tuple(null, null, null, false, SUCESSO, false, SituacaoConciliacaoTrn.CONCILIAR_CAIXA)
+				tuple(null, null, null, null, SUCESSO, true, null/*SituacaoConciliacaoTrn.CONCILIAR_CAIXA*/),
+				tuple(null, null, null, null, SUCESSO, false, null/*SituacaoConciliacaoTrn.CONCILIAR_CAIXA*/)
 				);
 	}
 	
@@ -291,14 +291,14 @@ public class VerificarTransacoesConciliacaoBancariaServiceTest extends Financeir
 				
 				tuple(lanc2.getId(), 
 						lanc2.getDescricao(),
-						LocalDate.now(),
+						lanc2.getDataLancamento(),
 						false,
 						SUCESSO,
 						TipoLancamentoFinanceiro.DEBITO.equals(lanc2.getTipoLancamentoFinanceiro()),
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA),
 				
-				tuple(null, null, null, false, SUCESSO, true, SituacaoConciliacaoTrn.CONCILIAR_CAIXA),
-				tuple(null, null, null, false, SUCESSO, false, SituacaoConciliacaoTrn.CONCILIAR_CAIXA)
+				tuple(null, null, null, null, SUCESSO, true, null),
+				tuple(null, null, null, null, SUCESSO, false, null)
 				
 				);
 	}

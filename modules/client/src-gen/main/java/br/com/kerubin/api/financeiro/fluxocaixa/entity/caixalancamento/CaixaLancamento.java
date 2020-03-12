@@ -19,6 +19,7 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaLook
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoLookupResult;
 
 public class CaixaLancamento {
 
@@ -75,8 +76,25 @@ public class CaixaLancamento {
 	@Size(max = 255, message = "\"Documento da conciliação bancária\" pode ter no máximo 255 caracteres.")
 	private String numDocConcBancaria;
 	
+	private Boolean estorno = false;
+	
+	private CaixaLancamentoLookupResult estornoLancamento;
+	
+	@Size(max = 1000, message = "\"Histórico do estorno\" pode ter no máximo 1000 caracteres.")
+	private String estornoHistorico;
+	
 	@Size(max = 1000, message = "\"Observações\" pode ter no máximo 1000 caracteres.")
 	private String observacoes;
+	
+	@Size(max = 255, message = "\"Criado por\" pode ter no máximo 255 caracteres.")
+	private String createdBy;
+	
+	private java.time.LocalDateTime createdDate;
+	
+	@Size(max = 255, message = "\"Alterado por\" pode ter no máximo 255 caracteres.")
+	private String lastModifiedBy;
+	
+	private java.time.LocalDateTime lastModifiedDate;
 	
 	private short version;
 	
@@ -166,8 +184,36 @@ public class CaixaLancamento {
 		return numDocConcBancaria;
 	}
 	
+	public Boolean getEstorno() {
+		return estorno;
+	}
+	
+	public CaixaLancamentoLookupResult getEstornoLancamento() {
+		return estornoLancamento;
+	}
+	
+	public String getEstornoHistorico() {
+		return estornoHistorico;
+	}
+	
 	public String getObservacoes() {
 		return observacoes;
+	}
+	
+	public String getCreatedBy() {
+		return createdBy;
+	}
+	
+	public java.time.LocalDateTime getCreatedDate() {
+		return createdDate;
+	}
+	
+	public String getLastModifiedBy() {
+		return lastModifiedBy;
+	}
+	
+	public java.time.LocalDateTime getLastModifiedDate() {
+		return lastModifiedDate;
 	}
 	
 	public short getVersion() {
@@ -254,8 +300,36 @@ public class CaixaLancamento {
 		this.numDocConcBancaria = numDocConcBancaria;
 	}
 	
+	public void setEstorno(Boolean estorno) {
+		this.estorno = estorno;
+	}
+	
+	public void setEstornoLancamento(CaixaLancamentoLookupResult estornoLancamento) {
+		this.estornoLancamento = estornoLancamento;
+	}
+	
+	public void setEstornoHistorico(String estornoHistorico) {
+		this.estornoHistorico = estornoHistorico;
+	}
+	
 	public void setObservacoes(String observacoes) {
 		this.observacoes = observacoes;
+	}
+	
+	public void setCreatedBy(String createdBy) {
+		this.createdBy = createdBy;
+	}
+	
+	public void setCreatedDate(java.time.LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
+	
+	public void setLastModifiedBy(String lastModifiedBy) {
+		this.lastModifiedBy = lastModifiedBy;
+	}
+	
+	public void setLastModifiedDate(java.time.LocalDateTime lastModifiedDate) {
+		this.lastModifiedDate = lastModifiedDate;
 	}
 	
 	public void setVersion(short version) {

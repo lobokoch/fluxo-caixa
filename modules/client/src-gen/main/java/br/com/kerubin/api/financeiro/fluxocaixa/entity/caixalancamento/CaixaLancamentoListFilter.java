@@ -41,6 +41,8 @@ public class CaixaLancamentoListFilter {
 	
 	private java.util.List<String> histConcBancaria;
 	
+	private Boolean estornoIsNotNull;
+	
 	// Map field for developer customizing parameters.
 	private Map<Object, Object> customParams = new HashMap<>();
 	
@@ -134,6 +136,18 @@ public class CaixaLancamentoListFilter {
 	
 	public void setHistConcBancaria(java.util.List<String> histConcBancaria) {
 		this.histConcBancaria = histConcBancaria;
+	}
+	
+	public Boolean isEstornoIsNotNull() {
+		return estornoIsNotNull != null && estornoIsNotNull;
+	}
+	
+	public Boolean getEstornoIsNotNull() {
+		return estornoIsNotNull;
+	}
+			
+	public void setEstornoIsNotNull(Boolean estornoIsNotNull) {
+		this.estornoIsNotNull = estornoIsNotNull;
 	}
 	
 	public Map<Object, Object> getCustomParams() {

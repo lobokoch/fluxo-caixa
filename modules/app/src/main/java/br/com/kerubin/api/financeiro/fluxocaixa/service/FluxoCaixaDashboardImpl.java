@@ -25,6 +25,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Predicate;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.Coalesce;
 import com.querydsl.core.types.dsl.NumberExpression;
@@ -87,6 +88,9 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		
 		NumberExpression<?> balanceValue = creditValue.asNumber().subtract(debitValue.asNumber());
 		
+		Predicate notEstorno = qLancamentos.estorno.isNull().or(qLancamentos.estorno.isFalse());
+		
+		
 		List<FluxoCaixaMonthItemImpl> dbItems = query
 			.select(
 				Projections.bean(FluxoCaixaMonthItemImpl.class,
@@ -97,7 +101,7 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 				)
 			)
 			.from(qLancamentos)
-			.where(qLancamentos.dataLancamento.year().eq(year))
+			.where(qLancamentos.dataLancamento.year().eq(year).and(notEstorno))
 			.groupBy(monthId)
 			.orderBy(monthId.asc())
 			.fetch();
@@ -174,6 +178,8 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		
 		Coalesce<String> planoContaCode = qPlanoContasPai.codigo.coalesce(qPlanoContas.codigo);
 		Coalesce<String> planoContaDescription = qPlanoContasPai.descricao.coalesce(qPlanoContas.descricao);
+		
+		Predicate notEstorno = qLancamentos.estorno.isNull().or(qLancamentos.estorno.isFalse());
 				
 		List<FluxoCaixaPlanoContasMonthDBProjection> dbItems = query
 			.select(
@@ -190,8 +196,9 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 			.leftJoin(qPlanoContas).on(qPlanoContas.id.eq(qLancamentos.planoContas.id))
 			.leftJoin(qPlanoContasPai).on(qPlanoContasPai.id.eq(qPlanoContas.planoContaPai.id))
 			.where(
-					qLancamentos.dataLancamento.year().eq(year).
-					and(qLancamentos.tipoLancamentoFinanceiro.eq(tipoLancamento))
+					qLancamentos.dataLancamento.year().eq(year)
+					.and(qLancamentos.tipoLancamentoFinanceiro.eq(tipoLancamento))
+					.and(notEstorno)
 			)
 			//.groupBy(monthId, qPlanoContasPai.codigo, qPlanoContasPai.descricao)
 			.groupBy(monthId, planoContaCode, planoContaDescription)
@@ -259,6 +266,8 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 		NumberExpression<Integer> monthId = qLancamentos.dataLancamento.month();
 		Coalesce<BigDecimal> debitValue = qLancamentos.valorDebito.sum().coalesce(BigDecimal.ZERO);
 		
+		Predicate notEstorno = qLancamentos.estorno.isNull().or(qLancamentos.estorno.isFalse());
+		
 		List<FluxoCaixaPlanoContasMonthDBProjection> dbItems = query
 				.select(
 						Projections.bean(FluxoCaixaPlanoContasMonthDBProjection.class,
@@ -272,8 +281,9 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 				.leftJoin(qPlanoContas).on(qPlanoContas.id.eq(qLancamentos.planoContas.id))
 				//.leftJoin(qPlanoContasPai).on(qPlanoContasPai.id.eq(qPlanoContas.planoContaPai.id))
 				.where(
-						qLancamentos.dataLancamento.year().eq(year).
-						and(qLancamentos.tipoLancamentoFinanceiro.eq(TipoLancamentoFinanceiro.DEBITO))
+						qLancamentos.dataLancamento.year().eq(year)
+						.and(qLancamentos.tipoLancamentoFinanceiro.eq(TipoLancamentoFinanceiro.DEBITO))
+						.and(notEstorno)
 						)
 				.groupBy(monthId, qPlanoContas.codigo, qPlanoContas.descricao)
 				.orderBy(monthId.asc(), debitValue.desc())
@@ -396,11 +406,14 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 	private JPQLQuery<BigDecimal> buildFieldSumQueryBetweenDates(NumberPath<BigDecimal> fieldToSum, LocalDate dateFrom, LocalDate dateTo, String alias) {
 		
 		Coalesce<BigDecimal> fieldValue = fieldToSum.sum().coalesce(BigDecimal.ZERO);
+		Predicate notEstorno = qCaixaLancamentos.estorno.isNull().or(qCaixaLancamentos.estorno.isFalse());
 		
 		JPQLQuery<BigDecimal> query = JPAExpressions
 				.select(fieldValue.as(alias))
 				.from(qCaixaLancamentos)
-				.where(qCaixaLancamentos.dataLancamento.between(dateFrom, dateTo));
+				.where(
+						qCaixaLancamentos.dataLancamento.between(dateFrom, dateTo)
+						.and(notEstorno));
 		
 		return query;
 	}

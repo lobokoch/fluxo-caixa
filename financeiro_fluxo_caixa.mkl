@@ -130,6 +130,7 @@ service fluxo_caixa {
 	}
 	
 	@version // xxx
+	@auditing
 	@label("Lançamentos no caixa")
 	entity CaixaLancamento {
 		id: uuid
@@ -215,10 +216,15 @@ service fluxo_caixa {
 		grid(hidden)
 		// listFilter(isEqualTo: "Fonte do movimento" styleClass: "ui-md-4")
 		
-		idFonteMovimento: uuid?
+		idFonteMovimento: uuid? // Id da fonte do movimento, id da conta a pagar ou a receber por exemplo.
 		web(readOnly styleClass: "ui-md-6")
 		label: "Id na fonte do movimento"
 		grid(hidden)
+		findBy(
+			custom: "findByIdFonteMovimentoAndEstornoIsNullOrIdFonteMovimentoAndEstornoIsFalse(java.util.UUID idFonteMovimento1, java.util.UUID idFonteMovimento2)"
+			resultKind: List
+			documentation: "Busca o último movimento desta conta (com esse idFonteMovimento), não estornado."
+		)
 		///// 
 		
 		documento: string?
@@ -246,6 +252,24 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-3" readOnly)
 		// End conciliação bancária
 		///////////
+		
+		/////////////
+		estorno: boolean?
+		label: "Estorno"
+		web(styleClass: "ui-md-2" readOnly)
+		listFilter(isNotNull: "Estornados" containerStyleClass: "ui-md-12")
+		
+		estornoLancamento: refers CaixaLancamento? manyToOne // Não criei FK aqui para simplificar e facilitar exclusão.
+		label: "Lançamento estornado"
+		grid(hidden)
+		web(styleClass: "ui-md-4" readOnly)
+		
+		estornoHistorico: string[1000]?
+		label: "Histórico do estorno"
+		grid(hidden)		
+		web(styleClass: "ui-md-6" readOnly)
+		
+		////////////
 		
 		observacoes: string[1000]? 
 		label: "Observações"

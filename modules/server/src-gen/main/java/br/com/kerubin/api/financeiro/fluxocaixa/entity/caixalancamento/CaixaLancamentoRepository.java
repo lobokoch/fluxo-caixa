@@ -9,6 +9,7 @@ package br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
+import java.util.List;
 import java.util.Collection;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,4 +27,12 @@ public interface CaixaLancamentoRepository extends JpaRepository<CaixaLancamento
 	// WARNING: supports only where clause with like for STRING fields. For relationships entities will get the first string autocomplete key field name.
 	@Query("select distinct ac.histConcBancaria as histConcBancaria from CaixaLancamentoEntity ac where ( upper(ac.histConcBancaria) like upper(concat('%', :query, '%')) ) order by 1 asc")
 	Collection<CaixaLancamentoHistConcBancariaAutoComplete> caixaLancamentoHistConcBancariaAutoComplete(@Param("query") String query);
+	
+	// Begin generated findBy
+	
+	/** 
+	 * Busca o último movimento desta conta (com esse idFonteMovimento), não estornado.
+	 **/
+	List<CaixaLancamentoEntity> findByIdFonteMovimentoAndEstornoIsNullOrIdFonteMovimentoAndEstornoIsFalse(java.util.UUID idFonteMovimento1, java.util.UUID idFonteMovimento2);
+	// End generated findBy
 }

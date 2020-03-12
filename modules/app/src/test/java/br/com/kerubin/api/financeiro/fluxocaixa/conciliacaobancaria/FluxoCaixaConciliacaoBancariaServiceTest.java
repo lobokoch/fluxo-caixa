@@ -272,7 +272,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						l1.getDescricao(),
 						LocalDate.now(),
 						false,
-						"Sucesso",
+						null,
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA
 						),
 				tuple(
@@ -280,7 +280,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						l2.getDescricao(),
 						LocalDate.now(),
 						false,
-						"Sucesso",
+						null,
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA
 						)
 				);
@@ -477,7 +477,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						l2.getDescricao(),
 						LocalDate.now(),
 						false,
-						"Sucesso",
+						null,
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA
 						)
 				);
@@ -592,7 +592,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						l2.getDescricao(),
 						LocalDate.now(),
 						false,
-						"Sucesso",
+						null,
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA
 						)
 				);
@@ -707,7 +707,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						l2.getDescricao(),
 						LocalDate.now(),
 						false,
-						"Sucesso",
+						null,
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA
 						)
 				);
@@ -822,7 +822,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						l2.getDescricao(),
 						LocalDate.now(),
 						false,
-						"Sucesso",
+						null,
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA
 						)
 				);
@@ -943,7 +943,7 @@ public class FluxoCaixaConciliacaoBancariaServiceTest extends FinanceiroFluxoCai
 						l2.getDescricao(),
 						LocalDate.now(),
 						false,
-						"Sucesso",
+						null,
 						SituacaoConciliacaoTrn.CONCILIADO_CAIXA
 						)
 				);

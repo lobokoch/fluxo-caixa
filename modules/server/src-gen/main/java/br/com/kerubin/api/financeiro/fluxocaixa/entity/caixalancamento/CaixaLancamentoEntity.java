@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
+import br.com.kerubin.api.database.entity.AuditingEntity;
 import javax.persistence.GeneratedValue;
 import org.hibernate.annotations.GenericGenerator;
 import javax.validation.constraints.NotNull;
@@ -31,10 +32,11 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaEnti
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoEntity;
 
 @Entity
 @Table(name = "caixa_lancamento")
-public class CaixaLancamentoEntity  {
+public class CaixaLancamentoEntity extends AuditingEntity {
 
 	@GeneratedValue(generator = "uuid2")
 	@GenericGenerator(name = "uuid2", strategy = "uuid2")
@@ -120,6 +122,17 @@ public class CaixaLancamentoEntity  {
 	@Size(max = 255, message = "\"Documento da conciliação bancária\" pode ter no máximo 255 caracteres.")
 	@Column(name="num_doc_conc_bancaria")
 	private String numDocConcBancaria;
+	
+	@Column(name="estorno")
+	private Boolean estorno = false;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "estorno_lancamento")
+	private CaixaLancamentoEntity estornoLancamento;
+	
+	@Size(max = 1000, message = "\"Histórico do estorno\" pode ter no máximo 1000 caracteres.")
+	@Column(name="estorno_historico")
+	private String estornoHistorico;
 	
 	@Size(max = 1000, message = "\"Observações\" pode ter no máximo 1000 caracteres.")
 	@Column(name="observacoes")
@@ -207,6 +220,18 @@ public class CaixaLancamentoEntity  {
 	
 	public String getNumDocConcBancaria() {
 		return numDocConcBancaria;
+	}
+	
+	public Boolean getEstorno() {
+		return estorno;
+	}
+	
+	public CaixaLancamentoEntity getEstornoLancamento() {
+		return estornoLancamento;
+	}
+	
+	public String getEstornoHistorico() {
+		return estornoHistorico;
 	}
 	
 	public String getObservacoes() {
@@ -297,6 +322,18 @@ public class CaixaLancamentoEntity  {
 		this.numDocConcBancaria = numDocConcBancaria != null ? numDocConcBancaria.trim() : numDocConcBancaria; // Chamadas REST fazem trim.
 	}
 	
+	public void setEstorno(Boolean estorno) {
+		this.estorno = estorno;
+	}
+	
+	public void setEstornoLancamento(CaixaLancamentoEntity estornoLancamento) {
+		this.estornoLancamento = estornoLancamento;
+	}
+	
+	public void setEstornoHistorico(String estornoHistorico) {
+		this.estornoHistorico = estornoHistorico != null ? estornoHistorico.trim() : estornoHistorico; // Chamadas REST fazem trim.
+	}
+	
 	public void setObservacoes(String observacoes) {
 		this.observacoes = observacoes != null ? observacoes.trim() : observacoes; // Chamadas REST fazem trim.
 	}
@@ -327,7 +364,14 @@ public class CaixaLancamentoEntity  {
 			this.setIdConcBancaria(source.getIdConcBancaria());
 			this.setHistConcBancaria(source.getHistConcBancaria());
 			this.setNumDocConcBancaria(source.getNumDocConcBancaria());
+			this.setEstorno(source.getEstorno());
+			this.setEstornoLancamento(source.getEstornoLancamento());
+			this.setEstornoHistorico(source.getEstornoHistorico());
 			this.setObservacoes(source.getObservacoes());
+			this.setCreatedBy(source.getCreatedBy());
+			this.setCreatedDate(source.getCreatedDate());
+			this.setLastModifiedBy(source.getLastModifiedBy());
+			this.setLastModifiedDate(source.getLastModifiedDate());
 			this.setVersion(source.getVersion());
 		}
 	}
@@ -364,7 +408,14 @@ public class CaixaLancamentoEntity  {
 		theClone.setIdConcBancaria(this.getIdConcBancaria());
 		theClone.setHistConcBancaria(this.getHistConcBancaria());
 		theClone.setNumDocConcBancaria(this.getNumDocConcBancaria());
+		theClone.setEstorno(this.getEstorno());
+		theClone.setEstornoLancamento(this.getEstornoLancamento() != null ? this.getEstornoLancamento().clone(visited) : null);
+		theClone.setEstornoHistorico(this.getEstornoHistorico());
 		theClone.setObservacoes(this.getObservacoes());
+		theClone.setCreatedBy(this.getCreatedBy());
+		theClone.setCreatedDate(this.getCreatedDate());
+		theClone.setLastModifiedBy(this.getLastModifiedBy());
+		theClone.setLastModifiedDate(this.getLastModifiedDate());
 		theClone.setVersion(this.getVersion());
 		
 		return theClone;

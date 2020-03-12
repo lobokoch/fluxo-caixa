@@ -10,8 +10,14 @@ package br.com.kerubin.api.financeiro.fluxocaixa.event.contareceber;
 
 import static br.com.kerubin.api.messaging.utils.Utils.isEmpty;
 import static br.com.kerubin.api.messaging.utils.Utils.isNotEmpty;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.formatDateAndTime;
+import static br.com.kerubin.api.servicecore.util.CoreUtils.formatMoney;
 
+import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -22,11 +28,13 @@ import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import br.com.kerubin.api.database.core.ServiceContext;
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
 import br.com.kerubin.api.financeiro.fluxocaixa.core.CaixaGeral;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoEntity;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoRepository;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoService;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCreditoRepository;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteRepository;
@@ -41,6 +49,9 @@ public class ContaReceberSubscriberEventHandler {
 	
 	@Inject
 	private CaixaLancamentoService caixaLancamentoService;
+	
+	@Inject
+	private CaixaLancamentoRepository caixaLancamentoRepository;
 	
 	@Inject
 	private PlanoContaRepository planoContasRepository;
@@ -112,7 +123,39 @@ public class ContaReceberSubscriberEventHandler {
 		caixaLancamentoEntity.setCaixaDiario(caixaGeral.getCaixaGeralDiarioAberto());
 		
 		String descricao = event.getDescricao();
-		if (!isPaga) {
+		boolean isEstorno = !isPaga;
+		
+		CaixaLancamentoEntity lancamentoFonteMovimento = null;
+		String estornoHistorico = null;
+		if (isEstorno) {
+			
+			// Begin estorno
+			List<CaixaLancamentoEntity> lancamentosFonteMovimento = caixaLancamentoRepository.findByIdFonteMovimentoAndEstornoIsNullOrIdFonteMovimentoAndEstornoIsFalse(event.getId(), event.getId());
+			if (isEmpty(lancamentosFonteMovimento)) {
+				throw new IllegalStateException(MessageFormat.format("Não foi possível achar o lançamento da fonte do movimento com IdFonteMovimento: {0} para efetuar o estorno. Evento do movimento: {1}.", 
+						event.getId(), event)) ;
+			}
+			
+			lancamentoFonteMovimento = lancamentosFonteMovimento.get(0);
+			
+			BigDecimal valor = TipoLancamentoFinanceiro.CREDITO.equals(lancamentoFonteMovimento.getTipoLancamentoFinanceiro()) ? 
+					lancamentoFonteMovimento.getValorCredito() : lancamentoFonteMovimento.getValorDebito();
+					
+			if (isEmpty(valor)) {
+				valor = event.getValorPago();
+			}
+			
+			estornoHistorico = MessageFormat.format("Conta de valor: {0}, estornada em: {1}, pelo usuário: {2}.", 
+					formatMoney(valor), formatDateAndTime(LocalDateTime.now()), ServiceContext.getUser());
+			
+			caixaLancamentoEntity.setEstorno(true);
+			
+			caixaLancamentoEntity.setHistConcBancaria(estornoHistorico);
+			
+			caixaLancamentoEntity.setEstornoLancamento(lancamentoFonteMovimento);
+			
+			// end estorno
+			
 			if (isNotEmpty(descricao)) {
 				descricao = "(ESTORNO) - " + descricao;
 			}
@@ -166,12 +209,19 @@ public class ContaReceberSubscriberEventHandler {
 		
 		
 		caixaLancamentoEntity.setDocumento(event.getNumDocumento());
+		caixaLancamentoEntity.setIdFonteMovimento(event.getId());
 		
-		caixaLancamentoService.create(caixaLancamentoEntity);
+		caixaLancamentoEntity = caixaLancamentoService.create(caixaLancamentoEntity);
+		
+		if (isEstorno) {
+			lancamentoFonteMovimento.setEstorno(true);
+			lancamentoFonteMovimento.setHistConcBancaria(estornoHistorico);
+			lancamentoFonteMovimento.setEstornoLancamento(caixaLancamentoEntity);
+			lancamentoFonteMovimento.setDescricao("(ESTORNO) - " + lancamentoFonteMovimento.getDescricao());
+			caixaLancamentoRepository.save(lancamentoFonteMovimento);
+		}
 		
 		log.info("Conta receber paga foi registrada no caixa com sucesso.");
 	}
 	
-
-
 }

@@ -39,6 +39,7 @@ public interface CaixaLancamentoService {
 	public Collection<PlanoContaAutoComplete> planoContaPlanoContasAutoComplete(String query, CaixaLancamento caixaLancamento);
 	public Collection<ClienteAutoComplete> clienteClienteAutoComplete(String query);
 	public Collection<FornecedorAutoComplete> fornecedorFornecedorAutoComplete(String query);
+	public Collection<CaixaLancamentoAutoComplete> caixaLancamentoEstornoLancamentoAutoComplete(String query);
 	// End relationships autoComplete
 	 
 	

@@ -172,6 +172,14 @@ public class CaixaLancamentoController {
 		return result;
 	}
 	
+	
+	@Transactional(readOnly = true)
+	@GetMapping("/caixaLancamentoEstornoLancamentoAutoComplete")
+	public Collection<CaixaLancamentoAutoComplete> caixaLancamentoEstornoLancamentoAutoComplete(@RequestParam("query") String query) {
+		Collection<CaixaLancamentoAutoComplete> result = caixaLancamentoService.caixaLancamentoEstornoLancamentoAutoComplete(query);
+		return result;
+	}
+	
 	// End relationships autoComplete
 	
 }
