@@ -103,7 +103,8 @@ public class ContaPagarSubscriberEventHandler {
 	}
 	
 	private void doContaPagaOuEstornada(ContaPagarEvent event, boolean isPaga) {
-		log.info("Recebendo conta paga para registrar no caixa...");
+		log.info("Processando conta PAGA com id: {} e descrição: {} e vlaor: {} para registrar no caixa...", 
+				event.getId(), event.getDescricao(), event.getValorPago());
 		
 		LocalDate dataMovimento = LocalDate.now(); // Para estorno usa a data atual.
 		if (isPaga && isEmpty(event.getDataPagamento())) {
@@ -209,7 +210,9 @@ public class ContaPagarSubscriberEventHandler {
 		
 		
 		caixaLancamentoEntity.setDocumento(event.getNumDocumento());
-		caixaLancamentoEntity.setIdFonteMovimento(event.getId());
+		caixaLancamentoEntity.setIdFonteMovimento(event.getId()); // Link entre a conta e o lançamento no caixa. Importante para estorno.
+		log.info("Aplicou na entidade o IdFonteMovimento: {}, recebido do evento id: {}.", 
+				caixaLancamentoEntity.getIdFonteMovimento(), event.getId());
 		
 		caixaLancamentoEntity = caixaLancamentoService.create(caixaLancamentoEntity);
 		
