@@ -103,7 +103,7 @@ public class ContaReceberSubscriberEventHandler {
 	}
 	
 	private void doContaReceberPagaOuEstornda(ContaReceberEvent event, boolean isPaga) {
-		log.info("Processando conta RECEBIDA com id: {} e descrição: {} e vlaor: {} para registrar no caixa...", 
+		log.info("Registrando no caixa a conta RECEBIDA com id: {}, descrição: {} e valor: {} ...", 
 				event.getId(), event.getDescricao(), event.getValorPago());
 		
 		LocalDate dataMovimento = LocalDate.now(); // Para estorno usa a data atual.
@@ -128,26 +128,35 @@ public class ContaReceberSubscriberEventHandler {
 		
 		CaixaLancamentoEntity lancamentoFonteMovimento = null;
 		String estornoHistorico = null;
+		boolean hasFonteMovimento = false;
 		if (isEstorno) {
-			
 			// Begin estorno
+			
 			List<CaixaLancamentoEntity> lancamentosFonteMovimento = caixaLancamentoRepository.findByIdFonteMovimentoAndEstornoIsNullOrIdFonteMovimentoAndEstornoIsFalse(event.getId(), event.getId());
-			if (isEmpty(lancamentosFonteMovimento)) {
-				throw new IllegalStateException(MessageFormat.format("Não foi possível achar o lançamento da fonte do movimento com IdFonteMovimento: {0} para efetuar o estorno. Evento do movimento: {1}.", 
-						event.getId(), event)) ;
+			hasFonteMovimento = isNotEmpty(lancamentosFonteMovimento);
+			if (hasFonteMovimento) {
+				lancamentoFonteMovimento = lancamentosFonteMovimento.get(0);
+			}
+			else {
+				log.warn("ATENÇÃO: Não foi possível achar o lançamento da fonte do movimento com IdFonteMovimento: {} para efetuar o estorno. Evento do movimento: {}.", 
+						event.getId(), event);
 			}
 			
-			lancamentoFonteMovimento = lancamentosFonteMovimento.get(0);
 			
-			BigDecimal valor = TipoLancamentoFinanceiro.CREDITO.equals(lancamentoFonteMovimento.getTipoLancamentoFinanceiro()) ? 
-					lancamentoFonteMovimento.getValorCredito() : lancamentoFonteMovimento.getValorDebito();
-					
+			BigDecimal valor = null;
+			if (hasFonteMovimento) {
+				valor = TipoLancamentoFinanceiro.CREDITO.equals(lancamentoFonteMovimento.getTipoLancamentoFinanceiro()) ? 
+						lancamentoFonteMovimento.getValorCredito() : lancamentoFonteMovimento.getValorDebito();
+			}
+			
 			if (isEmpty(valor)) {
 				valor = event.getValorPago();
 			}
+				
 			
 			estornoHistorico = MessageFormat.format("Conta de valor: {0}, estornada em: {1}, pelo usuário: {2}.", 
 					formatMoney(valor), formatDateAndTime(LocalDateTime.now()), ServiceContext.getUser());
+			
 			
 			caixaLancamentoEntity.setEstorno(true);
 			
@@ -216,7 +225,7 @@ public class ContaReceberSubscriberEventHandler {
 		
 		caixaLancamentoEntity = caixaLancamentoService.create(caixaLancamentoEntity);
 		
-		if (isEstorno) {
+		if (isEstorno && hasFonteMovimento) {
 			lancamentoFonteMovimento.setEstorno(true);
 			lancamentoFonteMovimento.setHistConcBancaria(estornoHistorico);
 			lancamentoFonteMovimento.setEstornoLancamento(caixaLancamentoEntity);
@@ -224,7 +233,8 @@ public class ContaReceberSubscriberEventHandler {
 			caixaLancamentoRepository.save(lancamentoFonteMovimento);
 		}
 		
-		log.info("Conta receber paga foi registrada no caixa com sucesso.");
+		log.info("Processada no caixa com sucesso a conta RECEBIDA com id: {}, descrição: {} e valor: {}.", 
+				event.getId(), event.getDescricao(), event.getValorPago());
 	}
 	
 }
