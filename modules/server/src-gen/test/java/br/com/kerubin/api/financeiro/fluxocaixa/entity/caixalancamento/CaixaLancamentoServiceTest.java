@@ -142,16 +142,16 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		CaixaLancamento caixaLancamento = new CaixaLancamento();
 		
 		caixaLancamento.setId(java.util.UUID.randomUUID());
+		caixaLancamento.setDescricao(generateRandomString(255));
 		
 		CaixaDiarioEntity caixaDiarioEntityParam = newCaixaDiarioEntity();
 		CaixaDiarioLookupResult caixaDiario = newCaixaDiarioLookupResult(caixaDiarioEntityParam);
 		caixaLancamento.setCaixaDiario(caixaDiario);
 		
-		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("2927.19956"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("29806.25690"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("16141.19448"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("7926.24037"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -179,9 +179,9 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		FornecedorLookupResult fornecedor = newFornecedorLookupResult(fornecedorEntityParam);
 		caixaLancamento.setFornecedor(fornecedor);
 		
-		caixaLancamento.setTipoFonteMovimento(TipoFonteMovimento.LANCEMENTO_CAIXA);
-		caixaLancamento.setIdFonteMovimento(java.util.UUID.randomUUID());
+		caixaLancamento.setMaisOpcoes(false);
 		caixaLancamento.setDocumento(generateRandomString(255));
+		caixaLancamento.setObservacoes(generateRandomString(1000));
 		caixaLancamento.setIdConcBancaria(generateRandomString(255));
 		caixaLancamento.setHistConcBancaria(generateRandomString(255));
 		caixaLancamento.setNumDocConcBancaria(generateRandomString(255));
@@ -192,7 +192,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setEstornoLancamento(estornoLancamento);
 		
 		caixaLancamento.setEstornoHistorico(generateRandomString(1000));
-		caixaLancamento.setObservacoes(generateRandomString(1000));
+		caixaLancamento.setTipoFonteMovimento(TipoFonteMovimento.LANCEMENTO_CAIXA);
+		caixaLancamento.setIdFonteMovimento(java.util.UUID.randomUUID());
 		
 		testVisitor.visit(this, "testCreateWithAllFields", caixaLancamento, TestOperation.BEFORE);
 		CaixaLancamentoEntity caixaLancamentoEntity = caixaLancamentoService.create(caixaLancamentoDTOConverter.convertDtoToEntity(caixaLancamento));
@@ -243,12 +244,12 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		CaixaLancamento caixaLancamento = new CaixaLancamento();
 		
 		caixaLancamento.setId(java.util.UUID.randomUUID());
+		caixaLancamento.setDescricao(generateRandomString(255));
 		
 		CaixaDiarioEntity caixaDiarioEntityParam = newCaixaDiarioEntity();
 		CaixaDiarioLookupResult caixaDiario = newCaixaDiarioLookupResult(caixaDiarioEntityParam);
 		caixaLancamento.setCaixaDiario(caixaDiario);
 		
-		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
@@ -318,16 +319,16 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		CaixaLancamento caixaLancamento = new CaixaLancamento();
 		caixaLancamento.setId(id);
 		
+		caixaLancamento.setDescricao(generateRandomString(255));
 		
 		CaixaDiarioEntity caixaDiarioEntityParam = newCaixaDiarioEntity();
 		CaixaDiarioLookupResult caixaDiario = newCaixaDiarioLookupResult(caixaDiarioEntityParam);
 		caixaLancamento.setCaixaDiario(caixaDiario);
 		
-		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamento.setValorCredito(new java.math.BigDecimal("27781.8281"));
-		caixaLancamento.setValorDebito(new java.math.BigDecimal("10688.8445"));
+		caixaLancamento.setValorCredito(new java.math.BigDecimal("12742.7674"));
+		caixaLancamento.setValorDebito(new java.math.BigDecimal("27168.32564"));
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
 		
 		ContaBancariaEntity contaBancariaEntityParam = newContaBancariaEntity();
@@ -355,9 +356,9 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		FornecedorLookupResult fornecedor = newFornecedorLookupResult(fornecedorEntityParam);
 		caixaLancamento.setFornecedor(fornecedor);
 		
-		caixaLancamento.setTipoFonteMovimento(TipoFonteMovimento.LANCEMENTO_CAIXA);
-		caixaLancamento.setIdFonteMovimento(java.util.UUID.randomUUID());
+		caixaLancamento.setMaisOpcoes(false);
 		caixaLancamento.setDocumento(generateRandomString(255));
+		caixaLancamento.setObservacoes(generateRandomString(1000));
 		caixaLancamento.setIdConcBancaria(generateRandomString(255));
 		caixaLancamento.setHistConcBancaria(generateRandomString(255));
 		caixaLancamento.setNumDocConcBancaria(generateRandomString(255));
@@ -368,7 +369,8 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamento.setEstornoLancamento(estornoLancamento);
 		
 		caixaLancamento.setEstornoHistorico(generateRandomString(1000));
-		caixaLancamento.setObservacoes(generateRandomString(1000));
+		caixaLancamento.setTipoFonteMovimento(TipoFonteMovimento.LANCEMENTO_CAIXA);
+		caixaLancamento.setIdFonteMovimento(java.util.UUID.randomUUID());
 		
 		testVisitor.visit(this, "testUpdateWithAllFields", caixaLancamento, TestOperation.BEFORE);
 		CaixaLancamentoEntity caixaLancamentoEntity = caixaLancamentoService.update(id, caixaLancamentoDTOConverter.convertDtoToEntity(caixaLancamento));
@@ -422,12 +424,12 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		CaixaLancamento caixaLancamento = new CaixaLancamento();
 		caixaLancamento.setId(id);
 		
+		caixaLancamento.setDescricao(generateRandomString(255));
 		
 		CaixaDiarioEntity caixaDiarioEntityParam = newCaixaDiarioEntity();
 		CaixaDiarioLookupResult caixaDiario = newCaixaDiarioLookupResult(caixaDiarioEntityParam);
 		caixaLancamento.setCaixaDiario(caixaDiario);
 		
-		caixaLancamento.setDescricao(generateRandomString(255));
 		caixaLancamento.setDataLancamento(getNextDate());
 		caixaLancamento.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
 		caixaLancamento.setFormaPagamento(FormaPagamento.DINHEIRO);
@@ -1085,12 +1087,12 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 	protected CaixaLancamentoEntity newCaixaLancamentoEntity() {
 		CaixaLancamentoEntity caixaLancamentoEntity = new CaixaLancamentoEntity();
 		
-		caixaLancamentoEntity.setCaixaDiario(newCaixaDiarioEntity());
 		caixaLancamentoEntity.setDescricao(generateRandomString(255));
+		caixaLancamentoEntity.setCaixaDiario(newCaixaDiarioEntity());
 		caixaLancamentoEntity.setDataLancamento(getNextDate());
 		caixaLancamentoEntity.setTipoLancamentoFinanceiro(TipoLancamentoFinanceiro.DEBITO);
-		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("12897.20080"));
-		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("7069.20380"));
+		caixaLancamentoEntity.setValorCredito(new java.math.BigDecimal("5255.10161"));
+		caixaLancamentoEntity.setValorDebito(new java.math.BigDecimal("23204.10310"));
 		caixaLancamentoEntity.setFormaPagamento(FormaPagamento.DINHEIRO);
 		caixaLancamentoEntity.setContaBancaria(newContaBancariaEntity());
 		caixaLancamentoEntity.setCartaoCredito(newCartaoCreditoEntity());
@@ -1098,16 +1100,17 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaLancamentoEntity.setPlanoContas(newPlanoContaEntity());
 		caixaLancamentoEntity.setCliente(newClienteEntity());
 		caixaLancamentoEntity.setFornecedor(newFornecedorEntity());
-		caixaLancamentoEntity.setTipoFonteMovimento(TipoFonteMovimento.LANCEMENTO_CAIXA);
-		caixaLancamentoEntity.setIdFonteMovimento(java.util.UUID.randomUUID());
+		caixaLancamentoEntity.setMaisOpcoes(false);
 		caixaLancamentoEntity.setDocumento(generateRandomString(255));
+		caixaLancamentoEntity.setObservacoes(generateRandomString(1000));
 		caixaLancamentoEntity.setIdConcBancaria(generateRandomString(255));
 		caixaLancamentoEntity.setHistConcBancaria(generateRandomString(255));
 		caixaLancamentoEntity.setNumDocConcBancaria(generateRandomString(255));
 		caixaLancamentoEntity.setEstorno(false);
 		caixaLancamentoEntity.setEstornoLancamento(null);
 		caixaLancamentoEntity.setEstornoHistorico(generateRandomString(1000));
-		caixaLancamentoEntity.setObservacoes(generateRandomString(1000));
+		caixaLancamentoEntity.setTipoFonteMovimento(TipoFonteMovimento.LANCEMENTO_CAIXA);
+		caixaLancamentoEntity.setIdFonteMovimento(java.util.UUID.randomUUID());
 		
 		caixaLancamentoEntity = em.persistAndFlush(caixaLancamentoEntity);
 		return caixaLancamentoEntity;
@@ -1131,9 +1134,9 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		caixaDiarioEntity.setCaixa(newCaixaEntity());
 		caixaDiarioEntity.setCaixaDiarioSituacao(CaixaDiarioSituacao.NAO_INICIADO);
 		caixaDiarioEntity.setDataHoraAbertura(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("21161.13013"));
+		caixaDiarioEntity.setSaldoInicial(new java.math.BigDecimal("17793.32276"));
 		caixaDiarioEntity.setDataHoraFechamento(java.time.LocalDateTime.now());
-		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("14376.30339"));
+		caixaDiarioEntity.setSaldoFinal(new java.math.BigDecimal("19682.23048"));
 		caixaDiarioEntity.setObservacoes(generateRandomString(1000));
 		
 		caixaDiarioEntity = em.persistAndFlush(caixaDiarioEntity);
@@ -1159,7 +1162,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		
 		caixaEntity.setNome(generateRandomString(255));
 		caixaEntity.setAtivo(true);
-		caixaEntity.setSaldo(new java.math.BigDecimal("5913.23168"));
+		caixaEntity.setSaldo(new java.math.BigDecimal("25116.27013"));
 		caixaEntity.setObservacoes(generateRandomString(255));
 		
 		caixaEntity = em.persistAndFlush(caixaEntity);
@@ -1266,7 +1269,7 @@ public class CaixaLancamentoServiceTest extends FinanceiroFluxoCaixaBaseEntityTe
 		cartaoCreditoEntity.setNomeTitular(generateRandomString(255));
 		cartaoCreditoEntity.setNumeroCartao(generateRandomString(50));
 		cartaoCreditoEntity.setValidade(getNextDate());
-		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("16160.17617"));
+		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("17901.3083"));
 		cartaoCreditoEntity.setBandeiraCartao(newBandeiraCartaoEntity());
 		cartaoCreditoEntity.setAtivo(true);
 		cartaoCreditoEntity.setDeleted(false);

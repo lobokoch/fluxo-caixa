@@ -7,10 +7,10 @@ WARNING: DO NOT CHANGE THIS CODE BECAUSE THE CHANGES WILL BE LOST IN THE NEXT CO
 
 package br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento;
 
-import javax.validation.constraints.NotNull;
-import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioLookupResult;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
+import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.contabancaria.ContaBancariaLookupResult;
@@ -18,21 +18,21 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCredi
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorLookupResult;
-import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoLookupResult;
+import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
 
 public class CaixaLancamento {
 
 	private java.util.UUID id;
 	
-	@NotNull(message="\"Caixa\" é obrigatório.")
-	private CaixaDiarioLookupResult caixaDiario;
-	
 	@NotBlank(message="\"Descrição do lançamento\" é obrigatório.")
 	@Size(max = 255, message = "\"Descrição do lançamento\" pode ter no máximo 255 caracteres.")
 	private String descricao;
 	
-	@NotNull(message="\"Data\" é obrigatório.")
+	@NotNull(message="\"Caixa para lançamento\" é obrigatório.")
+	private CaixaDiarioLookupResult caixaDiario;
+	
+	@NotNull(message="\"Data do movimento\" é obrigatório.")
 	private java.time.LocalDate dataLancamento;
 	
 	@NotNull(message="\"tipoLancamentoFinanceiro\" é obrigatório.")
@@ -59,13 +59,13 @@ public class CaixaLancamento {
 	
 	private FornecedorLookupResult fornecedor;
 	
-	@NotNull(message="\"tipoFonteMovimento\" é obrigatório.")
-	private TipoFonteMovimento tipoFonteMovimento;
-	
-	private java.util.UUID idFonteMovimento;
+	private Boolean maisOpcoes = false;
 	
 	@Size(max = 255, message = "\"Documento\" pode ter no máximo 255 caracteres.")
 	private String documento;
+	
+	@Size(max = 1000, message = "\"Observações\" pode ter no máximo 1000 caracteres.")
+	private String observacoes;
 	
 	@Size(max = 255, message = "\"Id da conciliação bancária\" pode ter no máximo 255 caracteres.")
 	private String idConcBancaria;
@@ -83,8 +83,10 @@ public class CaixaLancamento {
 	@Size(max = 1000, message = "\"Histórico do estorno\" pode ter no máximo 1000 caracteres.")
 	private String estornoHistorico;
 	
-	@Size(max = 1000, message = "\"Observações\" pode ter no máximo 1000 caracteres.")
-	private String observacoes;
+	@NotNull(message="\"tipoFonteMovimento\" é obrigatório.")
+	private TipoFonteMovimento tipoFonteMovimento;
+	
+	private java.util.UUID idFonteMovimento;
 	
 	@Size(max = 255, message = "\"Criado por\" pode ter no máximo 255 caracteres.")
 	private String createdBy;
@@ -108,12 +110,12 @@ public class CaixaLancamento {
 		return id;
 	}
 	
-	public CaixaDiarioLookupResult getCaixaDiario() {
-		return caixaDiario;
-	}
-	
 	public String getDescricao() {
 		return descricao;
+	}
+	
+	public CaixaDiarioLookupResult getCaixaDiario() {
+		return caixaDiario;
 	}
 	
 	public java.time.LocalDate getDataLancamento() {
@@ -160,16 +162,16 @@ public class CaixaLancamento {
 		return fornecedor;
 	}
 	
-	public TipoFonteMovimento getTipoFonteMovimento() {
-		return tipoFonteMovimento;
-	}
-	
-	public java.util.UUID getIdFonteMovimento() {
-		return idFonteMovimento;
+	public Boolean getMaisOpcoes() {
+		return maisOpcoes;
 	}
 	
 	public String getDocumento() {
 		return documento;
+	}
+	
+	public String getObservacoes() {
+		return observacoes;
 	}
 	
 	public String getIdConcBancaria() {
@@ -196,8 +198,12 @@ public class CaixaLancamento {
 		return estornoHistorico;
 	}
 	
-	public String getObservacoes() {
-		return observacoes;
+	public TipoFonteMovimento getTipoFonteMovimento() {
+		return tipoFonteMovimento;
+	}
+	
+	public java.util.UUID getIdFonteMovimento() {
+		return idFonteMovimento;
 	}
 	
 	public String getCreatedBy() {
@@ -224,12 +230,12 @@ public class CaixaLancamento {
 		this.id = id;
 	}
 	
-	public void setCaixaDiario(CaixaDiarioLookupResult caixaDiario) {
-		this.caixaDiario = caixaDiario;
-	}
-	
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public void setCaixaDiario(CaixaDiarioLookupResult caixaDiario) {
+		this.caixaDiario = caixaDiario;
 	}
 	
 	public void setDataLancamento(java.time.LocalDate dataLancamento) {
@@ -276,16 +282,16 @@ public class CaixaLancamento {
 		this.fornecedor = fornecedor;
 	}
 	
-	public void setTipoFonteMovimento(TipoFonteMovimento tipoFonteMovimento) {
-		this.tipoFonteMovimento = tipoFonteMovimento;
-	}
-	
-	public void setIdFonteMovimento(java.util.UUID idFonteMovimento) {
-		this.idFonteMovimento = idFonteMovimento;
+	public void setMaisOpcoes(Boolean maisOpcoes) {
+		this.maisOpcoes = maisOpcoes;
 	}
 	
 	public void setDocumento(String documento) {
 		this.documento = documento;
+	}
+	
+	public void setObservacoes(String observacoes) {
+		this.observacoes = observacoes;
 	}
 	
 	public void setIdConcBancaria(String idConcBancaria) {
@@ -312,8 +318,12 @@ public class CaixaLancamento {
 		this.estornoHistorico = estornoHistorico;
 	}
 	
-	public void setObservacoes(String observacoes) {
-		this.observacoes = observacoes;
+	public void setTipoFonteMovimento(TipoFonteMovimento tipoFonteMovimento) {
+		this.tipoFonteMovimento = tipoFonteMovimento;
+	}
+	
+	public void setIdFonteMovimento(java.util.UUID idFonteMovimento) {
+		this.idFonteMovimento = idFonteMovimento;
 	}
 	
 	public void setCreatedBy(String createdBy) {

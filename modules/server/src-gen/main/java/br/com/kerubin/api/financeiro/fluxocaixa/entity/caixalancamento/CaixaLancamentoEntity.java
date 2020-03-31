@@ -13,15 +13,16 @@ import javax.persistence.Table;
 import javax.persistence.Id;
 import javax.persistence.Column;
 import br.com.kerubin.api.database.entity.AuditingEntity;
+import javax.persistence.Transient;
 import javax.persistence.GeneratedValue;
 import org.hibernate.annotations.GenericGenerator;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioEntity;
 import javax.persistence.ManyToOne;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
@@ -31,8 +32,8 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCredi
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.planoconta.PlanoContaEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cliente.ClienteEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorEntity;
-import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixalancamento.CaixaLancamentoEntity;
+import br.com.kerubin.api.financeiro.fluxocaixa.TipoFonteMovimento;
 
 @Entity
 @Table(name = "caixa_lancamento")
@@ -44,17 +45,17 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 	@Column(name="id")
 	private java.util.UUID id;
 	
-	@NotNull(message="\"Caixa\" é obrigatório.")
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "caixa_diario")
-	private CaixaDiarioEntity caixaDiario;
-	
 	@NotBlank(message="\"Descrição do lançamento\" é obrigatório.")
 	@Size(max = 255, message = "\"Descrição do lançamento\" pode ter no máximo 255 caracteres.")
 	@Column(name="descricao")
 	private String descricao;
 	
-	@NotNull(message="\"Data\" é obrigatório.")
+	@NotNull(message="\"Caixa para lançamento\" é obrigatório.")
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "caixa_diario")
+	private CaixaDiarioEntity caixaDiario;
+	
+	@NotNull(message="\"Data do movimento\" é obrigatório.")
 	@Column(name="data_lancamento")
 	private java.time.LocalDate dataLancamento;
 	
@@ -99,17 +100,16 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 	@JoinColumn(name = "fornecedor")
 	private FornecedorEntity fornecedor;
 	
-	@NotNull(message="\"tipoFonteMovimento\" é obrigatório.")
-	@Enumerated(EnumType.STRING)
-	@Column(name="tipo_fonte_movimento")
-	private TipoFonteMovimento tipoFonteMovimento;
-	
-	@Column(name="id_fonte_movimento")
-	private java.util.UUID idFonteMovimento;
+	@Transient
+	private Boolean maisOpcoes = false;
 	
 	@Size(max = 255, message = "\"Documento\" pode ter no máximo 255 caracteres.")
 	@Column(name="documento")
 	private String documento;
+	
+	@Size(max = 1000, message = "\"Observações\" pode ter no máximo 1000 caracteres.")
+	@Column(name="observacoes")
+	private String observacoes;
 	
 	@Size(max = 255, message = "\"Id da conciliação bancária\" pode ter no máximo 255 caracteres.")
 	@Column(name="id_conc_bancaria")
@@ -134,9 +134,13 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 	@Column(name="estorno_historico")
 	private String estornoHistorico;
 	
-	@Size(max = 1000, message = "\"Observações\" pode ter no máximo 1000 caracteres.")
-	@Column(name="observacoes")
-	private String observacoes;
+	@NotNull(message="\"tipoFonteMovimento\" é obrigatório.")
+	@Enumerated(EnumType.STRING)
+	@Column(name="tipo_fonte_movimento")
+	private TipoFonteMovimento tipoFonteMovimento;
+	
+	@Column(name="id_fonte_movimento")
+	private java.util.UUID idFonteMovimento;
 	
 	@Version
 	@Column(name="entity_version")
@@ -146,12 +150,12 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		return id;
 	}
 	
-	public CaixaDiarioEntity getCaixaDiario() {
-		return caixaDiario;
-	}
-	
 	public String getDescricao() {
 		return descricao;
+	}
+	
+	public CaixaDiarioEntity getCaixaDiario() {
+		return caixaDiario;
 	}
 	
 	public java.time.LocalDate getDataLancamento() {
@@ -198,16 +202,16 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		return fornecedor;
 	}
 	
-	public TipoFonteMovimento getTipoFonteMovimento() {
-		return tipoFonteMovimento;
-	}
-	
-	public java.util.UUID getIdFonteMovimento() {
-		return idFonteMovimento;
+	public Boolean getMaisOpcoes() {
+		return maisOpcoes;
 	}
 	
 	public String getDocumento() {
 		return documento;
+	}
+	
+	public String getObservacoes() {
+		return observacoes;
 	}
 	
 	public String getIdConcBancaria() {
@@ -234,8 +238,12 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		return estornoHistorico;
 	}
 	
-	public String getObservacoes() {
-		return observacoes;
+	public TipoFonteMovimento getTipoFonteMovimento() {
+		return tipoFonteMovimento;
+	}
+	
+	public java.util.UUID getIdFonteMovimento() {
+		return idFonteMovimento;
 	}
 	
 	public short getVersion() {
@@ -246,12 +254,12 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		this.id = id;
 	}
 	
-	public void setCaixaDiario(CaixaDiarioEntity caixaDiario) {
-		this.caixaDiario = caixaDiario;
-	}
-	
 	public void setDescricao(String descricao) {
 		this.descricao = descricao != null ? descricao.trim() : descricao; // Chamadas REST fazem trim.
+	}
+	
+	public void setCaixaDiario(CaixaDiarioEntity caixaDiario) {
+		this.caixaDiario = caixaDiario;
 	}
 	
 	public void setDataLancamento(java.time.LocalDate dataLancamento) {
@@ -298,16 +306,16 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		this.fornecedor = fornecedor;
 	}
 	
-	public void setTipoFonteMovimento(TipoFonteMovimento tipoFonteMovimento) {
-		this.tipoFonteMovimento = tipoFonteMovimento;
-	}
-	
-	public void setIdFonteMovimento(java.util.UUID idFonteMovimento) {
-		this.idFonteMovimento = idFonteMovimento;
+	public void setMaisOpcoes(Boolean maisOpcoes) {
+		this.maisOpcoes = maisOpcoes;
 	}
 	
 	public void setDocumento(String documento) {
 		this.documento = documento != null ? documento.trim() : documento; // Chamadas REST fazem trim.
+	}
+	
+	public void setObservacoes(String observacoes) {
+		this.observacoes = observacoes != null ? observacoes.trim() : observacoes; // Chamadas REST fazem trim.
 	}
 	
 	public void setIdConcBancaria(String idConcBancaria) {
@@ -334,8 +342,12 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		this.estornoHistorico = estornoHistorico != null ? estornoHistorico.trim() : estornoHistorico; // Chamadas REST fazem trim.
 	}
 	
-	public void setObservacoes(String observacoes) {
-		this.observacoes = observacoes != null ? observacoes.trim() : observacoes; // Chamadas REST fazem trim.
+	public void setTipoFonteMovimento(TipoFonteMovimento tipoFonteMovimento) {
+		this.tipoFonteMovimento = tipoFonteMovimento;
+	}
+	
+	public void setIdFonteMovimento(java.util.UUID idFonteMovimento) {
+		this.idFonteMovimento = idFonteMovimento;
 	}
 	
 	public void setVersion(short version) {
@@ -345,8 +357,8 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 	public void assign(CaixaLancamentoEntity source) {
 		if (source != null) {
 			this.setId(source.getId());
-			this.setCaixaDiario(source.getCaixaDiario());
 			this.setDescricao(source.getDescricao());
+			this.setCaixaDiario(source.getCaixaDiario());
 			this.setDataLancamento(source.getDataLancamento());
 			this.setTipoLancamentoFinanceiro(source.getTipoLancamentoFinanceiro());
 			this.setValorCredito(source.getValorCredito());
@@ -358,16 +370,17 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 			this.setPlanoContas(source.getPlanoContas());
 			this.setCliente(source.getCliente());
 			this.setFornecedor(source.getFornecedor());
-			this.setTipoFonteMovimento(source.getTipoFonteMovimento());
-			this.setIdFonteMovimento(source.getIdFonteMovimento());
+			this.setMaisOpcoes(source.getMaisOpcoes());
 			this.setDocumento(source.getDocumento());
+			this.setObservacoes(source.getObservacoes());
 			this.setIdConcBancaria(source.getIdConcBancaria());
 			this.setHistConcBancaria(source.getHistConcBancaria());
 			this.setNumDocConcBancaria(source.getNumDocConcBancaria());
 			this.setEstorno(source.getEstorno());
 			this.setEstornoLancamento(source.getEstornoLancamento());
 			this.setEstornoHistorico(source.getEstornoHistorico());
-			this.setObservacoes(source.getObservacoes());
+			this.setTipoFonteMovimento(source.getTipoFonteMovimento());
+			this.setIdFonteMovimento(source.getIdFonteMovimento());
 			this.setCreatedBy(source.getCreatedBy());
 			this.setCreatedDate(source.getCreatedDate());
 			this.setLastModifiedBy(source.getLastModifiedBy());
@@ -389,8 +402,8 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		visited.put(this, theClone);
 		
 		theClone.setId(this.getId());
-		theClone.setCaixaDiario(this.getCaixaDiario() != null ? this.getCaixaDiario().clone(visited) : null);
 		theClone.setDescricao(this.getDescricao());
+		theClone.setCaixaDiario(this.getCaixaDiario() != null ? this.getCaixaDiario().clone(visited) : null);
 		theClone.setDataLancamento(this.getDataLancamento());
 		theClone.setTipoLancamentoFinanceiro(this.getTipoLancamentoFinanceiro());
 		theClone.setValorCredito(this.getValorCredito());
@@ -402,16 +415,17 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 		theClone.setPlanoContas(this.getPlanoContas() != null ? this.getPlanoContas().clone(visited) : null);
 		theClone.setCliente(this.getCliente() != null ? this.getCliente().clone(visited) : null);
 		theClone.setFornecedor(this.getFornecedor() != null ? this.getFornecedor().clone(visited) : null);
-		theClone.setTipoFonteMovimento(this.getTipoFonteMovimento());
-		theClone.setIdFonteMovimento(this.getIdFonteMovimento());
+		theClone.setMaisOpcoes(this.getMaisOpcoes());
 		theClone.setDocumento(this.getDocumento());
+		theClone.setObservacoes(this.getObservacoes());
 		theClone.setIdConcBancaria(this.getIdConcBancaria());
 		theClone.setHistConcBancaria(this.getHistConcBancaria());
 		theClone.setNumDocConcBancaria(this.getNumDocConcBancaria());
 		theClone.setEstorno(this.getEstorno());
 		theClone.setEstornoLancamento(this.getEstornoLancamento() != null ? this.getEstornoLancamento().clone(visited) : null);
 		theClone.setEstornoHistorico(this.getEstornoHistorico());
-		theClone.setObservacoes(this.getObservacoes());
+		theClone.setTipoFonteMovimento(this.getTipoFonteMovimento());
+		theClone.setIdFonteMovimento(this.getIdFonteMovimento());
 		theClone.setCreatedBy(this.getCreatedBy());
 		theClone.setCreatedDate(this.getCreatedDate());
 		theClone.setLastModifiedBy(this.getLastModifiedBy());

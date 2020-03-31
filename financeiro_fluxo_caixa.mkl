@@ -42,24 +42,27 @@ service fluxo_caixa {
 	
 	@version
 	@auditing
-	@label("Cadastro de caixa")
+	@label(title: "Cadastro de caixa")
 	entity Caixa {
 		id: uuid
 		
 		nome: string
 		label: "Nome do caixa"
-		web(styleClass: "ui-md-8")
+		web(styleClass: "ui-md-12")
 		autoComplete
+		help(text: "Informe um nome para o caixa. Por exemplo: Caixa da Ana.")
 		
 		ativo: boolean default: true
 		label: "Caixa ativo"
 		web(styleClass: "ui-md-4")
-		////////////
+		help(text: "Indica se este caixa esta ativo ou não. Somente caixas ativos podem receber lançamentos.")
 		
 		saldo: money optional
 		label: "Saldo do caixa"
 		web(styleClass: "ui-md-2" readOnly)
+		help(text: "Valor total que este caixa possui. É o somatório dos movimentos das entradas, substraído pelo somatório dos movimentos das saídas.")
 		
+		////////////
 		observacoes: string? 
 		label: "Observações"
 		grid(hidden) 
@@ -70,12 +73,15 @@ service fluxo_caixa {
 			
 			// Não permite alterar/apagar o caixa geral 
 			with(form).apply(disableCUD).when(id.isNotNull and id.isEquals("bd1e9cb7-e7f6-40da-af5c-1f461dac1d11"))
+			with(nome).apply(disableComponent).when(id.isNotNull and id.isEquals("bd1e9cb7-e7f6-40da-af5c-1f461dac1d11"))
+			with(ativo).apply(disableComponent).when(id.isNotNull and id.isEquals("bd1e9cb7-e7f6-40da-af5c-1f461dac1d11"))
+			with(observacoes).apply(disableComponent).when(id.isNotNull and id.isEquals("bd1e9cb7-e7f6-40da-af5c-1f461dac1d11"))
 		}
 	}
 	
 	@version
 	@auditing
-	@label("Abertura/Fechamento de caixa") ///
+	@label(title: "Abertura/Fechamento de caixa") //
 	entity CaixaDiario {
 		id: uuid
 		
@@ -83,32 +89,39 @@ service fluxo_caixa {
 		label: "Caixa"
 		web(styleClass: "ui-md-8")
 		autoComplete
+		help(text: "Escolha o caixa que você deseja abrir para receber lançamentos.")
 		
 		caixaDiarioSituacao: CaixaDiarioSituacao
 		web(styleClass: "ui-md-4" readOnly)
 		autoComplete(data)
+		help(text: "Indica a situação do caixa. Por exemplo: Aberto ou Fechado.")
 		
 		/////
-		
+		separator
 		dataHoraAbertura: dateTime optional
 		label: "Data/hora de abertura"
 		web(styleClass: "ui-md-6" readOnly)
 		autoComplete
+		help(text: "Data e hora em que este caixa foi aberto.")
 		
 		saldoInicial: money optional
 		label: "Saldo inicial"
 		web(styleClass: "ui-md-6" readOnly)
+		help(text: "Saldo inicial deste caixa. É o saldo final deste caixa desde a última vez em que ele foi fechado.")
 		///////////////////////////
 		
 		dataHoraFechamento: dateTime optional
 		label: "Data/hora de fechamento"
 		web(styleClass: "ui-md-6" readOnly)
+		help(text: "Data e hora em que este caixa foi fechado.")
 		
 		saldoFinal: money optional
 		label: "Saldo final"
 		web(styleClass: "ui-md-6" readOnly)
+		help(text: "Saldo final deste caixa. É o saldo inicial do caixa, mais o somatório dos lançamentos que esse caixa recebeu desde a última vez em que foi aberto.")
 		/////////////
 		
+		separator
 		observacoes: string[1000] optional
 		label: "Observações"
 		grid(hidden) 
@@ -119,101 +132,181 @@ service fluxo_caixa {
 			with(form.actions)
 				.apply(function(name: abrirCaixa params:[this] return: this))
 				.when(id.isNotNull and caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.NAO_INICIADO))
-				.action(name: abrirCaixa button(tooltip: "Abrir caixa" label: "Abrir caixa" cssClass: "ui-button-success" icon: "pi pi-lock-open"))
+				.action(name: abrirCaixa button(tooltip: "Abrir caixa" label: "Abrir este caixa" cssClass: "ui-button-success" icon: "pi pi-lock-open"))
 				
 			with(form.actions)
 				.apply(function(name: fecharCaixa params:[this] return: this))
 				.when(id.isNotNull and caixaDiarioSituacao.isEquals(CaixaDiarioSituacao.ABERTO))
-				.action(name: fecharCaixa button(tooltip: "Fechar caixa" label: "Fechar caixa" cssClass: "ui-button-warning" icon: "pi pi-lock"))
+				.action(name: fecharCaixa button(tooltip: "Fechar este caixa." label: "Fechar caixa" cssClass: "ui-button-warning" icon: "pi pi-lock"))
 		}
 		
 	}
 	
 	@version // xxx
 	@auditing
-	@label("Lançamentos no caixa")
+	@label(title: "Lançamentos no caixa")
 	entity CaixaLancamento {
 		id: uuid
-		
-		caixaDiario: refers CaixaDiario manyToOne // readOnly, do próprio usuário, aberto
-		label: "Caixa"
-		web(styleClass: "ui-md-6" rememberValue)
 		
 		descricao: string
 		label: "Descrição do lançamento"
 		web(styleClass: "ui-md-6")
 		listFilter(many:"Descrição do(s) lançamento(s)")
+		help(text: "Informe uma descrição para o lançamento. Por exemplo: Compra de guloseimas para as crianças")
 		
+		caixaDiario: refers CaixaDiario manyToOne // readOnly, do próprio usuário, aberto
+		label: "Caixa para lançamento"
+		web(styleClass: "ui-md-6" rememberValue)
+		help(text: "Escolha o caixa onde os movimentos de pagamento e/ou recebimentos serão lançados. O Kerubin cria automaticamente um caixa para você usar.")
 		///////////////////
 		
 		dataLancamento: date 
-		label: "Data"
+		label: "Data do movimento"
 		sort(order: desc position: 0)
 		web(styleClass: "ui-md-2" rememberValue)
 		listFilter(between: "Lançamentos de;Até;Intervalo de tempo")
+		help(text: "Informe a data em que o movimento (pagamento ou recebimento) ocorreu. Não pode ser uma data futura.")
 		
 		tipoLancamentoFinanceiro: TipoLancamentoFinanceiro
 		web(styleClass: "ui-md-2")
 		grid(hidden)
 		listFilter(isEqualTo: "Tipo do movimento" styleClass: "ui-md-4")
+		help(text: "Escolha 'Débito', caso você esteja registrando um pagamento, ou 'Crédito' caso esteja registrando um recebimento.")
 		
 		valorCredito: money optional
-		label: "Valor crédito"
+		label: "Valor"
 		web(styleClass: "ui-md-2 kb-fin-credito")
 		sum(styleClass:"kb-fin-credito" label:"A")
 		grid(noCurrencySimbol label: "Crédito (R$)" columnWidth: "12em" )
 		listFilter(between: "Créditos com valores de;até;" styleClass: "ui-md-3")
+		help(text: "Informe o valor recebido.")
 		
 		valorDebito: money optional
-		label: "Valor débito"
+		label: "Valor"
 		web(styleClass: "ui-md-2 kb-fin-debito")
 		sum(styleClass:"kb-fin-debito" label:"B")
 		grid(showNumberAsNegative noCurrencySimbol label: "Débito (R$)" columnWidth: "12em" )
 		listFilter(between: "Déditos com valores de;até;" styleClass: "ui-md-3")
+		help(text: "Informe o valor pago.")
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
 		web(styleClass: "ui-md-2" rememberValue)
 		listFilter(isEqualTo: "Forma de pagamento" styleClass: "ui-md-4")
+		help(text: "Escolha a forma de pagamento que será ou foi utilizada para pagar esta conta.")
 		
 		/////
 		contaBancaria: refers ContaBancaria? manyToOne 
 		grid(hidden)
 		label: "Dados da conta bancária"
 		web(styleClass: "ui-md-4" rememberValue)
+		help(text: "Escolha a conta bancária que foi ou será utilizada para pagar esta conta.")
 		
 		cartaoCredito: refers CartaoCredito? manyToOne
 		label: "Dados do cartão de crédito"
 		grid(hidden)
 		web(styleClass: "ui-md-4" rememberValue)
+		help(text: "Escolha o cartão de crédito que foi ou será utilizado para pagar esta conta.")
 		
 		outrosDescricao: string?
 		label: "Dados complementares"
 		web(styleClass: "ui-md-4")
 		grid(hidden)
+		help(text: "Caso tenha, informe dados adicionais referente a forma de pagamento informada.")
 		
 		//////
-		
+		separator
 		planoContas: refers PlanoConta manyToOne
 		web(styleClass: "ui-md-12" rememberValue)
 		grid(hidden)
 		autoCompleteWithOwnerParams
+		help(text: "Associa contas diferentes a uma categoria mais geral. Por exemplo, contas de: Luz, Água, Gás, Aluguel e Condomínio poderiam pertencer ao Plano de contas: Habitação.")
 		
 		///////////////////////
 		
 		cliente: refers Cliente? manyToOne
 		web(styleClass: "ui-md-12" rememberValue)
 		grid(hidden)
+		help(text: "Caso tenha, escolha o cliente que originou esta cobrança.")
 		////
 		
 		fornecedor: refers Fornecedor? manyToOne
 		web(styleClass: "ui-md-12" rememberValue)
 		grid(hidden)
+		help(text: "Caso tenha, escolha o fornecedor que originou este pagamento.")
 		////
 		
+		/////////////////////////////
+		separator
+		maisOpcoes: boolean? transient
+		label: "Mostrar mais opções"
+		help(text: "Mostra ou oculta opções extras para o movimento.")
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		/////////////////////////////
+		
+		documento: string?
+		label: "Documento"
+		web(styleClass: "ui-md-12")
+		grid(hidden)
+		help(text: "Informe caso o movimento tenha um documento relacionado.")
+		
+		observacoes: string[1000]? 
+		label: "Observações"
+		grid(hidden) 
+		web(styleClass: "ui-md-12")//
+		
+		///////
+		// Begin conciliação bancária
+		separator
+		idConcBancaria: string? 
+		label: "Id da conciliação bancária"
+		grid(hidden) 
+		web(styleClass: "ui-md-4" readOnly)
+		listFilter(isNotNull: "Baixa via conc. banc." containerStyleClass: "ui-md-6")
+		help(text: "Identificador da conciliação bancária (movimento via importação de extrato bancário).")
+		
+		histConcBancaria: string?
+		label: "Histórico da conciliação bancária"
+		grid(hidden)
+		web(styleClass: "ui-md-5" readOnly)
+		listFilter(many: "Histórico da conciliação bancária" containerStyleClass: "ui-md-6")
+		help(text: "Descrição da transação bancária (movimento via importação de extrato bancário).")
+		
+		numDocConcBancaria: string? 
+		label: "Documento da conciliação bancária"
+		grid(hidden) 
+		web(styleClass: "ui-md-3" readOnly)
+		help(text: "Documento da transação bancária (movimento via importação de extrato bancário).")
+		// End conciliação bancária
+		///////////
+		
+		/////////////
+		separator
+		estorno: boolean?
+		label: "Estorno"
+		web(styleClass: "ui-md-12" disabled)
+		listFilter(isNotNull: "Estornados" containerStyleClass: "ui-md-12")
+		help(text: "Indica se este movimento é um estorno de outro movimento. Este campo não pode ser alterado.")
+		
+		estornoLancamento: refers CaixaLancamento? manyToOne // Não criei FK aqui para simplificar e facilitar exclusão.
+		label: "Lançamento estornado"
+		grid(hidden)
+		web(styleClass: "ui-md-12" disabled)
+		help(text: "Indica o movimento que foi estornado e resultou nesse movimento de estorno.")
+		
+		estornoHistorico: string[1000]?
+		label: "Histórico do estorno"
+		grid(hidden)		
+		web(styleClass: "ui-md-12" disabled)
+		help(text: "Histórico do movimento de estorno.")
+		
+		///////////////
+		separator
 		tipoFonteMovimento: TipoFonteMovimento
 		web(styleClass: "ui-md-6" readOnly)
 		grid(hidden)
+		help(text: "Origem do movimento, podendo ser: 'Contas a pagar', 'Contas a receber' ou 'Lançamento direto no caixa'.")
 		// listFilter(isEqualTo: "Fonte do movimento" styleClass: "ui-md-4")
 		
 		idFonteMovimento: uuid? // Id da fonte do movimento, id da conta a pagar ou a receber por exemplo.
@@ -225,73 +318,45 @@ service fluxo_caixa {
 			resultKind: List
 			documentation: "Busca o último movimento desta conta (com esse idFonteMovimento), não estornado."
 		)
-		///// 
-		
-		documento: string?
-		label: "Documento"
-		web(styleClass: "ui-md-12")
-		grid(hidden)
-		
-		///////
-		// Begin conciliação bancária
-		idConcBancaria: string? 
-		label: "Id da conciliação bancária"
-		grid(hidden) 
-		web(styleClass: "ui-md-4" readOnly)
-		listFilter(isNotNull: "Baixa via conc. banc." containerStyleClass: "ui-md-6")
-		
-		histConcBancaria: string?
-		label: "Histórico da conciliação bancária"
-		grid(hidden)
-		web(styleClass: "ui-md-5" readOnly)
-		listFilter(many: "Histórico da conciliação bancária" containerStyleClass: "ui-md-6")
-		
-		numDocConcBancaria: string? 
-		label: "Documento da conciliação bancária"
-		grid(hidden) 
-		web(styleClass: "ui-md-3" readOnly)
-		// End conciliação bancária
-		///////////
-		
-		/////////////
-		estorno: boolean?
-		label: "Estorno"
-		web(styleClass: "ui-md-2" readOnly)
-		listFilter(isNotNull: "Estornados" containerStyleClass: "ui-md-12")
-		
-		estornoLancamento: refers CaixaLancamento? manyToOne // Não criei FK aqui para simplificar e facilitar exclusão.
-		label: "Lançamento estornado"
-		grid(hidden)
-		web(styleClass: "ui-md-4" readOnly)
-		
-		estornoHistorico: string[1000]?
-		label: "Histórico do estorno"
-		grid(hidden)		
-		web(styleClass: "ui-md-6" readOnly)
-		
+		help(text: "Identificador único do movimento. Existirá somente quando o movimento for originado no contas a pagar ou no contas a receber.")		
 		////////////
 		
-		observacoes: string[1000]? 
-		label: "Observações"
-		grid(hidden) 
-		web(styleClass: "ui-md-12")//
+		rules { //xxx
 		
-		rules { //xx
-			with(contaBancaria).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CONTA_BANCARIA))
-			with(cartaoCredito).apply(styleClass:"hidden").when(formaPagamento.isNotEquals(FormaPagamento.CARTAO_CREDITO))
-			with(outrosDescricao).apply(styleClass:"hidden").when(formaPagamento.isEquals(FormaPagamento.CONTA_BANCARIA) or formaPagamento.isEquals(FormaPagamento.CARTAO_CREDITO) )
+			with(documento).apply(hiddeComponent).when(maisOpcoes.isNotTrue)
+			with(observacoes).apply(hiddeComponent).when(maisOpcoes.isNotTrue)
 			
-			with(idFonteMovimento).apply(styleClass:"hidden").when(idFonteMovimento.isNull)
-			with(idConcBancaria).apply(styleClass:"hidden").when(idConcBancaria.isNull)
-			with(numDocConcBancaria).apply(styleClass:"hidden").when(numDocConcBancaria.isNull)
-			with(histConcBancaria).apply(styleClass:"hidden").when(numDocConcBancaria.isNull)
-		
+			with(idConcBancaria).apply(hiddeComponent).when(maisOpcoes.isNotTrue or idConcBancaria.isNull)
+			with(histConcBancaria).apply(hiddeComponent).when(maisOpcoes.isNotTrue or idConcBancaria.isNull)
+			with(numDocConcBancaria).apply(hiddeComponent).when(maisOpcoes.isNotTrue or idConcBancaria.isNull)
+			
+			with(estorno).apply(hiddeComponent).when(maisOpcoes.isNotTrue or estorno.isNotTrue)
+			with(estornoLancamento).apply(hiddeComponent).when(maisOpcoes.isNotTrue or estorno.isNotTrue)
+			with(estornoHistorico).apply(hiddeComponent).when(maisOpcoes.isNotTrue or estorno.isNotTrue)
+			
+			/*with(estorno).apply(disableComponent).when(maisOpcoes.isTrue and estorno.isTrue)
+			with(estornoLancamento).apply(disableComponent).when(maisOpcoes.isTrue and estorno.isTrue)
+			with(estornoHistorico).apply(disableComponent).when(maisOpcoes.isTrue and estorno.isTrue)*/
+			
+			with(tipoFonteMovimento)
+				.apply(hiddeComponent)
+				.when(maisOpcoes.isNotTrue or tipoFonteMovimento.isEquals(TipoFonteMovimento.LANCEMENTO_CAIXA)) // Nem mostra quando não for do contas a pagar e/ou contas a receber.
+				
+			with(idFonteMovimento)
+				.apply(hiddeComponent)
+				.when(maisOpcoes.isNotTrue or tipoFonteMovimento.isEquals(TipoFonteMovimento.LANCEMENTO_CAIXA))
+			
+			
+			with(contaBancaria).apply(hiddeComponent).when(formaPagamento.isNotEquals(FormaPagamento.CONTA_BANCARIA))
+			with(cartaoCredito).apply(hiddeComponent).when(formaPagamento.isNotEquals(FormaPagamento.CARTAO_CREDITO))
+			with(outrosDescricao).apply(hiddeComponent).when(formaPagamento.isEquals(FormaPagamento.CONTA_BANCARIA) or formaPagamento.isEquals(FormaPagamento.CARTAO_CREDITO) )
+			
 			with(form).apply(disableCUD).when(id.isNotNull and caixaDiario.caixaDiarioSituacao.isNotEquals(CaixaDiarioSituacao.ABERTO))
 			with(form).apply(dataLancamento = today).when(entityForm.onInit)
-			with(cliente).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
-			with(fornecedor).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
-			with(valorCredito).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
-			with(valorDebito).apply(styleClass:"hidden").when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
+			with(cliente).apply(hiddeComponent).when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
+			with(fornecedor).apply(hiddeComponent).when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
+			with(valorCredito).apply(hiddeComponent).when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.CREDITO))
+			with(valorDebito).apply(hiddeComponent).when(tipoLancamentoFinanceiro.isNotEquals(TipoLancamentoFinanceiro.DEBITO))
 			with(grid.sumRow.lastCell).apply(equation(valorCredito - valorDebito)) // xxx
 		}
 		
@@ -299,7 +364,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= cadastros, service=cliente, events=[created, updated, deleted])
-	@label("Cliente")
+	@label(title: "Cliente")
 	entity Cliente {		
 		
 		tipoPessoa: TipoPessoa
@@ -317,7 +382,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= cadastros, service=fornecedor, events=[created, updated, deleted])
-	@label("Fornecedor")
+	@label(title: "Fornecedor")
 	entity Fornecedor {		
 		
 		tipoPessoa: TipoPessoa
@@ -335,7 +400,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= cadastros, service=banco, events=[created, updated, deleted])
-	@label("Banco")
+	@label(title: "Banco")
 	entity Banco {
 		
 		numero: string[20] 
@@ -349,7 +414,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= cadastros, service=banco, events=[cud])
-	@label("Agência bancária")
+	@label(title: "Agência bancária")
 	entity AgenciaBancaria {
 		
 		banco: refers Banco manyToOne
@@ -370,7 +435,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= cadastros, service=banco, events=[cud])
-	@label("Bandeira de cartão")
+	@label(title: "Bandeira de cartão")
 	entity BandeiraCartao {
 		
 		nomeBandeira: string
@@ -380,7 +445,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= cadastros, service=banco, events=[cud])
-	@label("Conta bancária")
+	@label(title: "Conta bancária")
 	entity ContaBancaria {
 		
 		nomeTitular: string
@@ -415,7 +480,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= cadastros, service=banco, events=[cud])
-	@label("Cartão de crédito")
+	@label(title: "Cartão de crédito")
 	entity CartaoCredito {
 		
 		//--
@@ -448,7 +513,7 @@ service fluxo_caixa {
 	
 	@externalEntity
 	@subscribe(domain= financeiro, service=plano_contas, events=[cud])
-	@label("Plano de contas")
+	@label(title: "Plano de contas")
 	entity PlanoConta {
 		
 		codigo: string
