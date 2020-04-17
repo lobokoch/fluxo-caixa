@@ -22,6 +22,8 @@ public interface CaixaService {
 	
 	public void delete(java.util.UUID id);
 	
+	public void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
 	public Page<CaixaEntity> list(CaixaListFilter caixaListFilter, Pageable pageable);
 	
 	public Collection<CaixaAutoComplete> autoComplete(String query);

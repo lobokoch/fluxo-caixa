@@ -80,7 +80,7 @@ public class PlanoContaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		planoConta.setId(java.util.UUID.randomUUID());
 		planoConta.setCodigo(generateRandomString(255));
 		planoConta.setDescricao(generateRandomString(255));
-		planoConta.setTipoFinanceiro(TipoPlanoContaFinanceiro.RECEITA);
+		planoConta.setTipoFinanceiro(TipoPlanoContaFinanceiro.DESPESA);
 		planoConta.setTipoReceitaDespesa(TipoReceitaDespesa.VARIAVEL);
 		
 		PlanoContaEntity planoContaEntityParam = newPlanoContaEntity();
@@ -169,7 +169,7 @@ public class PlanoContaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		planoConta.setCodigo(generateRandomString(255));
 		planoConta.setDescricao(generateRandomString(255));
-		planoConta.setTipoFinanceiro(TipoPlanoContaFinanceiro.RECEITA);
+		planoConta.setTipoFinanceiro(TipoPlanoContaFinanceiro.DESPESA);
 		planoConta.setTipoReceitaDespesa(TipoReceitaDespesa.VARIAVEL);
 		
 		PlanoContaEntity planoContaEntityParam = newPlanoContaEntity();
@@ -209,7 +209,7 @@ public class PlanoContaServiceTest extends FinanceiroFluxoCaixaBaseEntityTest {
 		
 		planoConta.setCodigo(generateRandomString(255));
 		planoConta.setDescricao(generateRandomString(255));
-		planoConta.setTipoFinanceiro(TipoPlanoContaFinanceiro.RECEITA);
+		planoConta.setTipoFinanceiro(TipoPlanoContaFinanceiro.DESPESA);
 		planoConta.setAtivo(true);
 		
 		testVisitor.visit(this, "testUpdateWithOnlyRecairedFields", planoConta, TestOperation.BEFORE);

@@ -23,6 +23,8 @@ public interface CaixaDiarioService {
 	
 	public void delete(java.util.UUID id);
 	
+	public void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
 	public Page<CaixaDiarioEntity> list(CaixaDiarioListFilter caixaDiarioListFilter, Pageable pageable);
 	
 	public Collection<CaixaDiarioAutoComplete> autoComplete(String query);

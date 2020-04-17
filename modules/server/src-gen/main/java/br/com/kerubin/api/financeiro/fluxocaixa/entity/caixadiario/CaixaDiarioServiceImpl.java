@@ -74,6 +74,16 @@ public class CaixaDiarioServiceImpl implements CaixaDiarioService {
 		
 	}
 	
+	@Transactional
+	@Override
+	public void deleteInBulk(java.util.List<java.util.UUID> idList) {
+		// Delete it.
+		caixaDiarioRepository.deleteInBulk(idList);
+		
+		// Force flush to the database, for relationship validation and must throw exception because of this here.
+		caixaDiarioRepository.flush();
+	}
+	
 	
 	@Transactional(readOnly = true)
 	@Override

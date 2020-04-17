@@ -103,8 +103,15 @@ public class ContaPagarSubscriberEventHandler {
 	}
 	
 	private void doContaPagaOuEstornada(ContaPagarEvent event, boolean isPaga) {
-		log.info("Registrando no caixa a conta PAGA com id: {}, descrição: {} e valor: {} ...", 
-				event.getId(), event.getDescricao(), event.getValorPago());
+		String tipoEvento = isPaga ? "PAGAMENTO" : "ESTORNO";
+		log.info("Registrando no caixa evento de {} da conta com id: {}, descrição: {} e valor: {} ...", 
+				tipoEvento, event.getId(), event.getDescricao(), event.getValorPago());
+		
+		boolean isMultiple = TipoPagamentoConta.MULTIPLE.equals(event.getTipoPagamento());
+		if (isMultiple && event.getContaPagarPai() == null) { // Deve ter baixado ou estornado a conta pai, não faz nada.
+			log.warn("EVENTO {} IGNORADO devido a conta ser MULTIPLE. Dados: [{}].", tipoEvento, event);
+			return;
+		}
 		
 		LocalDate dataMovimento = LocalDate.now(); // Para estorno usa a data atual.
 		if (isPaga && isEmpty(event.getDataPagamento())) {

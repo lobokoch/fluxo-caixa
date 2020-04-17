@@ -80,6 +80,16 @@ public class CaixaServiceImpl implements CaixaService {
 		
 	}
 	
+	@Transactional
+	@Override
+	public void deleteInBulk(java.util.List<java.util.UUID> idList) {
+		// Delete it.
+		caixaRepository.deleteInBulk(idList);
+		
+		// Force flush to the database, for relationship validation and must throw exception because of this here.
+		caixaRepository.flush();
+	}
+	
 	
 	@Transactional(readOnly = true)
 	@Override

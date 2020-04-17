@@ -80,6 +80,12 @@ public class FornecedorController {
 		fornecedorService.delete(id);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PostMapping("/deleteInBulk")
+	public void deleteInBulk(@RequestBody java.util.List<java.util.UUID> idList) {
+		fornecedorService.deleteInBulk(idList);
+	}
+	
 	@Transactional(readOnly = true)
 	@GetMapping
 	public PageResult<Fornecedor> list(FornecedorListFilter fornecedorListFilter, Pageable pageable) {

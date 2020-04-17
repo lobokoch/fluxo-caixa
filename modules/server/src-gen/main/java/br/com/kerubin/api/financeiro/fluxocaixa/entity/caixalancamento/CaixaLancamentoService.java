@@ -28,6 +28,8 @@ public interface CaixaLancamentoService {
 	
 	public void delete(java.util.UUID id);
 	
+	public void deleteInBulk(java.util.List<java.util.UUID> idList);
+	
 	public Page<CaixaLancamentoEntity> list(CaixaLancamentoListFilter caixaLancamentoListFilter, Pageable pageable);
 	
 	public Collection<CaixaLancamentoAutoComplete> autoComplete(String query);

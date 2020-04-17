@@ -88,6 +88,12 @@ public class CaixaLancamentoController {
 		caixaLancamentoService.delete(id);
 	}
 	
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	@PostMapping("/deleteInBulk")
+	public void deleteInBulk(@RequestBody java.util.List<java.util.UUID> idList) {
+		caixaLancamentoService.deleteInBulk(idList);
+	}
+	
 	@Transactional(readOnly = true)
 	@GetMapping
 	public PageResult<CaixaLancamento> list(CaixaLancamentoListFilter caixaLancamentoListFilter, Pageable pageable) {
