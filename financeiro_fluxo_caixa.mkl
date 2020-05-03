@@ -51,6 +51,7 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-12")
 		autoComplete
 		help(text: "Informe um nome para o caixa. Por exemplo: Caixa da Ana.")
+		unaccent
 		
 		ativo: boolean default: true
 		label: "Caixa ativo"
@@ -153,6 +154,7 @@ service fluxo_caixa {
 		web(styleClass: "ui-md-6")
 		listFilter(many:"Descrição do(s) lançamento(s)")
 		help(text: "Informe uma descrição para o lançamento. Por exemplo: Compra de guloseimas para as crianças")
+		unaccent
 		
 		caixaDiario: refers CaixaDiario manyToOne // readOnly, do próprio usuário, aberto
 		label: "Caixa para lançamento"
@@ -372,6 +374,7 @@ service fluxo_caixa {
 		nome: string
 		label: "Nome"
 		listFilter(many: "Nome do cliente")
+		unaccent
 		
 		cnpjCPF: string?
 		label: "Documento (CNPJ/CPF)"
@@ -390,6 +393,7 @@ service fluxo_caixa {
 		nome: string
 		label: "Nome"
 		listFilter(many: "Nome do fornecedor")
+		unaccent
 		
 		cnpjCPF: string?
 		label: "Documento (CNPJ/CPF)"
@@ -410,6 +414,7 @@ service fluxo_caixa {
 		nome: string 
 		label: "Nome"
 		autoComplete
+		unaccent
 	}
 	
 	@externalEntity
@@ -430,6 +435,7 @@ service fluxo_caixa {
 		endereco: string? 
 		autoComplete
 		label: "Endereço/localização da agência"
+		unaccent
 		
 	}
 	
@@ -441,6 +447,7 @@ service fluxo_caixa {
 		nomeBandeira: string
 		autoComplete
 		label: "Bandeira do cartão"
+		unaccent
 	}
 	
 	@externalEntity
@@ -451,6 +458,7 @@ service fluxo_caixa {
 		nomeTitular: string
 		label: "Nome do títular da conta"
 		autoComplete
+		unaccent
 		
 		agencia: refers AgenciaBancaria manyToOne
 		findBy( ////
@@ -489,6 +497,7 @@ service fluxo_caixa {
 		nomeTitular: string
 		autoComplete
 		label: "Nome do títular do cartão"
+		unaccent
 		
 		//--
 		numeroCartao: string[50] 
@@ -523,6 +532,7 @@ service fluxo_caixa {
 		descricao: string
 		label: "Descrição"
 		autoComplete
+		unaccent
 		
 		tipoFinanceiro: TipoPlanoContaFinanceiro
 		

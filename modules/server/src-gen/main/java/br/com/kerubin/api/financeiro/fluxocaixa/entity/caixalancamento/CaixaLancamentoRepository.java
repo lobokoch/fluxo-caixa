@@ -26,11 +26,13 @@ public interface CaixaLancamentoRepository extends JpaRepository<CaixaLancamento
 	
 	
 	// WARNING: supports only where clause with like for STRING fields. For relationships entities will get the first string autocomplete key field name.
-	@Query("select distinct ac.id as id, ac.descricao as descricao, ac.version as version from CaixaLancamentoEntity ac where ( upper(ac.descricao) like upper(concat('%', :query, '%')) ) order by 1 asc")
+	@Query("select distinct ac.id as id, ac.descricao as descricao, ac.version as version from CaixaLancamentoEntity ac where ( upper(unaccent(ac.descricao)) like upper(concat('%', unaccent(:query), '%')) ) order by 1 asc")
 	Collection<CaixaLancamentoAutoComplete> autoComplete(@Param("query") String query);
+	
 	// WARNING: supports only where clause with like for STRING fields. For relationships entities will get the first string autocomplete key field name.
-	@Query("select distinct ac.descricao as descricao from CaixaLancamentoEntity ac where ( upper(ac.descricao) like upper(concat('%', :query, '%')) ) order by 1 asc")
+	@Query("select distinct ac.descricao as descricao from CaixaLancamentoEntity ac where ( upper(unaccent(ac.descricao)) like upper(concat('%', unaccent(:query), '%')) ) order by 1 asc")
 	Collection<CaixaLancamentoDescricaoAutoComplete> caixaLancamentoDescricaoAutoComplete(@Param("query") String query);
+	
 	// WARNING: supports only where clause with like for STRING fields. For relationships entities will get the first string autocomplete key field name.
 	@Query("select distinct ac.histConcBancaria as histConcBancaria from CaixaLancamentoEntity ac where ( upper(ac.histConcBancaria) like upper(concat('%', :query, '%')) ) order by 1 asc")
 	Collection<CaixaLancamentoHistConcBancariaAutoComplete> caixaLancamentoHistConcBancariaAutoComplete(@Param("query") String query);

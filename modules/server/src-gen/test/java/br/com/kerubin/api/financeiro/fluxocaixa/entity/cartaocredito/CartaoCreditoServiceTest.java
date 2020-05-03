@@ -95,7 +95,7 @@ public class CartaoCreditoServiceTest extends FinanceiroFluxoCaixaBaseEntityTest
 		cartaoCredito.setNomeTitular(generateRandomString(255));
 		cartaoCredito.setNumeroCartao(generateRandomString(50));
 		cartaoCredito.setValidade(getNextDate());
-		cartaoCredito.setValorLimite(new java.math.BigDecimal("6446.23918"));
+		cartaoCredito.setValorLimite(new java.math.BigDecimal("26528.22354"));
 		
 		BandeiraCartaoEntity bandeiraCartaoEntityParam = newBandeiraCartaoEntity();
 		BandeiraCartaoLookupResult bandeiraCartao = newBandeiraCartaoLookupResult(bandeiraCartaoEntityParam);
@@ -209,7 +209,7 @@ public class CartaoCreditoServiceTest extends FinanceiroFluxoCaixaBaseEntityTest
 		cartaoCredito.setNomeTitular(generateRandomString(255));
 		cartaoCredito.setNumeroCartao(generateRandomString(50));
 		cartaoCredito.setValidade(getNextDate());
-		cartaoCredito.setValorLimite(new java.math.BigDecimal("17090.14076"));
+		cartaoCredito.setValorLimite(new java.math.BigDecimal("27914.27523"));
 		
 		BandeiraCartaoEntity bandeiraCartaoEntityParam = newBandeiraCartaoEntity();
 		BandeiraCartaoLookupResult bandeiraCartao = newBandeiraCartaoLookupResult(bandeiraCartaoEntityParam);
@@ -449,7 +449,7 @@ public class CartaoCreditoServiceTest extends FinanceiroFluxoCaixaBaseEntityTest
 		cartaoCreditoEntity.setNomeTitular(generateRandomString(255));
 		cartaoCreditoEntity.setNumeroCartao(generateRandomString(50));
 		cartaoCreditoEntity.setValidade(getNextDate());
-		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("2290.2476"));
+		cartaoCreditoEntity.setValorLimite(new java.math.BigDecimal("14021.4312"));
 		cartaoCreditoEntity.setBandeiraCartao(newBandeiraCartaoEntity());
 		cartaoCreditoEntity.setAtivo(true);
 		cartaoCreditoEntity.setDeleted(false);

@@ -25,6 +25,6 @@ public interface CaixaRepository extends JpaRepository<CaixaEntity, java.util.UU
 	
 	
 	// WARNING: supports only where clause with like for STRING fields. For relationships entities will get the first string autocomplete key field name.
-	@Query("select distinct ac.id as id, ac.nome as nome, ac.version as version from CaixaEntity ac where ( upper(ac.nome) like upper(concat('%', :query, '%')) ) order by 1 asc")
+	@Query("select distinct ac.id as id, ac.nome as nome, ac.version as version from CaixaEntity ac where ( upper(unaccent(ac.nome)) like upper(concat('%', unaccent(:query), '%')) ) order by 1 asc")
 	Collection<CaixaAutoComplete> autoComplete(@Param("query") String query);
 }
