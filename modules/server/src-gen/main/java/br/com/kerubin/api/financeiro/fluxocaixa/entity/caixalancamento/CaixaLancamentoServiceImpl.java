@@ -37,9 +37,10 @@ import br.com.kerubin.api.financeiro.fluxocaixa.entity.fornecedor.FornecedorRepo
 import java.util.Collection;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
+import java.util.Objects;
 import java.util.Optional;
 import java.math.BigDecimal;
-import java.util.Objects;
 import br.com.kerubin.api.financeiro.fluxocaixa.CaixaDiarioSituacao;
  
 @Service
@@ -77,6 +78,7 @@ public class CaixaLancamentoServiceImpl implements CaixaLancamentoService {
 	@Transactional
 	@Override
 	public CaixaLancamentoEntity create(CaixaLancamentoEntity caixaLancamentoEntity) {
+		doRulesFormBeforeSave(caixaLancamentoEntity);
 		caixaLancamentoRuleDisableCUD(caixaLancamentoEntity);
 		
 		return caixaLancamentoRepository.save(caixaLancamentoEntity);
@@ -91,6 +93,7 @@ public class CaixaLancamentoServiceImpl implements CaixaLancamentoService {
 	@Transactional
 	@Override
 	public CaixaLancamentoEntity update(java.util.UUID id, CaixaLancamentoEntity caixaLancamentoEntity) {
+		doRulesFormBeforeSave(caixaLancamentoEntity);
 		caixaLancamentoRuleDisableCUD(caixaLancamentoEntity);
 		
 		// CaixaLancamentoEntity entity = getCaixaLancamentoEntity(id);
@@ -101,6 +104,20 @@ public class CaixaLancamentoServiceImpl implements CaixaLancamentoService {
 		
 		return entity;
 	}
+	
+	private void doRulesFormBeforeSave(CaixaLancamentoEntity caixaLancamento) {
+		
+		if (caixaLancamento.getTipoLancamentoFinanceiro().equals(TipoLancamentoFinanceiro.CREDITO) && Objects.isNull(caixaLancamento.getValorCredito())) {
+			throw new IllegalStateException("O valor recebido deve ser maior do que zero.");
+		}
+		
+		
+		if (caixaLancamento.getTipoLancamentoFinanceiro().equals(TipoLancamentoFinanceiro.DEBITO) && Objects.isNull(caixaLancamento.getValorDebito())) {
+			throw new IllegalStateException("O valor pago deve ser maior do que zero.");
+		}
+		
+	}
+	
 	
 	@Transactional
 	@Override

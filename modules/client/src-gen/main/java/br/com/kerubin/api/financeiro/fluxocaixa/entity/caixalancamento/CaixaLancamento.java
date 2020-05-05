@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import javax.validation.constraints.NotNull;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.caixadiario.CaixaDiarioLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
+import javax.validation.constraints.Positive;
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.contabancaria.ContaBancariaLookupResult;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCreditoLookupResult;
@@ -38,8 +39,10 @@ public class CaixaLancamento {
 	@NotNull(message="\"tipoLancamentoFinanceiro\" é obrigatório.")
 	private TipoLancamentoFinanceiro tipoLancamentoFinanceiro;
 	
+	@Positive(message="O valor recebido deve ser maior do que zero.")
 	private java.math.BigDecimal valorCredito;
 	
+	@Positive(message="O valor pago deve ser maior do que zero.")
 	private java.math.BigDecimal valorDebito;
 	
 	@NotNull(message="\"Forma de pagamento\" é obrigatório.")

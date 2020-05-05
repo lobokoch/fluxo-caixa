@@ -182,6 +182,7 @@ service fluxo_caixa {
 		grid(noCurrencySimbol label: "Crédito (R$)" columnWidth: "12em" )
 		listFilter(between: "Créditos com valores de;até;" styleClass: "ui-md-3")
 		help(text: "Informe o valor recebido.")
+		validation(name: Positive message: "O valor recebido deve ser maior do que zero.")
 		
 		valorDebito: money optional
 		label: "Valor"
@@ -190,6 +191,7 @@ service fluxo_caixa {
 		grid(showNumberAsNegative noCurrencySimbol label: "Débito (R$)" columnWidth: "12em" )
 		listFilter(between: "Déditos com valores de;até;" styleClass: "ui-md-3")
 		help(text: "Informe o valor pago.")
+		validation(name: Positive message: "O valor pago deve ser maior do que zero.")
 		
 		formaPagamento: FormaPagamento
 		label: "Forma de pagamento"
@@ -324,6 +326,14 @@ service fluxo_caixa {
 		////////////
 		
 		rules { //xxx
+		
+			with(form.beforeSave)
+			.apply(error('O valor recebido deve ser maior do que zero.'))
+			.when(tipoLancamentoFinanceiro.isEquals(TipoLancamentoFinanceiro.CREDITO) and valorCredito.isNull)
+			
+			with(form.beforeSave)
+			.apply(error('O valor pago deve ser maior do que zero.'))
+			.when(tipoLancamentoFinanceiro.isEquals(TipoLancamentoFinanceiro.DEBITO) and valorDebito.isNull)
 		
 			with(documento).apply(hiddeComponent).when(maisOpcoes.isNotTrue)
 			with(observacoes).apply(hiddeComponent).when(maisOpcoes.isNotTrue)

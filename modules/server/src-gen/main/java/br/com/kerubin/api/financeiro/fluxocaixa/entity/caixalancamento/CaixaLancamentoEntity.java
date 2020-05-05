@@ -26,6 +26,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import br.com.kerubin.api.financeiro.fluxocaixa.TipoLancamentoFinanceiro;
+import javax.validation.constraints.Positive;
 import br.com.kerubin.api.financeiro.fluxocaixa.FormaPagamento;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.contabancaria.ContaBancariaEntity;
 import br.com.kerubin.api.financeiro.fluxocaixa.entity.cartaocredito.CartaoCreditoEntity;
@@ -64,9 +65,11 @@ public class CaixaLancamentoEntity extends AuditingEntity {
 	@Column(name="tipo_lancamento_financeiro")
 	private TipoLancamentoFinanceiro tipoLancamentoFinanceiro;
 	
+	@Positive(message="O valor recebido deve ser maior do que zero.")
 	@Column(name="valor_credito")
 	private java.math.BigDecimal valorCredito;
 	
+	@Positive(message="O valor pago deve ser maior do que zero.")
 	@Column(name="valor_debito")
 	private java.math.BigDecimal valorDebito;
 	
