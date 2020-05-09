@@ -440,7 +440,7 @@ public class FluxoCaixaDashboardImpl implements FluxoCaixaDashboard {
 			
 			item.setCreditValue(creditos);
 			item.setDebitValue(debitos);
-			item.setBalanceValue(getDiff(creditos, debitos));
+			item.setBalanceValue(creditos.subtract(debitos));
 			item.setMonthName("(Previsão) " + item.getMonthName());
 		}
 		
