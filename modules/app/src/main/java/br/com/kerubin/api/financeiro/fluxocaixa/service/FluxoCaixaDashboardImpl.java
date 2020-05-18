@@ -1,10 +1,9 @@
 package br.com.kerubin.api.financeiro.fluxocaixa.service;
 
+import static br.com.kerubin.api.servicecore.util.CoreUtils.formatDate;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.getSafeValue;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.getDiff;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isEmpty;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.isNotEmpty;
-import static br.com.kerubin.api.servicecore.util.CoreUtils.formatDate;
 import static br.com.kerubin.api.servicecore.util.CoreUtils.lowerWithFirstUpper;
 
 import java.math.BigDecimal;
